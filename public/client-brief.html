@@ -627,6 +627,64 @@
   initRadioGroup('pricingRadios');
 
   function submitBrief() {
+    const get = (name) => {
+      const el = document.querySelector(`[name="${name}"]`);
+      return el ? el.value.trim() : '';
+    };
+
+    const feelSelected = [...document.querySelectorAll('#feelTags .tag.selected')].map(t => t.dataset.value).join(', ') || '(none selected)';
+    const feelOther = get('q2_other');
+
+    const priorities = [...document.querySelectorAll('#priorityChecks .check-item.selected .check-label')].map(l => l.textContent.trim()).join('\n  - ') || '(none selected)';
+    const scope = document.querySelector('#scopeRadios .radio-item.selected .radio-label')?.textContent.trim() || '(not selected)';
+    const printType = document.querySelector('#printRadios .radio-item.selected .radio-label')?.textContent.trim() || '(not selected)';
+    const customers = [...document.querySelectorAll('#customerChecks .check-item.selected .check-label')].map(l => l.textContent.trim()).join('\n  - ') || '(none selected)';
+    const pricing = document.querySelector('#pricingRadios .radio-item.selected .radio-label')?.textContent.trim() || '(not selected)';
+
+    const body = [
+      `YARIK 3D PRINTS — WEBSITE BRIEF`,
+      ``,
+      `Q1. Main goal of the website:`,
+      get('q1') || '(no answer)',
+      ``,
+      `Q2. How it should feel:`,
+      `  Selected: ${feelSelected}`,
+      feelOther ? `  Other: ${feelOther}` : '',
+      ``,
+      `Q3. What users should do first:`,
+      get('q3') || '(no answer)',
+      ``,
+      `Q4. What matters most:`,
+      `  - ${priorities}`,
+      ``,
+      `Q5. Expected changes:`,
+      get('q5') || '(no answer)',
+      ``,
+      `Q6. Scope of changes:`,
+      scope,
+      ``,
+      `Q7. What should NOT change:`,
+      get('q7') || '(no answer)',
+      ``,
+      `Q8. New additions:`,
+      get('q8') || '(no answer)',
+      ``,
+      `Q9. Print type to highlight:`,
+      printType,
+      ``,
+      `Q10. Main customer type:`,
+      `  - ${customers}`,
+      ``,
+      `Q11. Pricing display:`,
+      pricing,
+      ``,
+      `Q12. Definition of done:`,
+      get('q12') || '(no answer)',
+    ].filter(l => l !== undefined).join('\n');
+
+    const mailto = `mailto:vidur@vidur.co.za?subject=${encodeURIComponent('Yarik 3D Prints — Website Brief Submission')}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+
     document.getElementById('confirmation').style.display = 'block';
     document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
   }
