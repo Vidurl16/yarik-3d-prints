@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { useEffect, useRef, useState } from "react";
 import { siteCategories } from "@/lib/products";
@@ -24,7 +25,6 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -46,21 +46,34 @@ export default function Nav() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[rgba(10,10,10,0.97)] border-b border-[rgba(201,168,76,0.15)]"
-          : "bg-[rgba(10,10,10,0.7)] border-b border-[rgba(201,168,76,0.08)]"
+          ? "bg-[rgba(12,9,2,0.98)] border-b border-[rgba(196,160,69,0.2)]"
+          : "bg-[rgba(12,9,2,0.75)] border-b border-[rgba(196,160,69,0.08)]"
       }`}
-      style={{ backdropFilter: "blur(12px)" }}
+      style={{ backdropFilter: "blur(14px)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2 flex-shrink-0">
-            <span className="font-heading text-xl tracking-[0.15em] text-[#c9a84c] group-hover:text-[#e0c878] transition-colors">
-              YARIK
-            </span>
-            <span className="hidden sm:block text-[rgba(201,168,76,0.4)] text-xs tracking-widest font-body uppercase mt-0.5">
-              3D Prints
-            </span>
+          <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
+            <div className="relative w-10 h-10 flex-shrink-0 overflow-hidden rounded-full ring-1 ring-[rgba(196,160,69,0.3)] group-hover:ring-[rgba(196,160,69,0.7)] transition-all duration-300">
+              <Image
+                src="/logo.jpg"
+                alt="The Dexarium"
+                fill
+                className="object-cover"
+                sizes="40px"
+                priority
+              />
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className="font-heading text-base tracking-[0.12em] text-[#c4a045] group-hover:text-[#ddb95a] transition-colors">
+                THE DEXARIUM
+              </span>
+              <span className="hidden sm:block font-body text-[9px] tracking-[0.25em] text-[rgba(196,160,69,0.45)] uppercase">
+                From Spark to Legend
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
@@ -69,7 +82,7 @@ export default function Nav() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShopOpen((v) => !v)}
-                className="flex items-center gap-1 font-body text-sm tracking-[0.15em] text-[#e8e0d0] hover:text-[#c9a84c] transition-colors relative group"
+                className="flex items-center gap-1 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group"
               >
                 SHOP
                 <svg
@@ -78,15 +91,15 @@ export default function Nav() {
                 >
                   <path d="M2 4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c9a84c] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
 
               {shopOpen && (
                 <div
                   className="absolute top-full left-0 mt-2 w-64 py-2"
                   style={{
-                    background: "linear-gradient(160deg, #141414 0%, #1a1010 100%)",
-                    border: "1px solid rgba(201,168,76,0.15)",
+                    background: "linear-gradient(160deg, #140e06 0%, #1c1508 100%)",
+                    border: "1px solid rgba(196,160,69,0.15)",
                     backdropFilter: "blur(16px)",
                   }}
                 >
@@ -95,24 +108,24 @@ export default function Nav() {
                       key={cat.id}
                       href={`/shop/${cat.id}`}
                       onClick={() => setShopOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(201,168,76,0.06)] transition-colors group"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(196,160,69,0.06)] transition-colors group"
                     >
                       <span className="text-lg leading-none">{cat.icon}</span>
                       <div>
-                        <p className="font-body text-xs tracking-wider text-[rgba(232,224,208,0.85)] group-hover:text-[#c9a84c] transition-colors">
+                        <p className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.85)] group-hover:text-[#c4a045] transition-colors">
                           {cat.name}
                         </p>
-                        <p className="font-body text-[10px] text-[#6b6b6b] leading-tight mt-0.5">
+                        <p className="font-body text-[10px] text-[#6b5e48] leading-tight mt-0.5">
                           {cat.flavorText}
                         </p>
                       </div>
                     </Link>
                   ))}
-                  <div className="border-t border-[rgba(201,168,76,0.08)] mt-2 pt-2">
+                  <div className="border-t border-[rgba(196,160,69,0.08)] mt-2 pt-2">
                     <Link
                       href="/shop"
                       onClick={() => setShopOpen(false)}
-                      className="block px-4 py-2 font-body text-[10px] tracking-[0.2em] text-[rgba(201,168,76,0.6)] hover:text-[#c9a84c] transition-colors"
+                      className="block px-4 py-2 font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.6)] hover:text-[#c4a045] transition-colors"
                     >
                       VIEW ALL →
                     </Link>
@@ -125,36 +138,34 @@ export default function Nav() {
               <Link
                 key={href}
                 href={href}
-                className="font-body text-sm tracking-[0.15em] text-[#e8e0d0] hover:text-[#c9a84c] transition-colors relative group"
+                className="font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group"
               >
                 {label}
-                <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c9a84c] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             ))}
           </div>
 
           {/* Right side: Cart + Mobile menu */}
           <div className="flex items-center gap-3">
-            {/* Cart Button */}
             <button
               onClick={openDrawer}
               aria-label={`Open cart — ${itemCount} items`}
-              className="relative flex items-center gap-2 px-4 py-2 border border-[rgba(201,168,76,0.25)] hover:border-[rgba(201,168,76,0.7)] transition-all duration-200 group"
+              className="relative flex items-center gap-2 px-4 py-2 border border-[rgba(196,160,69,0.25)] hover:border-[rgba(196,160,69,0.7)] transition-all duration-200 group"
             >
-              <CartIcon className="w-4 h-4 text-[#c9a84c] group-hover:text-[#e0c878] transition-colors" />
-              <span className="font-body text-xs tracking-wider text-[#e8e0d0] group-hover:text-[#c9a84c] transition-colors hidden sm:block">
+              <CartIcon className="w-4 h-4 text-[#c4a045] group-hover:text-[#ddb95a] transition-colors" />
+              <span className="font-body text-xs tracking-wider text-[#f0e8d8] group-hover:text-[#c4a045] transition-colors hidden sm:block">
                 CART
               </span>
               {itemCount > 0 && (
-                <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#8b0000] text-[#e8e0d0] text-[10px] font-bold rounded-full flex items-center justify-center font-body">
+                <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#8b0000] text-[#f0e8d8] text-[10px] font-bold rounded-full flex items-center justify-center font-body">
                   {itemCount > 99 ? "99+" : itemCount}
                 </span>
               )}
             </button>
 
-            {/* Mobile Hamburger */}
             <button
-              className="lg:hidden flex flex-col gap-1.5 px-2 py-2 text-[#c9a84c]"
+              className="lg:hidden flex flex-col gap-1.5 px-2 py-2 text-[#c4a045]"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
@@ -169,10 +180,10 @@ export default function Nav() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div
-          className="lg:hidden border-t border-[rgba(201,168,76,0.1)] py-4 px-4"
-          style={{ background: "rgba(10,10,10,0.99)" }}
+          className="lg:hidden border-t border-[rgba(196,160,69,0.1)] py-4 px-4"
+          style={{ background: "rgba(12,9,2,0.99)" }}
         >
-          <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(201,168,76,0.4)] mb-3 uppercase px-2">
+          <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(196,160,69,0.4)] mb-3 uppercase px-2">
             Shop by Category
           </p>
           {siteCategories.map((cat) => (
@@ -180,19 +191,19 @@ export default function Nav() {
               key={cat.id}
               href={`/shop/${cat.id}`}
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-2 py-2.5 hover:bg-[rgba(201,168,76,0.05)] transition-colors"
+              className="flex items-center gap-3 px-2 py-2.5 hover:bg-[rgba(196,160,69,0.05)] transition-colors"
             >
               <span className="text-base">{cat.icon}</span>
-              <span className="font-body text-sm tracking-wider text-[rgba(232,224,208,0.8)]">{cat.name}</span>
+              <span className="font-body text-sm tracking-wider text-[rgba(240,232,216,0.8)]">{cat.name}</span>
             </Link>
           ))}
-          <div className="border-t border-[rgba(201,168,76,0.08)] mt-3 pt-3 space-y-1">
+          <div className="border-t border-[rgba(196,160,69,0.08)] mt-3 pt-3 space-y-1">
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-2 py-2.5 font-body text-sm tracking-[0.15em] text-[#e8e0d0] hover:text-[#c9a84c] transition-colors"
+                className="block px-2 py-2.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors"
               >
                 {label}
               </Link>
@@ -206,18 +217,8 @@ export default function Nav() {
 
 function CartIcon({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
     </svg>
   );
 }

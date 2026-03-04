@@ -1,18 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #0a0a0a;
+  --color-void: #0c0902;
   --color-blood: #8b0000;
   --color-blood-dark: #6b0000;
   --color-blood-light: #b50000;
-  --color-gold: #c9a84c;
-  --color-gold-light: #e0c878;
-  --color-gold-dark: #a07a20;
-  --color-parchment: #e8e0d0;
-  --color-ash: #141414;
-  --color-iron: #1e1e1e;
-  --color-steel: #2a2a2a;
-  --color-muted: #6b6b6b;
+  --color-gold: #c4a045;
+  --color-gold-light: #ddb95a;
+  --color-gold-dark: #9a7820;
+  --color-wood: #7b5e2a;
+  --color-wood-light: #a07a3a;
+  --color-parchment: #f0e8d8;
+  --color-ash: #140e06;
+  --color-iron: #1c1508;
+  --color-steel: #2a200e;
+  --color-muted: #6b5e48;
 }
 
 *,
@@ -26,8 +28,8 @@ html {
 }
 
 body {
-  background-color: #0a0a0a;
-  color: #e8e0d0;
+  background-color: #0c0902;
+  color: #f0e8d8;
   min-height: 100vh;
 }
 
@@ -106,16 +108,16 @@ body {
    Custom scrollbar
 ──────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #8b0000; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #c9a84c; }
+::-webkit-scrollbar-track { background: #0c0902; }
+::-webkit-scrollbar-thumb { background: #7b5e2a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #c4a045; }
 
 /* ────────────────────────────────────────
    Selection
 ──────────────────────────────────────── */
 ::selection {
-  background-color: #8b0000;
-  color: #e8e0d0;
+  background-color: #7b5e2a;
+  color: #f0e8d8;
 }
 
 /* ────────────────────────────────────────
@@ -126,7 +128,7 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.04;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
@@ -136,16 +138,16 @@ body {
    Utility classes
 ──────────────────────────────────────── */
 .gold-border {
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  border: 1px solid rgba(196, 160, 69, 0.3);
 }
 
 .gold-border-hover:hover {
-  border-color: rgba(201, 168, 76, 0.8);
+  border-color: rgba(196, 160, 69, 0.8);
 }
 
 .card-bg {
-  background: linear-gradient(135deg, #141414 0%, #1a1414 100%);
-  border: 1px solid rgba(201, 168, 76, 0.12);
+  background: linear-gradient(135deg, #140e06 0%, #1c1508 100%);
+  border: 1px solid rgba(196, 160, 69, 0.12);
 }
 
 .print-badge-resin {
@@ -161,7 +163,7 @@ body {
 }
 
 .print-badge-multicolour {
-  background: rgba(80, 50, 0, 0.3);
-  color: #c9a84c;
-  border: 1px solid rgba(201, 168, 76, 0.4);
+  background: rgba(80, 60, 0, 0.3);
+  color: #c4a045;
+  border: 1px solid rgba(196, 160, 69, 0.4);
 }

@@ -19,10 +19,10 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "YARIK 3D Prints — Warhammer 40K Miniatures",
+  title: "The Dexarium — From Spark to Legend",
   description:
-    "Medical-grade resin & multicolour FDM printing. Warhammer 40K miniatures, Pokémon merch, and custom projects. Built to battlefield standard.",
-  keywords: ["warhammer 40k", "3d printing", "miniatures", "resin", "FDM", "South Africa"],
+    "South African 3D prints: unique Pokémon merchandise, Warhammer minis, basing & terrain. Medical-grade resin & multicolour FDM. Custom orders welcome.",
+  keywords: ["pokemon merchandise", "3d printing", "miniatures", "resin", "FDM", "South Africa", "warhammer", "custom prints"],
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${cinzel.variable} ${rajdhani.variable}`}>
-      <body className="font-body bg-[#0a0a0a] text-[#e8e0d0] antialiased">
+      <body className="font-body bg-[#0c0902] text-[#f0e8d8] antialiased">
         {/* Noise texture overlay */}
         <div className="noise-overlay" aria-hidden="true" />
 
