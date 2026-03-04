@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yarik 3D Prints – Website Brief</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #e8e0d0;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding: 48px 24px 80px;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 56px;
+      border-bottom: 1px solid #8b000044;
+      padding-bottom: 40px;
+    }
+
+    .logo-text {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(22px, 5vw, 38px);
+      color: #c9a84c;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-shadow: 0 0 40px #c9a84c44;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #8b0000;
+      font-weight: 600;
+    }
+
+    .brief-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(13px, 2.5vw, 17px);
+      color: #888;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 44px;
+    }
+
+    .section-number {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 11px;
+      color: #8b0000;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #c9a84c;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .section-hint {
+      font-size: 13px;
+      color: #555;
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    /* Text input */
+    textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-left: 3px solid #8b0000;
+      color: #e8e0d0;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 14px 16px;
+      resize: vertical;
+      min-height: 90px;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+    }
+    textarea:focus {
+      border-color: #c9a84c;
+      border-left-color: #c9a84c;
+      background: #131313;
+    }
+    textarea::placeholder { color: #333; }
+
+    /* Tag cloud (word picker) */
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tag {
+      cursor: pointer;
+      border: 1px solid #2a2a2a;
+      padding: 6px 16px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      background: #111;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .tag:hover { border-color: #8b0000; color: #e8e0d0; }
+    .tag.selected { border-color: #c9a84c; color: #c9a84c; background: #1a1500; }
+
+    /* Checkbox list */
+    .check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 10px 14px;
+      border: 1px solid #1e1e1e;
+      background: #0e0e0e;
+      transition: all 0.15s;
+    }
+    .check-item:hover { border-color: #2a2a2a; background: #111; }
+    .check-item.selected { border-color: #8b0000; background: #110000; }
+
+    .check-item input[type="checkbox"] { display: none; }
+
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border: 1px solid #333;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .check-item.selected .check-box {
+      border-color: #8b0000;
+      background: #8b0000;
+    }
+    .check-box::after {
+      content: '';
+      display: none;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+    }
+    .check-item.selected .check-box::after { display: block; }
+
+    .check-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: #aaa;
+    }
+    .check-item.selected .check-label { color: #e8e0d0; }
+
+    /* Radio (scope) */
+    .radio-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 10px 14px;
+      border: 1px solid #1e1e1e;
+      background: #0e0e0e;
+      transition: all 0.15s;
+    }
+    .radio-item:hover { border-color: #2a2a2a; background: #111; }
+    .radio-item.selected { border-color: #c9a84c; background: #120f00; }
+    .radio-dot {
+      width: 18px;
+      height: 18px;
+      border: 1px solid #333;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .radio-item.selected .radio-dot { border-color: #c9a84c; }
+    .radio-dot::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #c9a84c;
+      display: none;
+    }
+    .radio-item.selected .radio-dot::after { display: block; }
+    .radio-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: #aaa;
+    }
+    .radio-item.selected .radio-label { color: #e8e0d0; }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      margin: 44px 0;
+    }
+
+    /* Submit */
+    .submit-wrap {
+      text-align: center;
+      margin-top: 56px;
+    }
+
+    .btn-submit {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      background: #8b0000;
+      color: #e8e0d0;
+      border: none;
+      padding: 18px 48px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 30px #8b000044;
+    }
+    .btn-submit:hover {
+      background: #a00000;
+      box-shadow: 0 0 50px #8b000088;
+      transform: translateY(-1px);
+    }
+
+    .btn-print {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: transparent;
+      color: #555;
+      border: 1px solid #222;
+      padding: 14px 32px;
+      cursor: pointer;
+      margin-left: 16px;
+      transition: all 0.2s;
+    }
+    .btn-print:hover { color: #888; border-color: #444; }
+
+    /* Confirmation */
+    #confirmation {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      border: 1px solid #c9a84c33;
+      background: #0d0d00;
+      margin-top: 32px;
+    }
+    #confirmation h3 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 18px;
+      color: #c9a84c;
+      margin-bottom: 12px;
+    }
+    #confirmation p { color: #888; font-size: 14px; }
+
+    @media print {
+      body { background: #fff; color: #000; padding: 20px; }
+      body::before { display: none; }
+      .btn-submit, .btn-print, #confirmation { display: none !important; }
+      textarea { border: 1px solid #ccc; color: #000; background: #fff; }
+      .section-title { color: #8b0000; }
+      .section-number { color: #666; }
+      .logo-text { color: #8b0000; text-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div class="logo-text">Yarik 3D Prints</div>
+    <div class="subtitle">Warhammer 40K &amp; Custom Miniatures</div>
+    <div class="brief-title">Website Expectation Brief</div>
+  </header>
+
+  <form id="briefForm">
+
+    <!-- Q1 -->
+    <div class="section">
+      <div class="section-number">Question 01</div>
+      <div class="section-title">What is the main goal of the website?</div>
+      <div class="section-hint">e.g. sell products directly, generate quote requests, show portfolio, look professional...</div>
+      <textarea name="q1" placeholder="Type your answer here..."></textarea>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q2 -->
+    <div class="section">
+      <div class="section-number">Question 02</div>
+      <div class="section-title">How should the website feel?</div>
+      <div class="section-hint">Select 3–5 words that describe the vibe you want.</div>
+      <div class="tag-grid" id="feelTags">
+        <div class="tag" data-value="Dark &amp; Gritty">Dark &amp; Gritty</div>
+        <div class="tag" data-value="Premium">Premium</div>
+        <div class="tag" data-value="Bold">Bold</div>
+        <div class="tag" data-value="Industrial">Industrial</div>
+        <div class="tag" data-value="Technical">Technical</div>
+        <div class="tag" data-value="Minimal">Minimal</div>
+        <div class="tag" data-value="Clean">Clean</div>
+        <div class="tag" data-value="Epic">Epic</div>
+        <div class="tag" data-value="Collector-Grade">Collector-Grade</div>
+        <div class="tag" data-value="Friendly">Friendly</div>
+        <div class="tag" data-value="Aggressive">Aggressive</div>
+        <div class="tag" data-value="Luxurious">Luxurious</div>
+      </div>
+      <textarea name="q2_other" placeholder="Anything else? Type additional words here..." style="min-height:60px;"></textarea>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q3 -->
+    <div class="section">
+      <div class="section-number">Question 03</div>
+      <div class="section-title">What should users do first when they land on the homepage?</div>
+      <div class="section-hint">e.g. browse by faction, request a custom print, understand what we offer, see prices immediately...</div>
+      <textarea name="q3" placeholder="Type your answer here..."></textarea>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q4 -->
+    <div class="section">
+      <div class="section-number">Question 04</div>
+      <div class="section-title">What matters most to you?</div>
+      <div class="section-hint">Select all that apply.</div>
+      <div class="check-list" id="priorityChecks">
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Design aesthetics" />
+          <div class="check-box"></div>
+          <span class="check-label">Design aesthetics — it needs to look impressive</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Speed" />
+          <div class="check-box"></div>
+          <span class="check-label">Speed — fast loading, no lag</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Simplicity" />
+          <div class="check-box"></div>
+          <span class="check-label">Simplicity — easy to navigate and manage</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Sales conversion" />
+          <div class="check-box"></div>
+          <span class="check-label">Sales conversion — get people to buy / enquire</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Brand impression" />
+          <div class="check-box"></div>
+          <span class="check-label">Brand impression — make the brand memorable</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Professionalism" />
+          <div class="check-box"></div>
+          <span class="check-label">Professionalism — look more legit than competitors</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q4" value="Custom print prominence" />
+          <div class="check-box"></div>
+          <span class="check-label">Custom print prominence — showcase the resin &amp; FDM quality</span>
+        </label>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q5 -->
+    <div class="section">
+      <div class="section-number">Question 05</div>
+      <div class="section-title">What changes are you expecting?</div>
+      <div class="section-hint">Describe freely — bigger images, different colours, cleaner layout, different text, new sections, etc.</div>
+      <textarea name="q5" placeholder="Be as specific as you like..." style="min-height:120px;"></textarea>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q6 -->
+    <div class="section">
+      <div class="section-number">Question 06</div>
+      <div class="section-title">What is the scope of these changes?</div>
+      <div class="radio-list" id="scopeRadios">
+        <div class="radio-item" data-value="Small visual tweaks">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Small visual tweaks — minor polish, nothing major</span>
+        </div>
+        <div class="radio-item" data-value="Noticeable visual refresh">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Noticeable visual refresh — layout and feel improvements</span>
+        </div>
+        <div class="radio-item" data-value="New pages or features">
+          <div class="radio-dot"></div>
+          <span class="radio-label">New pages or features — adding something that isn't there yet</span>
+        </div>
+        <div class="radio-item" data-value="Full visual redesign">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Full visual redesign — everything looks different, same functionality</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q7 -->
+    <div class="section">
+      <div class="section-number">Question 07</div>
+      <div class="section-title">What should NOT change?</div>
+      <div class="section-hint">e.g. checkout flow, pricing logic, product categories, navigation structure, colour scheme...</div>
+      <textarea name="q7" placeholder="List anything that must stay as-is..."></textarea>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q8 -->
+    <div class="section">
+      <div class="section-number">Question 08</div>
+      <div class="section-title">Are we adding anything new?</div>
+      <div class="section-hint">New pages, features, products, factions, forms, integrations? If no, just write "No new features."</div>
+      <textarea name="q8" placeholder="Describe new additions, or write: No new features."></textarea>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q9 (Yarik-specific) -->
+    <div class="section">
+      <div class="section-number">Question 09</div>
+      <div class="section-title">Which print types do you want highlighted most?</div>
+      <div class="section-hint">Your main printers are dental resin and Bambu Lab multicolour FDM — which should be front and centre?</div>
+      <div class="radio-list" id="printRadios">
+        <div class="radio-item" data-value="Resin (dental-grade)">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Resin (dental-grade) — precision detail, professional finish</span>
+        </div>
+        <div class="radio-item" data-value="FDM Multicolour (Bambu Lab)">
+          <div class="radio-dot"></div>
+          <span class="radio-label">FDM Multicolour (Bambu Lab) — full-colour, larger models</span>
+        </div>
+        <div class="radio-item" data-value="Both equally">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Both equally — let the product speak for itself</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q10 (Yarik-specific) -->
+    <div class="section">
+      <div class="section-number">Question 10</div>
+      <div class="section-title">Who is your main customer?</div>
+      <div class="section-hint">This affects the copy tone and product presentation.</div>
+      <div class="check-list" id="customerChecks">
+        <label class="check-item">
+          <input type="checkbox" name="q10" value="Serious hobbyists who paint their own minis" />
+          <div class="check-box"></div>
+          <span class="check-label">Serious hobbyists who paint their own minis</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q10" value="Collectors who want display-ready pieces" />
+          <div class="check-box"></div>
+          <span class="check-label">Collectors who want display-ready pieces</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q10" value="Wargamers who need affordable armies fast" />
+          <div class="check-box"></div>
+          <span class="check-label">Wargamers who need affordable armies fast</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q10" value="Gift buyers looking for something unique" />
+          <div class="check-box"></div>
+          <span class="check-label">Gift buyers looking for something unique</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="q10" value="Custom / commission clients" />
+          <div class="check-box"></div>
+          <span class="check-label">Custom / commission clients</span>
+        </label>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q11 -->
+    <div class="section">
+      <div class="section-number">Question 11</div>
+      <div class="section-title">How should pricing be displayed?</div>
+      <div class="radio-list" id="pricingRadios">
+        <div class="radio-item" data-value="All prices public">
+          <div class="radio-dot"></div>
+          <span class="radio-label">All prices public — customers can add to cart directly</span>
+        </div>
+        <div class="radio-item" data-value="Prices public, custom work is quote-only">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Standard products public, custom work is quote-only</span>
+        </div>
+        <div class="radio-item" data-value="Everything quote-only">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Everything quote-only — no prices shown publicly</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q12 -->
+    <div class="section">
+      <div class="section-number">Question 12</div>
+      <div class="section-title">When will you consider this finished?</div>
+      <div class="section-hint">e.g. when it feels premium, when it matches my vision, when a friend says "wow", when I'd share the link proudly...</div>
+      <textarea name="q12" placeholder="Describe your finish line..."></textarea>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="button" class="btn-submit" onclick="submitBrief()">Submit Brief</button>
+      <button type="button" class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+    <div id="confirmation">
+      <h3>Brief Received</h3>
+      <p>Thank you — we'll review your answers and get back to you shortly.</p>
+    </div>
+
+  </form>
+
+</div>
+
+<script>
+  // Tag toggle (feel words) — max 5
+  document.querySelectorAll('#feelTags .tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      const selected = document.querySelectorAll('#feelTags .tag.selected');
+      if (tag.classList.contains('selected')) {
+        tag.classList.remove('selected');
+      } else if (selected.length < 5) {
+        tag.classList.add('selected');
+      }
+    });
+  });
+
+  // Checkbox items
+  document.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('selected');
+      const cb = item.querySelector('input[type="checkbox"]');
+      if (cb) cb.checked = item.classList.contains('selected');
+    });
+  });
+
+  // Radio groups
+  function initRadioGroup(containerId) {
+    document.querySelectorAll(`#${containerId} .radio-item`).forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll(`#${containerId} .radio-item`).forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+      });
+    });
+  }
+  initRadioGroup('scopeRadios');
+  initRadioGroup('printRadios');
+  initRadioGroup('pricingRadios');
+
+  function submitBrief() {
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
