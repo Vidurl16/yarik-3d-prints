@@ -1,5 +1,12 @@
 import { notFound } from "next/navigation";
-import { factions, getProductsByFaction, getFactionById } from "@/lib/products";
+import {
+  factions,
+  siteCategories,
+  getProductsByFaction,
+  getProductsBySiteCategory,
+  getFactionById,
+  getSiteCategoryById,
+} from "@/lib/products";
 import Link from "next/link";
 import ProductGrid from "./ProductGrid";
 import type { Metadata } from "next";
@@ -9,13 +16,22 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return factions.map((f) => ({ faction: f.id }));
+  const factionParams = factions.map((f) => ({ faction: f.id }));
+  const categoryParams = siteCategories.map((c) => ({ faction: c.id }));
+  return [...factionParams, ...categoryParams];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { faction: factionId } = await params;
-  const faction = getFactionById(factionId);
-  if (!faction) return { title: "Faction Not Found" };
+  const { faction: slug } = await params;
+  const siteCategory = getSiteCategoryById(slug);
+  if (siteCategory) {
+    return {
+      title: `${siteCategory.name} — YARIK 3D Prints`,
+      description: siteCategory.flavorText,
+    };
+  }
+  const faction = getFactionById(slug);
+  if (!faction) return { title: "Not Found" };
   return {
     title: `${faction.name} — YARIK 3D Prints`,
     description: faction.flavorText,
@@ -23,12 +39,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function FactionPage({ params }: PageProps) {
-  const { faction: factionId } = await params;
-  const faction = getFactionById(factionId);
+  const { faction: slug } = await params;
 
-  if (!faction) notFound();
+  // Try site category first, then faction
+  const siteCategory = getSiteCategoryById(slug);
+  const faction = getFactionById(slug);
 
-  const products = getProductsByFaction(factionId);
+  if (!siteCategory && !faction) notFound();
+
+  const products = siteCategory
+    ? getProductsBySiteCategory(siteCategory.id)
+    : getProductsByFaction(faction!.id);
+
+  const displayName = siteCategory ? siteCategory.name : faction!.name;
+  const displayText = siteCategory ? siteCategory.flavorText : faction!.flavorText;
+  const accentColor = siteCategory ? siteCategory.accentColor : faction!.accentColor;
+  const glowColor = siteCategory ? siteCategory.glowColor : faction!.glowColor;
+  const borderColor = siteCategory ? siteCategory.borderColor : faction!.borderColor;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-20">
@@ -36,14 +63,14 @@ export default async function FactionPage({ params }: PageProps) {
       <div
         className="relative overflow-hidden mb-12"
         style={{
-          background: `linear-gradient(135deg, #0a0a0a 0%, ${faction.accentColor}30 50%, #0a0a0a 100%)`,
-          borderBottom: `1px solid ${faction.borderColor}`,
+          background: `linear-gradient(135deg, #0a0a0a 0%, ${accentColor}30 50%, #0a0a0a 100%)`,
+          borderBottom: `1px solid ${borderColor}`,
         }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: `radial-gradient(ellipse 80% 100% at 50% 100%, ${faction.glowColor} 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse 80% 100% at 50% 100%, ${glowColor} 0%, transparent 70%)`,
           }}
         />
 
@@ -54,18 +81,34 @@ export default async function FactionPage({ params }: PageProps) {
             <span className="text-[rgba(201,168,76,0.3)]">›</span>
             <Link href="/shop" className="hover:text-[#c9a84c] transition-colors">SHOP</Link>
             <span className="text-[rgba(201,168,76,0.3)]">›</span>
-            <span className="text-[rgba(232,224,208,0.5)] uppercase">{faction.name}</span>
+            <span className="text-[rgba(232,224,208,0.5)] uppercase">{displayName}</span>
           </div>
 
           <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(201,168,76,0.5)] mb-3 uppercase">
             {products.length} Models Available
           </p>
           <h1 className="font-heading text-3xl sm:text-5xl text-[#e8e0d0] mb-3">
-            {faction.name.toUpperCase()}
+            {displayName.toUpperCase()}
           </h1>
           <p className="font-body text-sm text-[#6b6b6b] max-w-md">
-            {faction.flavorText}
+            {displayText}
           </p>
+
+          {/* Faction sub-filters for site categories */}
+          {siteCategory && (
+            <div className="flex flex-wrap gap-2 mt-6">
+              {factions
+                .filter((f) => products.some((p) => p.faction === f.id))
+                .map((f) => (
+                  <span
+                    key={f.id}
+                    className="font-body text-[10px] tracking-widest px-3 py-1 border border-[rgba(201,168,76,0.15)] text-[rgba(232,224,208,0.5)]"
+                  >
+                    {f.name.toUpperCase()}
+                  </span>
+                ))}
+            </div>
+          )}
         </div>
       </div>
 

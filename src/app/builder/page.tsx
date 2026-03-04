@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bundle Builder — YARIK 3D Prints",
-  description: "Build your custom Ork warband. Select 3+ parts for a 15% discount.",
+  title: "Army Builder — YARIK 3D Prints",
+  description: "Build your custom army. Select 3+ units for a 15% warband discount.",
 };
 
 export default function BuilderPage() {
@@ -28,13 +28,13 @@ export default function BuilderPage() {
           </div>
 
           <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(201,168,76,0.5)] mb-3 uppercase">
-            Ork Warband · Pick 3+ for 15% Off
+            Multi-Faction Builder · Pick 3+ for 15% Off
           </p>
           <h1 className="font-heading text-3xl sm:text-5xl text-[#e8e0d0] mb-3">
-            BUILD YOUR WARBAND
+            ARMY BUILDER
           </h1>
           <p className="font-body text-sm text-[#6b6b6b] max-w-lg leading-relaxed">
-            Select your pieces, see your total update live. Bundle 3 or more
+            Mix units across Space Marines, Orks, Chaos, and Tyranids. Bundle 3 or more
             and the 15% warband discount activates automatically.
           </p>
 
