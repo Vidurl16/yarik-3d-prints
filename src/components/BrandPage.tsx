@@ -1,13 +1,16 @@
 import type { ThemeId } from "./theme/themes";
 import { THEMES, ARMY_BUILDER_BRANDS } from "./theme/themes";
 import Link from "next/link";
+import type { DbProduct } from "@/lib/data/types";
+import BrandProductGrid from "./BrandProductGrid";
 
 interface BrandPageProps {
   themeId: ThemeId;
   brandSlug: string;
+  products?: DbProduct[];
 }
 
-export default function BrandPage({ themeId, brandSlug }: BrandPageProps) {
+export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPageProps) {
   const theme = THEMES[themeId];
   const hasArmyBuilder = (ARMY_BUILDER_BRANDS as readonly string[]).includes(brandSlug);
 
@@ -101,69 +104,8 @@ export default function BrandPage({ themeId, brandSlug }: BrandPageProps) {
         </div>
       </section>
 
-      {/* ── FILTERS ──────────────────────────────────────────── */}
-      <section
-        className="sticky top-16 z-30 border-b"
-        style={{
-          background: "var(--surface)",
-          borderColor: "var(--border)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-4 overflow-x-auto">
-          <span
-            className="font-body text-[10px] tracking-[0.3em] uppercase flex-shrink-0"
-            style={{ color: "var(--muted)" }}
-          >
-            Filter
-          </span>
-          {/* Placeholder filter chips */}
-          {["All", "New", "Preorder", "Resin", "FDM"].map((f) => (
-            <button
-              key={f}
-              className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all duration-150"
-              style={{
-                border: "1px solid var(--border)",
-                color: f === "All" ? "var(--bg)" : "var(--muted)",
-                background: f === "All" ? "var(--primary)" : "transparent",
-              }}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* ── PRODUCT GRID (placeholder) ───────────────────────── */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="flex items-baseline justify-between mb-8">
-          <h2
-            className="font-heading text-2xl tracking-wider"
-            style={{ color: "var(--text)" }}
-          >
-            PRODUCTS
-          </h2>
-          <span
-            className="font-body text-xs tracking-wider"
-            style={{ color: "var(--muted)" }}
-          >
-            — coming soon —
-          </span>
-        </div>
-
-        {/* Grid skeleton */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="aspect-[3/4] animate-pulse"
-              style={{
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-              }}
-            />
-          ))}
-        </div>
-      </section>
+      {/* ── FILTER BAR + PRODUCT GRID ────────────────────────── */}
+      <BrandProductGrid products={products} />
 
       {/* ── UPSELL SECTION (placeholder) ─────────────────────── */}
       <section

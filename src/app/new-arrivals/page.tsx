@@ -1,15 +1,17 @@
-import { getNewArrivals } from "@/lib/products";
+import { getNewArrivals } from "@/lib/data/products";
 import Link from "next/link";
-import ProductCard from "@/components/ProductCard";
+import DbProductCard from "@/components/DbProductCard";
 import type { Metadata } from "next";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
-  title: "New Arrivals — YARIK 3D Prints",
+  title: "New Arrivals — The Dexarium",
   description: "The latest premium 3D prints — fresh off the printer.",
 };
 
-export default function NewArrivalsPage() {
-  const products = getNewArrivals();
+export default async function NewArrivalsPage() {
+  const products = await getNewArrivals();
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-20">
@@ -40,7 +42,7 @@ export default function NewArrivalsPage() {
         {products.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <DbProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (

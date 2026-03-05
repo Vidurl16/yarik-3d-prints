@@ -1,15 +1,17 @@
-import { getPreorders, formatPrice } from "@/lib/products";
+import { getPreorders } from "@/lib/data/products";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
-  title: "Preorders — YARIK 3D Prints",
+  title: "Preorders — The Dexarium",
   description: "Reserve your models before they drop. Secure your spot in the queue.",
 };
 
-export default function PreordersPage() {
-  const products = getPreorders();
+export default async function PreordersPage() {
+  const products = await getPreorders();
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-20">
@@ -50,7 +52,7 @@ export default function PreordersPage() {
               >
                 <div className="relative w-full aspect-square overflow-hidden bg-[#111]">
                   <Image
-                    src={product.imageUrl}
+                    src={product.image_url ?? `https://picsum.photos/seed/${product.slug}/400/400`}
                     alt={product.name}
                     fill
                     loading="lazy"
@@ -66,22 +68,22 @@ export default function PreordersPage() {
                   <span className="absolute top-3 left-3 font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,0,0,0.25)] text-[#ff6060] border border-[rgba(139,0,0,0.5)]">
                     PREORDER
                   </span>
-                  {product.preorderDate && (
+                  {product.preorder_date && (
                     <span className="absolute bottom-3 right-3 font-body text-[10px] tracking-widest text-[#6b6b6b]">
-                      {product.preorderDate}
+                      {product.preorder_date}
                     </span>
                   )}
                 </div>
 
                 <div className="p-5 flex flex-col flex-1">
                   <span className="font-body text-[9px] tracking-widest text-[#6b6b6b] uppercase mb-1">
-                    {product.category}
+                    {product.type}
                   </span>
                   <h3 className="font-body text-sm font-semibold text-[#e8e0d0] leading-snug flex-1 mb-3">
                     {product.name}
                   </h3>
                   <div className="flex items-center justify-between pt-3 border-t border-[rgba(139,0,0,0.15)]">
-                    <span className="font-heading text-[#c9a84c]">{formatPrice(product.price)}</span>
+                    <span className="font-heading text-[#c9a84c]">R {(product.price_cents / 100).toLocaleString("en-ZA", { minimumFractionDigits: 0 })}</span>
                     <Link
                       href="/contact"
                       className="font-body text-[10px] tracking-widest px-3 py-1.5 bg-[rgba(139,0,0,0.2)] hover:bg-[rgba(139,0,0,0.4)] text-[#ff6060] border border-[rgba(139,0,0,0.4)] transition-all duration-200"
