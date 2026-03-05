@@ -6,6 +6,14 @@ import { useCartStore } from "@/store/cartStore";
 import { useEffect, useRef, useState } from "react";
 import { siteCategories } from "@/lib/products";
 
+const BRAND_ROUTE_MAP: Record<string, string> = {
+  "grimdark-future": "/grimdark-future",
+  "age-of-fantasy": "/age-of-fantasy",
+  "pokemon": "/pokemon",
+  "basing-battle-effects": "/basing-battle-effects",
+  "gaming-accessories-terrain": "/gaming-accessories-terrain",
+};
+
 export default function Nav() {
   const { getItemCount, openDrawer } = useCartStore();
   const [itemCount, setItemCount] = useState(0);
@@ -106,7 +114,7 @@ export default function Nav() {
                   {siteCategories.map((cat) => (
                     <Link
                       key={cat.id}
-                      href={`/shop/${cat.id}`}
+                      href={BRAND_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
                       onClick={() => setShopOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(196,160,69,0.06)] transition-colors group"
                     >
@@ -189,7 +197,7 @@ export default function Nav() {
           {siteCategories.map((cat) => (
             <Link
               key={cat.id}
-              href={`/shop/${cat.id}`}
+              href={BRAND_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
               onClick={() => setMobileOpen(false)}
               className="flex items-center gap-3 px-2 py-2.5 hover:bg-[rgba(196,160,69,0.05)] transition-colors"
             >

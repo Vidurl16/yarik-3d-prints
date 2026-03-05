@@ -2,12 +2,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteCategories, getNewArrivals, getPreorders, formatPrice } from "@/lib/products";
 
+// Map siteCategory IDs → new top-level brand routes
+const CATEGORY_ROUTE_MAP: Record<string, string> = {
+  "grimdark-future": "/grimdark-future",
+  "age-of-fantasy": "/age-of-fantasy",
+  "pokemon": "/pokemon",
+  "basing-battle-effects": "/basing-battle-effects",
+  "gaming-accessories-terrain": "/gaming-accessories-terrain",
+};
+
 export default function HeroPage() {
   const newArrivals = getNewArrivals().slice(0, 4);
   const preorders = getPreorders().slice(0, 4);
 
   return (
-    <div className="bg-[#0c0902]">
+    <div data-theme="dexarium" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Warm amber radial glow */}
@@ -149,7 +158,7 @@ export default function HeroPage() {
           {siteCategories.map((cat) => (
             <Link
               key={cat.id}
-              href={`/shop/${cat.id}`}
+              href={CATEGORY_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
               className="group relative flex flex-col items-center text-center p-6 transition-all duration-300 hover:-translate-y-1"
               style={{
                 background: "linear-gradient(160deg, #140e06 0%, #1c1508 100%)",
@@ -205,7 +214,7 @@ export default function HeroPage() {
               {newArrivals.map((product) => (
                 <Link
                   key={product.id}
-                  href={`/shop/${product.siteCategory}`}
+                  href={CATEGORY_ROUTE_MAP[product.siteCategory] ?? `/shop/${product.siteCategory}`}
                   className="group card-bg overflow-hidden transition-all duration-300 hover:border-[rgba(196,160,69,0.35)]"
                 >
                   <div className="relative w-full aspect-square overflow-hidden bg-[#0f0a03]">
@@ -263,7 +272,7 @@ export default function HeroPage() {
               {preorders.map((product) => (
                 <Link
                   key={product.id}
-                  href={`/shop/${product.siteCategory}`}
+                  href={CATEGORY_ROUTE_MAP[product.siteCategory] ?? `/shop/${product.siteCategory}`}
                   className="group card-bg overflow-hidden transition-all duration-300 hover:border-[rgba(196,160,69,0.3)]"
                 >
                   <div className="relative w-full aspect-square overflow-hidden bg-[#0f0a03]">

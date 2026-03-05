@@ -1,5 +1,77 @@
 @import "tailwindcss";
 
+/* ════════════════════════════════════════
+   ROUTE-DRIVEN THEME TOKENS
+   Applied via data-theme="<id>" on wrapper div.
+   Components consume var(--bg), var(--text), etc.
+════════════════════════════════════════ */
+
+[data-theme="dexarium"] {
+  --bg:      #0c0902;
+  --surface: #140e06;
+  --text:    #f0e8d8;
+  --muted:   #6b5e48;
+  --primary: #c4a045;
+  --accent:  #7b5e2a;
+  --border:  rgba(196, 160, 69, 0.2);
+  --glow:    rgba(196, 160, 69, 0.15);
+}
+
+[data-theme="grimdark"] {
+  --bg:      #08080e;
+  --surface: #0f0f1a;
+  --text:    #d4cce0;
+  --muted:   #5a5570;
+  --primary: #9b4060;
+  --accent:  #c0392b;
+  --border:  rgba(155, 64, 96, 0.25);
+  --glow:    rgba(192, 57, 43, 0.2);
+}
+
+[data-theme="fantasy"] {
+  --bg:      #080e08;
+  --surface: #0f180e;
+  --text:    #d8e8d0;
+  --muted:   #4a5e48;
+  --primary: #5ca85c;
+  --accent:  #2e7d2e;
+  --border:  rgba(92, 168, 92, 0.25);
+  --glow:    rgba(92, 168, 92, 0.15);
+}
+
+[data-theme="pokemon"] {
+  --bg:      #08090f;
+  --surface: #0f1018;
+  --text:    #e8ecf8;
+  --muted:   #4a5278;
+  --primary: #e8c838;
+  --accent:  #c8281c;
+  --border:  rgba(232, 200, 56, 0.25);
+  --glow:    rgba(232, 200, 56, 0.18);
+}
+
+[data-theme="basing"] {
+  --bg:      #0d0b07;
+  --surface: #16120c;
+  --text:    #e8dcc8;
+  --muted:   #5e5040;
+  --primary: #a08040;
+  --accent:  #6b4e20;
+  --border:  rgba(160, 128, 64, 0.25);
+  --glow:    rgba(160, 128, 64, 0.15);
+}
+
+[data-theme="terrain"] {
+  --bg:      #080e08;
+  --surface: #0f180f;
+  --text:    #d8e8d0;
+  --muted:   #485848;
+  --primary: #608060;
+  --accent:  #3a5c3a;
+  --border:  rgba(96, 128, 96, 0.25);
+  --glow:    rgba(96, 128, 96, 0.15);
+}
+
 @theme {
   --color-void: #0c0902;
   --color-blood: #8b0000;
