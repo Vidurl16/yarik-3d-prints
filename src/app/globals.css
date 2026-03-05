@@ -7,14 +7,14 @@
 ════════════════════════════════════════ */
 
 [data-theme="dexarium"] {
-  --bg:      #0c0902;
-  --surface: #140e06;
-  --text:    #f0e8d8;
-  --muted:   #6b5e48;
-  --primary: #c4a045;
-  --accent:  #7b5e2a;
-  --border:  rgba(196, 160, 69, 0.2);
-  --glow:    rgba(196, 160, 69, 0.15);
+  --bg:      #faf5ec;
+  --surface: #f0e6d2;
+  --text:    #1e1208;
+  --muted:   #7a5e40;
+  --primary: #8b5e14;
+  --accent:  #5c3d1a;
+  --border:  rgba(92, 61, 26, 0.15);
+  --glow:    rgba(139, 94, 20, 0.1);
 }
 
 [data-theme="grimdark"] {
@@ -220,6 +220,12 @@ body {
 .card-bg {
   background: linear-gradient(135deg, #140e06 0%, #1c1508 100%);
   border: 1px solid rgba(196, 160, 69, 0.12);
+}
+
+/* Light override for dexarium theme */
+[data-theme="dexarium"] .card-bg {
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .print-badge-resin {

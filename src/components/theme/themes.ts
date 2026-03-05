@@ -54,13 +54,13 @@ export interface ThemeTokens {
 
 export const THEMES: Record<ThemeId, ThemeTokens> = {
   dexarium: {
-    bg: "#0c0902",
-    surface: "#140e06",
-    text: "#f0e8d8",
-    muted: "#6b5e48",
-    primary: "#c4a045",
-    accent: "#7b5e2a",
-    border: "rgba(196,160,69,0.2)",
+    bg: "#faf5ec",
+    surface: "#f0e6d2",
+    text: "#1e1208",
+    muted: "#7a5e40",
+    primary: "#8b5e14",
+    accent: "#5c3d1a",
+    border: "rgba(92, 61, 26, 0.15)",
     heroImage: "/brand-assets/dexarium/hero.webp",
     label: "The Dexarium",
     icon: "🔮",
