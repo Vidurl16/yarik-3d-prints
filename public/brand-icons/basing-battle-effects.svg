@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Miniature base with terrain rocks — Basing & Battle Effects category icon -->
+  <!-- Original artwork by The Dexarium -->
+
+  <!-- Base edge (outer oval ring - perspective view) -->
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    d="M 476,270 A 220,190 0 1,0 36,270 A 220,190 0 1,0 476,270 Z
+       M 456,255 A 200,165 0 1,0 56,255 A 200,165 0 1,0 456,255 Z"
+  />
+
+  <!-- Rock 1 (large, left) -->
+  <path
+    fill="currentColor"
+    d="M 155,250 Q 140,210 170,195 Q 200,178 220,205 Q 238,225 225,255 Q 208,278 178,270 Q 148,262 155,250 Z"
+  />
+
+  <!-- Rock 2 (medium, right) -->
+  <path
+    fill="currentColor"
+    d="M 285,235 Q 278,205 300,193 Q 322,181 338,202 Q 352,222 342,245 Q 330,265 308,260 Q 282,254 285,235 Z"
+  />
+
+  <!-- Rock 3 (small, centre-top) -->
+  <path
+    fill="currentColor"
+    d="M 248,200 Q 244,182 258,174 Q 272,166 282,180 Q 292,193 283,207 Q 272,218 258,213 Q 242,206 248,200 Z"
+  />
+
+  <!-- Debris scatter (tiny dots) -->
+  <circle cx="210" cy="248" r="7" fill="currentColor" opacity="0.6"/>
+  <circle cx="320" cy="252" r="5" fill="currentColor" opacity="0.6"/>
+  <circle cx="256" cy="238" r="4" fill="currentColor" opacity="0.55"/>
+  <circle cx="172" cy="230" r="5" fill="currentColor" opacity="0.55"/>
+</svg>

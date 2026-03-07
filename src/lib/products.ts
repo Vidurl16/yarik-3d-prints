@@ -40,6 +40,8 @@ export interface SiteCategory {
   shortName: string;
   flavorText: string;
   icon: string;
+  /** Path to SVG icon under /public (served at this URL path) */
+  iconSrc: string;
   accentColor: string;
   glowColor: string;
   borderColor: string;
@@ -53,6 +55,7 @@ export const siteCategories: SiteCategory[] = [
     shortName: "Grimdark",
     flavorText: "40K-scale miniatures. Industrial ruin. Eternal war.",
     icon: "⚙️",
+    iconSrc: "/brand-icons/grimdark-future.svg",
     accentColor: "#8b0000",
     glowColor: "rgba(139,0,0,0.5)",
     borderColor: "rgba(139,0,0,0.4)",
@@ -64,6 +67,7 @@ export const siteCategories: SiteCategory[] = [
     shortName: "Fantasy",
     flavorText: "Heroic warriors. Ancient magic. Epic battlefields.",
     icon: "⚔️",
+    iconSrc: "/brand-icons/age-of-fantasy.svg",
     accentColor: "#2a5a3a",
     glowColor: "rgba(42,90,58,0.5)",
     borderColor: "rgba(80,160,100,0.35)",
@@ -75,6 +79,7 @@ export const siteCategories: SiteCategory[] = [
     shortName: "Pokémon",
     flavorText: "Gotta catch 'em all — in glorious resin.",
     icon: "⭐",
+    iconSrc: "/brand-icons/pokemon.svg",
     accentColor: "#c9a84c",
     glowColor: "rgba(201,168,76,0.4)",
     borderColor: "rgba(240,200,0,0.4)",
@@ -86,6 +91,7 @@ export const siteCategories: SiteCategory[] = [
     shortName: "Basing",
     flavorText: "Realistic bases, scatter, and battlefield dressing.",
     icon: "🪨",
+    iconSrc: "/brand-icons/basing-battle-effects.svg",
     accentColor: "#5a4a2a",
     glowColor: "rgba(90,74,42,0.5)",
     borderColor: "rgba(140,110,60,0.35)",
@@ -97,6 +103,7 @@ export const siteCategories: SiteCategory[] = [
     shortName: "Terrain",
     flavorText: "Immersive terrain, tokens, trays and gaming accessories.",
     icon: "🏗️",
+    iconSrc: "/brand-icons/gaming-accessories-terrain.svg",
     accentColor: "#2a3a5a",
     glowColor: "rgba(42,58,90,0.5)",
     borderColor: "rgba(80,120,180,0.35)",

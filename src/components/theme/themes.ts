@@ -46,8 +46,10 @@ export interface ThemeTokens {
   heroImage: string;
   /** Human-readable brand label */
   label: string;
-  /** Emoji icon for nav / tiles */
+  /** Emoji icon for nav / tiles (fallback) */
   icon: string;
+  /** SVG icon path under public/ */
+  iconSrc: string;
   /** Short brand tagline */
   tagline: string;
 }
@@ -64,6 +66,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     heroImage: "/brand-assets/dexarium/hero.webp",
     label: "The Dexarium",
     icon: "🔮",
+    iconSrc: "",
     tagline: "From Spark to Legend",
   },
   grimdark: {
@@ -77,6 +80,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     heroImage: "/brand-assets/grimdark/hero.webp",
     label: "Grimdark Future",
     icon: "⚔️",
+    iconSrc: "/brand-icons/grimdark-future.svg",
     tagline: "Industrial Ruin · War Without End",
   },
   fantasy: {
@@ -90,6 +94,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     heroImage: "/brand-assets/fantasy/hero.webp",
     label: "Age of Fantasy",
     icon: "🏰",
+    iconSrc: "/brand-icons/age-of-fantasy.svg",
     tagline: "Legends of the Old World",
   },
   pokemon: {
@@ -103,6 +108,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     heroImage: "/brand-assets/pokemon/hero.webp",
     label: "Pokémon",
     icon: "✨",
+    iconSrc: "/brand-icons/pokemon.svg",
     tagline: "Gotta Print 'Em All",
   },
   basing: {
@@ -116,6 +122,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     heroImage: "/brand-assets/basing/hero.webp",
     label: "Basing & Battle Effects",
     icon: "🪨",
+    iconSrc: "/brand-icons/basing-battle-effects.svg",
     tagline: "Ground Your Legend",
   },
   terrain: {
@@ -129,6 +136,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     heroImage: "/brand-assets/terrain/hero.webp",
     label: "Gaming Accessories & Terrain",
     icon: "🗺️",
+    iconSrc: "/brand-icons/gaming-accessories-terrain.svg",
     tagline: "Build Your Battlefield",
   },
 };

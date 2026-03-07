@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Poké Ball silhouette — Pokémon category icon -->
+  <!-- Original artwork by The Dexarium (stylised representation for category navigation) -->
+
+  <!-- Outer circle -->
+  <circle cx="256" cy="256" r="228" fill="currentColor"/>
+
+  <!-- Top-half inset (slightly smaller, same color creates the band/edge illusion) -->
+  <!-- White band strip across middle -->
+  <rect x="28" y="236" width="456" height="40" rx="0" fill="currentColor" opacity="0.18"/>
+
+  <!-- Cut band to circle shape using clip approach: overdraw with two arcs *)
+       Bottom half semi-circle (lighter fill to differentiate) -->
+  <path
+    d="M 28,256 A 228,228 0 0,0 484,256 Z"
+    fill="currentColor"
+    opacity="0.30"
+  />
+
+  <!-- Center button ring (outer) -->
+  <circle cx="256" cy="256" r="54" fill="currentColor" opacity="1"/>
+  <!-- Center button inner hole -->
+  <circle cx="256" cy="256" r="34" fill="currentColor" opacity="0.10"/>
+
+  <!-- Horizontal band lines (crisp) -->
+  <line x1="202" y1="236" x2="28" y2="236" stroke="currentColor" stroke-width="0"/>
+  <!-- Top-half dark arc line (top border of band) -->
+  <path d="M 28,236 A 228,228 0 0,1 484,236" fill="none" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+  <path d="M 28,276 A 228,228 0 0,0 484,276" fill="none" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+</svg>

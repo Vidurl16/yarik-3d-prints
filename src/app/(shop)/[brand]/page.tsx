@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { THEMES } from "@/components/theme/themes";
 import { getProductsByBrand } from "@/lib/data/products";
 
-// ISR: revalidate every hour so DB changes propagate
-export const revalidate = 3600;
+// ISR: revalidate every 60s so DB changes propagate within 1 minute
+export const revalidate = 60;
 
 interface Props {
   params: Promise<{ brand: string }>;

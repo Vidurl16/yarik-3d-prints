@@ -1,5 +1,6 @@
 import { siteCategories } from "@/lib/products";
 import Link from "next/link";
+import BrandIcon from "@/components/BrandIcon";
 
 export const metadata = {
   title: "Shop — YARIK 3D Prints",
@@ -56,7 +57,13 @@ export default function ShopPage() {
                 }}
               />
               <div className="relative z-10">
-                <span className="text-5xl mb-5 block">{cat.icon}</span>
+                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                  <BrandIcon
+                    id={cat.id}
+                    className="w-full h-full"
+                    style={{ color: cat.accentColor }}
+                  />
+                </div>
                 <h2 className="font-heading text-xl tracking-[0.08em] text-[#e8e0d0] mb-2 group-hover:text-[#c9a84c] transition-colors">
                   {cat.name.toUpperCase()}
                 </h2>

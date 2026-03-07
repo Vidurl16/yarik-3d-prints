@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Castle tower with merlons — Gaming Accessories & Terrain category icon -->
+  <!-- Original artwork by The Dexarium -->
+
+  <!-- Tower silhouette (body + merlons as single filled path) -->
+  <path
+    fill="currentColor"
+    d="M 96,448 L 96,210 L 96,140 L 168,140 L 168,210 L 220,210 L 220,140 L 292,140 L 292,210 L 344,210 L 344,140 L 416,140 L 416,210 L 416,448 Z"
+  />
+
+  <!-- Arrow slit window (cut out using lighter fill overdraw or separate element) -->
+  <path
+    d="M 242,300 Q 256,260 270,300 L 270,390 Q 256,400 242,390 Z"
+    fill="currentColor"
+    opacity="0.12"
+  />
+
+  <!-- Foundation base -->
+  <rect x="72" y="440" width="368" height="28" rx="6" fill="currentColor" opacity="0.55"/>
+
+  <!-- Gate arch at bottom centre -->
+  <path
+    d="M 196,448 L 196,360 Q 196,308 256,308 Q 316,308 316,360 L 316,448 Z"
+    fill="currentColor"
+    opacity="0.18"
+  />
+</svg>

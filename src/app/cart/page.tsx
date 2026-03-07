@@ -48,9 +48,9 @@ function CartContent() {
         throw new Error(data.error ?? "Checkout failed");
       }
 
-      const { url } = await res.json();
-      if (url) {
-        window.location.href = url;
+      const { redirectUrl } = await res.json();
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -72,11 +72,15 @@ function CartContent() {
             </svg>
           </div>
           <h1 className="font-heading text-2xl text-[#c9a84c] mb-3 tracking-widest">
-            ORDER RECEIVED
+            PAYMENT PROCESSING
           </h1>
-          <p className="font-body text-sm text-[#6b6b6b] leading-relaxed mb-8">
-            For the Emperor! Your warband will be forged and dispatched shortly.
-            Check your email for order confirmation.
+          <p className="font-body text-sm text-[#6b6b6b] leading-relaxed mb-4">
+            Your payment is being confirmed. You will receive an email once your order is verified.
+          </p>
+          <p className="font-body text-xs text-[#4a4a4a] leading-relaxed mb-8">
+            If payment succeeded but your order is not confirmed within a few minutes,{" "}
+            <Link href="/contact" className="text-[#c9a84c] hover:underline">contact support</Link>{" "}
+            with your order reference.
           </p>
           <Link
             href="/shop"
@@ -297,22 +301,6 @@ function CartContent() {
                     {error}
                   </p>
                 )}
-
-                {/* Stripe Test Card Hint */}
-                <div
-                  className="mt-4 p-3 text-center"
-                  style={{ background: "rgba(30,80,140,0.1)", border: "1px solid rgba(30,80,140,0.3)" }}
-                >
-                  <p className="font-body text-[9px] tracking-wider text-[#6ab0ff] mb-1">
-                    STRIPE TEST MODE
-                  </p>
-                  <p className="font-body text-[10px] text-[rgba(106,176,255,0.7)]">
-                    Test card: <span className="font-semibold text-[#6ab0ff]">4242 4242 4242 4242</span>
-                  </p>
-                  <p className="font-body text-[9px] text-[rgba(106,176,255,0.5)] mt-0.5">
-                    Any future date · Any CVC
-                  </p>
-                </div>
               </div>
             </div>
           </div>

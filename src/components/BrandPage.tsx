@@ -1,6 +1,7 @@
 import type { ThemeId } from "./theme/themes";
 import { THEMES, ARMY_BUILDER_BRANDS } from "./theme/themes";
 import Link from "next/link";
+import BrandIcon from "@/components/BrandIcon";
 import type { DbProduct } from "@/lib/data/types";
 import BrandProductGrid from "./BrandProductGrid";
 
@@ -64,10 +65,21 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
             The Dexarium
           </p>
           <h1
-            className="font-heading text-4xl sm:text-6xl leading-tight mb-4"
+            className="font-heading text-4xl sm:text-6xl leading-tight mb-4 flex items-center gap-5"
             style={{ color: "var(--text)" }}
           >
-            {theme.icon} {theme.label}
+            {theme.iconSrc ? (
+              <span className="inline-flex items-center justify-center w-14 h-14 sm:w-20 sm:h-20 shrink-0">
+                <BrandIcon
+                  id={brandSlug}
+                  className="w-full h-full"
+                  style={{ color: "var(--primary)" }}
+                />
+              </span>
+            ) : (
+              <span>{theme.icon}</span>
+            )}
+            {theme.label}
           </h1>
           <p
             className="font-body text-base tracking-widest mb-8"

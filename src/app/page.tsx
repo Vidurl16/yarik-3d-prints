@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { siteCategories, getNewArrivals, getPreorders, formatPrice } from "@/lib/products";
+import BrandIcon from "@/components/BrandIcon";
 
 // Map siteCategory IDs → top-level brand routes
 const CATEGORY_ROUTE_MAP: Record<string, string> = {
@@ -207,7 +208,13 @@ export default function HeroPage() {
                 }}
               />
               <div className="relative z-10">
-                <span className="text-4xl mb-4 block">{cat.icon}</span>
+                <div className="w-16 h-16 mb-4 mx-auto flex items-center justify-center">
+                  <BrandIcon
+                    id={cat.id}
+                    className="w-full h-full"
+                    style={{ color: cat.accentColor }}
+                  />
+                </div>
                 <h3
                   className="font-heading text-sm tracking-[0.1em] mb-2"
                   style={{ color: "var(--text)" }}

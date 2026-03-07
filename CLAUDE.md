@@ -150,3 +150,52 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 - Commit .env.local to git
 - Ask clarifying questions — make decisions and build
 - Use placeholder grey boxes for images — use picsum.photos with consistent seeds per product
+
+---
+
+## Phase 2: Functional Production Website
+
+### New Routes Added
+- `/login` — Supabase Auth email+password login/signup (Dexarium theme)
+- `/account` — User profile + order history (Dexarium theme, protected)
+- `/admin` — Admin dashboard (server-protected by ADMIN_EMAIL_ALLOWLIST)
+- `/admin/products` — Product list with activate/deactivate/delete
+- `/admin/products/new` — Create product with image upload
+- `/admin/products/[id]/edit` — Edit product
+- `/admin/orders` — Orders list with date/status filters
+- `/admin/analytics` — Revenue KPIs + top products tables
+
+### New API Routes
+- `POST /api/checkout` — Provider-agnostic checkout (creates Order first, then provider session)
+- `POST /api/webhooks/stripe` — Stripe webhook (sets paid only after verified webhook)
+- `GET /api/admin/products` — List all products (admin only)
+- `POST /api/admin/products` — Create product (admin only)
+- `PATCH /api/admin/products/[id]` — Update product (admin only)
+- `DELETE /api/admin/products/[id]` — Delete product (admin only)
+- `POST /api/admin/upload-image` — Upload product image to Supabase Storage (admin only)
+- `GET /api/admin/orders` — List orders with filters (admin only)
+- `GET /api/admin/analytics` — Sales analytics (admin only)
+- `POST /api/admin/revalidate` — Purge ISR cache for product pages
+
+### Payment Architecture
+- `PaymentProvider` interface in `src/lib/payments/types.ts`
+- `StripeProvider` adapter in `src/lib/payments/stripe.ts`
+- Factory in `src/lib/payments/index.ts` — controlled by `PAYMENT_PROVIDER` env var
+- Orders created with `payment_provider`, `payment_session_id`, `payment_status`, `payment_metadata`, `paid_at`
+- Orders only marked `paid` after verified webhook (not on redirect)
+
+### DB Migration
+- Run `supabase/migration_phase2.sql` in Supabase SQL Editor
+- Removes `stripe_session_id`, `stripe_payment_intent_id` from orders
+- Adds `user_id`, `payment_provider`, `payment_session_id`, `payment_status`, `payment_event_ids`, `payment_metadata`, `paid_at`
+- Adds `carts` table for user cart persistence
+- Adds RLS policies for all tables
+- Creates `product-images` storage bucket
+
+### Key Files
+- `src/middleware.ts` — Auth cookie refresh + admin/account route protection
+- `src/lib/auth/getSession.ts` — SSR session retrieval
+- `src/lib/auth/isAdmin.ts` — Admin allowlist check (server-side only)
+- `src/lib/payments/` — Provider adapter interface + Stripe implementation
+- `src/lib/storage/uploadImage.ts` — Image upload to Supabase Storage
+- `src/store/cartStore.ts` — Cart with localStorage (guest) + Supabase sync (user)

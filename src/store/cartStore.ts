@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { getBrowserClient } from "@/lib/supabase/browser";
 
 export interface CartItem {
   id: string;
@@ -23,6 +24,28 @@ interface CartStore {
   closeDrawer: () => void;
   getTotal: () => number;
   getItemCount: () => number;
+  /** Sync cart to/from Supabase for logged-in users */
+  syncToDb: (userId: string) => Promise<void>;
+  loadFromDb: (userId: string) => Promise<void>;
+  mergeAndSync: (userId: string) => Promise<void>;
+}
+
+let _syncTimer: ReturnType<typeof setTimeout> | null = null;
+
+function debouncedSync(userId: string, items: CartItem[]) {
+  if (_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(async () => {
+    try {
+      const supabase = getBrowserClient();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from("carts") as any).upsert(
+        { user_id: userId, cart_json: items, updated_at: new Date().toISOString() },
+        { onConflict: "user_id" }
+      );
+    } catch (err) {
+      console.error("[Cart] DB sync error:", err);
+    }
+  }, 800);
 }
 
 export const useCartStore = create<CartStore>()(
@@ -34,14 +57,12 @@ export const useCartStore = create<CartStore>()(
       addItem: (item) => {
         set((state) => {
           const existing = state.items.find((i) => i.id === item.id);
-          if (existing) {
-            return {
-              items: state.items.map((i) =>
+          const newItems = existing
+            ? state.items.map((i) =>
                 i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-              ),
-            };
-          }
-          return { items: [...state.items, { ...item, quantity: 1 }] };
+              )
+            : [...state.items, { ...item, quantity: 1 }];
+          return { items: newItems };
         });
       },
 
@@ -69,6 +90,56 @@ export const useCartStore = create<CartStore>()(
 
       getItemCount: () =>
         get().items.reduce((sum, item) => sum + item.quantity, 0),
+
+      syncToDb: async (userId: string) => {
+        debouncedSync(userId, get().items);
+      },
+
+      loadFromDb: async (userId: string) => {
+        try {
+          const supabase = getBrowserClient();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data } = await (supabase.from("carts") as any)
+            .select("cart_json")
+            .eq("user_id", userId)
+            .maybeSingle();
+          if (data?.cart_json && Array.isArray(data.cart_json)) {
+            set({ items: data.cart_json as CartItem[] });
+          }
+        } catch (err) {
+          console.error("[Cart] loadFromDb error:", err);
+        }
+      },
+
+      mergeAndSync: async (userId: string) => {
+        try {
+          const supabase = getBrowserClient();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data } = await (supabase.from("carts") as any)
+            .select("cart_json")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+          const remoteItems: CartItem[] = Array.isArray(data?.cart_json)
+            ? (data.cart_json as CartItem[])
+            : [];
+
+          const localItems = get().items;
+
+          // Merge: local items take precedence for quantity; add remote-only items
+          const merged = [...localItems];
+          for (const remoteItem of remoteItems) {
+            if (!merged.find((i) => i.id === remoteItem.id)) {
+              merged.push(remoteItem);
+            }
+          }
+
+          set({ items: merged });
+          debouncedSync(userId, merged);
+        } catch (err) {
+          console.error("[Cart] mergeAndSync error:", err);
+        }
+      },
     }),
     {
       name: "yarik-cart",

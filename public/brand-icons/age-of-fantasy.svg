@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Heraldic heater shield — Age of Fantasy category icon -->
+  <!-- Original artwork by The Dexarium -->
+
+  <!-- Shield body -->
+  <path
+    fill="currentColor"
+    d="M 56,90 Q 56,60 86,60 L 426,60 Q 456,60 456,90 L 456,340 Q 456,380 256,460 Q 56,380 56,340 Z"
+  />
+
+  <!-- Sword overlay (cutout effect using a second lighter path) -->
+  <!-- Blade -->
+  <rect x="248" y="80" width="16" height="240" rx="4" fill="currentColor" opacity="0.22"/>
+  <!-- Cross-guard -->
+  <rect x="196" y="290" width="120" height="16" rx="4" fill="currentColor" opacity="0.22"/>
+  <!-- Pommel -->
+  <ellipse cx="256" cy="360" rx="18" ry="18" fill="currentColor" opacity="0.22"/>
+
+  <!-- Shield border ring -->
+  <path
+    fill="none"
+    stroke="currentColor"
+    stroke-width="12"
+    opacity="0.35"
+    d="M 56,90 Q 56,60 86,60 L 426,60 Q 456,60 456,90 L 456,340 Q 456,380 256,460 Q 56,380 56,340 Z"
+  />
+</svg>

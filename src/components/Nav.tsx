@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { useEffect, useRef, useState } from "react";
 import { siteCategories } from "@/lib/products";
+import NavAuthLinks from "./NavAuthLinks";
 
 const BRAND_ROUTE_MAP: Record<string, string> = {
   "grimdark-future": "/grimdark-future",
@@ -152,6 +153,7 @@ export default function Nav() {
                 <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             ))}
+            <NavAuthLinks />
           </div>
 
           {/* Right side: Cart + Mobile menu */}

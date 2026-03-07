@@ -3,7 +3,7 @@ import Link from "next/link";
 import DbProductCard from "@/components/DbProductCard";
 import type { Metadata } from "next";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "New Arrivals — The Dexarium",

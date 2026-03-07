@@ -16,14 +16,22 @@ export interface DbProduct {
   updated_at: string;
 }
 
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+
 export interface DbOrder {
   id: string;
-  stripe_session_id: string;
-  stripe_payment_intent_id: string | null;
+  user_id: string | null;
   email: string | null;
   currency: string | null;
   total_amount_cents: number | null;
+  /** Legacy status field kept for compatibility; prefer payment_status */
   status: string | null;
+  payment_provider: string | null;
+  payment_session_id: string | null;
+  payment_status: PaymentStatus;
+  payment_event_ids: string[];
+  payment_metadata: Record<string, unknown>;
+  paid_at: string | null;
   created_at: string;
 }
 
@@ -35,4 +43,10 @@ export interface DbOrderItem {
   quantity: number;
   unit_amount_cents: number;
   created_at: string;
+}
+
+export interface DbCart {
+  user_id: string;
+  cart_json: unknown[];
+  updated_at: string;
 }
