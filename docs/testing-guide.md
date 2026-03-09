@@ -180,12 +180,61 @@ Log in with an admin email first.
 
 ---
 
+## 12. Known Issues & Gaps to Verify
+
+These are known gaps in the current implementation. Test each one and note behaviour.
+
+### 🔴 Critical — will break real usage
+
+| # | Issue | How to test | Current behaviour |
+|---|-------|-------------|-------------------|
+| 12.1 | **Cart sync never fires on login** | Add items as guest → log in → check cart | Cart does NOT restore from Supabase (mergeAndSync is defined but never called on auth change) |
+| 12.2 | **Yoco keys not set** | Add item to cart → click Checkout | Expect 500 error until `PAYMENT_SECRET_KEY` and `PAYMENT_WEBHOOK_SECRET` are set in `.env.local` |
+| 12.3 | **DB migration may not be run** | Add to cart → attempt checkout | If `carts` / `payment_provider` columns missing, you'll see DB errors — run `supabase/migration_phase2.sql` in Supabase SQL Editor |
+
+### 🟡 Important — missing features
+
+| # | Issue | How to test | Expected fix |
+|---|-------|-------------|--------------|
+| 12.4 | **No order confirmation email** | Complete a successful Yoco payment | Customer receives no email — Phase 3 item |
+| 12.5 | **No guest order status page** | Complete checkout as guest | No way to check order status without logging in |
+| 12.6 | **Failed payment not handled** | Trigger a declined card in Yoco test mode | Order stays `pending` forever; no UI feedback |
+| 12.7 | **ADMIN_EMAIL_ALLOWLIST is placeholder** | Try to access `/admin` | If `.env.local` still has `you@yourdomain.com`, admin portal is inaccessible to everyone |
+
+### 🟠 Code gaps
+
+| # | Issue | How to test | Notes |
+|---|-------|-------------|-------|
+| 12.8 | **Cart cleared before payment confirmed** | Start checkout → close Yoco window without paying | Cart is already cleared client-side; customer loses their cart |
+| 12.9 | **Yoco redirect URL field name unverified** | Complete a real Yoco test checkout | Adapter tries `data.redirectUrl ?? data.paymentUrl ?? data.url` — if none match, checkout silently fails with no redirect |
+| 12.10 | **Webhook unreachable locally** | Run locally without ngrok | Yoco cannot POST to `localhost:3000` — use `ngrok http 3000` and update Yoco dashboard webhook URL |
+
+### Setup checklist before any real testing
+
+```bash
+# 1. Confirm migration ran — should return rows
+# In Supabase SQL Editor:
+SELECT column_name FROM information_schema.columns
+WHERE table_name = 'orders' AND column_name = 'payment_provider';
+# → should return 1 row
+
+SELECT table_name FROM information_schema.tables
+WHERE table_name = 'carts';
+# → should return 1 row
+
+# 2. Confirm env vars set (run locally)
+grep "PAYMENT_SECRET_KEY\|PAYMENT_WEBHOOK_SECRET\|ADMIN_EMAIL_ALLOWLIST" .env.local
+# → none should contain "xxx" or placeholder values
+```
+
+---
+
 ## Known Limitations / Out of Scope (Phase 2)
 
 - No discount/coupon codes
 - No email notifications on order (Phase 3)
 - Yoco webhook requires public URL — use ngrok for local testing
-- Cart sync to Supabase requires a `CartSyncProvider` component to be wired in root layout (planned for Phase 3)
+- Cart sync to Supabase requires auth state listener to call `mergeAndSync()` on login (planned fix)
 
 ---
 
