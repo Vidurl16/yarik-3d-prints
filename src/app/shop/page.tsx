@@ -1,6 +1,7 @@
 import { siteCategories } from "@/lib/products";
 import Link from "next/link";
 import BrandIcon from "@/components/BrandIcon";
+import HoverLink from "@/components/HoverLink";
 
 export const metadata = {
   title: "Shop — YARIK 3D Prints",
@@ -12,7 +13,7 @@ export default function ShopPage() {
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
-          <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }} onMouseOver={e=>(e.currentTarget.style.color="var(--primary)")} onMouseOut={e=>(e.currentTarget.style.color="var(--muted)")}>HOME</Link>
+          <HoverLink href="/" className="transition-colors" defaultColor="var(--muted)" hoverColor="var(--primary)">HOME</HoverLink>
           <span style={{ color: "var(--border)" }}>›</span>
           <span style={{ color: "var(--text)", opacity: 0.5 }}>SHOP</span>
         </div>
