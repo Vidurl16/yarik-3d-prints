@@ -3,6 +3,7 @@ import { Cinzel_Decorative, Rajdhani } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import CartDrawer from "@/components/CartDrawer";
+import CartSyncProvider from "@/components/CartSyncProvider";
 
 const cinzel = Cinzel_Decorative({
   variable: "--font-cinzel",
@@ -39,6 +40,9 @@ export default function RootLayout({
 
         {/* Cart Drawer */}
         <CartDrawer />
+
+        {/* Cart ↔ Supabase sync (auth-triggered merge + ongoing debounce save) */}
+        <CartSyncProvider />
 
         {/* Page Content */}
         <main>{children}</main>

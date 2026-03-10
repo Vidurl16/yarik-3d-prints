@@ -11,6 +11,7 @@ Before testing, confirm:
 - [ ] `supabase/migration_phase2.sql` has been run in the Supabase SQL Editor
 - [ ] `.env.local` has real values for all keys (not placeholder `xxx`)
 - [ ] `ADMIN_EMAIL_ALLOWLIST` contains the email you'll use to test admin
+- [ ] `RESEND_API_KEY` is set with a valid Resend key (for order confirmation emails; safe to omit — emails are skipped gracefully if missing)
 - [ ] Supabase Auth → Email provider is **enabled** (Dashboard → Auth → Providers)
 - [ ] Dev server is running: `npm run dev` → `http://localhost:3000`
 
@@ -80,10 +81,10 @@ Before testing, confirm:
 | # | Step | Expected |
 |---|------|----------|
 | 4.1 | Add items to cart while **logged out** (guest) | Items stored in `localStorage` |
-| 4.2 | Log in | Cart merges: local items + any Supabase-saved items combined |
-| 4.3 | Add another item while logged in | Item count increases |
+| 4.2 | Log in | Cart merges: local items + any Supabase-saved items combined, then saved to DB |
+| 4.3 | Add another item while logged in | Item count increases; Supabase `carts` row updates within ~1 second |
 | 4.4 | In Supabase Dashboard → Table Editor → `carts` table | Row exists for your user ID with correct items JSON |
-| 4.5 | Log out, log back in | Cart restores from Supabase (not empty) |
+| 4.5 | Log out, log back in on a **different browser/device** | Cart restores from Supabase (not empty) |
 
 ---
 
@@ -97,9 +98,12 @@ Before testing, confirm:
 | 5.2 | In Supabase `orders` table | New row created with `payment_status = pending` |
 | 5.3 | Complete payment with Yoco test card | Redirected back to `/cart?success=true` |
 | 5.4 | Cart success state | Shows **"PAYMENT PROCESSING"** (NOT "ORDER RECEIVED") |
-| 5.5 | Cart items | Cart is cleared |
+| 5.5 | Cart items | Cart is cleared automatically on the success page |
 | 5.6 | Yoco fires webhook → `POST /api/webhooks/yoco` | Order row `payment_status` updates to `paid` |
 | 5.7 | In Supabase `orders` table | `payment_status = paid`, `paid_at` timestamp populated, `payment_provider = yoco` |
+| 5.8 | Customer receives order confirmation email | Branded email sent via Resend to the address on the order (requires `RESEND_API_KEY` set) |
+| 5.9 | **Failed payment** — use Yoco declined-card test number | Yoco redirects back to `/cart?cancelled=true` |
+| 5.10 | Cart page after failed payment | Red "Payment was cancelled or declined" banner appears above cart items; items are still in cart |
 
 > ⚠️ If the webhook doesn't fire locally, use [ngrok](https://ngrok.com) to expose localhost and configure the Yoco dashboard webhook URL to `https://<your-ngrok-url>/api/webhooks/yoco`
 
@@ -188,7 +192,7 @@ These are known gaps in the current implementation. Test each one and note behav
 
 | # | Issue | How to test | Current behaviour |
 |---|-------|-------------|-------------------|
-| 12.1 | **Cart sync never fires on login** | Add items as guest → log in → check cart | Cart does NOT restore from Supabase (mergeAndSync is defined but never called on auth change) |
+| ~~12.1~~ | ~~**Cart sync never fires on login**~~ | ~~Add items as guest → log in → check cart~~ | ✅ **Fixed** — `CartSyncProvider` in root layout listens to `onAuthStateChange`; calls `mergeAndSync` on `SIGNED_IN` and `INITIAL_SESSION`, and debounce-saves on every cart change while logged in |
 | 12.2 | **Yoco keys not set** | Add item to cart → click Checkout | Expect 500 error until `PAYMENT_SECRET_KEY` and `PAYMENT_WEBHOOK_SECRET` are set in `.env.local` |
 | 12.3 | **DB migration may not be run** | Add to cart → attempt checkout | If `carts` / `payment_provider` columns missing, you'll see DB errors — run `supabase/migration_phase2.sql` in Supabase SQL Editor |
 
@@ -196,16 +200,16 @@ These are known gaps in the current implementation. Test each one and note behav
 
 | # | Issue | How to test | Expected fix |
 |---|-------|-------------|--------------|
-| 12.4 | **No order confirmation email** | Complete a successful Yoco payment | Customer receives no email — Phase 3 item |
+| ~~12.4~~ | ~~**No order confirmation email**~~ | ~~Complete a successful Yoco payment~~ | ✅ **Fixed** — Resend integration sends a branded order confirmation email on `payment.succeeded` webhook. Requires `RESEND_API_KEY` in `.env.local`. |
 | 12.5 | **No guest order status page** | Complete checkout as guest | No way to check order status without logging in |
-| 12.6 | **Failed payment not handled** | Trigger a declined card in Yoco test mode | Order stays `pending` forever; no UI feedback |
+| ~~12.6~~ | ~~**Failed payment not handled**~~ | ~~Trigger a declined card in Yoco test mode~~ | ✅ **Fixed** — `cancelUrl` now includes `?cancelled=true`; cart page shows a "Payment was cancelled or declined" banner with cart items intact. |
 | 12.7 | **ADMIN_EMAIL_ALLOWLIST is placeholder** | Try to access `/admin` | If `.env.local` still has `you@yourdomain.com`, admin portal is inaccessible to everyone |
 
 ### 🟠 Code gaps
 
 | # | Issue | How to test | Notes |
 |---|-------|-------------|-------|
-| 12.8 | **Cart cleared before payment confirmed** | Start checkout → close Yoco window without paying | Cart is already cleared client-side; customer loses their cart |
+| ~~12.8~~ | ~~**Cart cleared before payment confirmed**~~ | ~~Start checkout → close Yoco window without paying~~ | ✅ **Fixed** — cart is now cleared via `useEffect` only when `?success=true` is in the URL (i.e., after Yoco redirects back). Abandoning the Yoco window leaves cart intact. |
 | 12.9 | **Yoco redirect URL field name unverified** | Complete a real Yoco test checkout | Adapter tries `data.redirectUrl ?? data.paymentUrl ?? data.url` — if none match, checkout silently fails with no redirect |
 | 12.10 | **Webhook unreachable locally** | Run locally without ngrok | Yoco cannot POST to `localhost:3000` — use `ngrok http 3000` and update Yoco dashboard webhook URL |
 

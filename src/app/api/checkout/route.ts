@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       currency: "ZAR",
       customerEmail: user?.email ?? null,
       successUrl: `${baseUrl}/cart?success=true&order=${orderId}`,
-      cancelUrl: `${baseUrl}/cart`,
+      cancelUrl: `${baseUrl}/cart?cancelled=true`,
       metadata: {
         order_id: orderId,
         ...(user?.id ? { user_id: user.id } : {}),

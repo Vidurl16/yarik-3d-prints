@@ -169,6 +169,48 @@ export async function listOrdersAdmin(opts: {
 }
 
 /**
+ * Get a single order with its items by order ID.
+ */
+export async function getOrderWithItems(
+  orderId: string
+): Promise<{ order: DbOrder; items: DbOrderItem[] } | null> {
+  const supabase = getServiceClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*, order_items(*)")
+    .eq("id", orderId)
+    .maybeSingle();
+  if (error) {
+    console.error("[DB] getOrderWithItems:", error.message);
+    return null;
+  }
+  if (!data) return null;
+  const { order_items, ...order } = data as DbOrder & { order_items: DbOrderItem[] };
+  return { order: order as DbOrder, items: order_items ?? [] };
+}
+
+/**
+ * Get a single order with its items by payment_session_id.
+ */
+export async function getOrderWithItemsBySessionId(
+  sessionId: string
+): Promise<{ order: DbOrder; items: DbOrderItem[] } | null> {
+  const supabase = getServiceClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*, order_items(*)")
+    .eq("payment_session_id", sessionId)
+    .maybeSingle();
+  if (error) {
+    console.error("[DB] getOrderWithItemsBySessionId:", error.message);
+    return null;
+  }
+  if (!data) return null;
+  const { order_items, ...order } = data as DbOrder & { order_items: DbOrderItem[] };
+  return { order: order as DbOrder, items: order_items ?? [] };
+}
+
+/**
  * Get orders for a user (for /account page).
  */
 export async function getOrdersByUser(userId: string): Promise<DbOrder[]> {

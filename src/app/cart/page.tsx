@@ -5,12 +5,13 @@ import { formatPrice } from "@/lib/products";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 
 function CartContent() {
   const { items, removeItem, updateQuantity, clearCart, getTotal } = useCartStore();
   const searchParams = useSearchParams();
   const isSuccess = searchParams.get("success") === "true";
+  const isCancelled = searchParams.get("cancelled") === "true";
   const [checkingOut, setCheckingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,6 +58,12 @@ function CartContent() {
       setCheckingOut(false);
     }
   }
+
+  // Clear cart once on successful payment return
+  useEffect(() => {
+    if (isSuccess) clearCart();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   // Success state
   if (isSuccess) {
@@ -136,7 +143,29 @@ function CartContent() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Failed / cancelled payment banner */}
+          {isCancelled && (
+            <div
+              className="mb-8 flex items-start gap-4 p-4"
+              style={{ background: "rgba(139,0,0,0.12)", border: "1px solid rgba(139,0,0,0.5)" }}
+            >
+              <svg className="w-5 h-5 text-[#8b0000] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+              </svg>
+              <div>
+                <p className="font-body text-sm text-[#e8e0d0] mb-1">
+                  Payment was cancelled or declined.
+                </p>
+                <p className="font-body text-xs text-[#6b6b6b] leading-relaxed">
+                  Your cart is intact — review your items below and try again, or{" "}
+                  <Link href="/contact" className="text-[#c9a84c] hover:underline">contact support</Link>{" "}
+                  if the problem persists.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 text-[10px] tracking-widest text-[#6b6b6b] font-body mb-6">
             <Link href="/" className="hover:text-[#c9a84c] transition-colors">HOME</Link>

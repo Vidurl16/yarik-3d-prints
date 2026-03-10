@@ -1,0 +1,767 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import Image from "next/image";
+import { useCartStore } from "@/store/cartStore";
+import { formatPrice, type Product } from "@/lib/products";
+import type { ThemeTokens } from "@/components/theme/themes";
+
+const ROLE_SECTIONS = [
+  {
+    id: "HQ",
+    label: "HQ",
+    icon: "👑",
+    description: "Commanders & Characters",
+    roles: ["HQ"],
+  },
+  {
+    id: "Battleline",
+    label: "Battleline",
+    icon: "🛡️",
+    description: "Core troops & scoring units",
+    roles: ["Battleline", "Support"],
+  },
+  {
+    id: "Infantry",
+    label: "Infantry / Cavalry",
+    icon: "⚔️",
+    description: "Foot soldiers & mounted warriors",
+    roles: ["Infantry", "Cavalry"],
+  },
+  {
+    id: "Vehicles",
+    label: "Vehicles",
+    icon: "🚛",
+    description: "Tanks, walkers & war machines",
+    roles: ["Vehicles"],
+  },
+  {
+    id: "Transports",
+    label: "Transports",
+    icon: "🚁",
+    description: "Deployment & mobility units",
+    roles: ["Transports"],
+  },
+] as const;
+
+interface Props {
+  brand: string;
+  theme: ThemeTokens;
+  mainProducts: Product[];
+  basingSuggestion: Product;
+  battleEffectsSuggestion: Product;
+}
+
+interface UnitCardProps {
+  product: Product;
+  qty: number;
+  onQtyChange: (qty: number) => void;
+  theme: ThemeTokens;
+}
+
+function UnitCard({ product, qty, onQtyChange, theme }: UnitCardProps) {
+  const isSelected = qty > 0;
+
+  const printBadgeClass =
+    product.printType === "RESIN"
+      ? "print-badge-resin"
+      : product.printType === "FDM"
+      ? "print-badge-fdm"
+      : "print-badge-multicolour";
+
+  return (
+    <div
+      className="flex flex-col overflow-hidden transition-all duration-200"
+      style={{
+        background: isSelected
+          ? `linear-gradient(160deg, var(--surface) 0%, color-mix(in srgb, var(--primary) 8%, var(--surface)) 100%)`
+          : "var(--surface)",
+        border: isSelected
+          ? "1px solid var(--primary)"
+          : "1px solid var(--border)",
+      }}
+    >
+      {/* Image */}
+      <div className="relative w-full aspect-square overflow-hidden">
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          fill
+          className="object-cover opacity-75"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)",
+          }}
+        />
+        {product.isPreorder && (
+          <span
+            className="absolute top-2 left-2 font-body text-[8px] tracking-[0.15em] px-1.5 py-0.5"
+            style={{
+              background: "rgba(139,0,0,0.8)",
+              color: "#ff9090",
+            }}
+          >
+            PREORDER
+          </span>
+        )}
+        {isSelected && (
+          <div
+            className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center"
+            style={{ background: "var(--primary)" }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              className="w-3 h-3"
+              style={{ color: "var(--bg)" }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m4.5 12.75 6 6 9-13.5"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="p-3 flex flex-col gap-1.5">
+        <p
+          className="font-body text-[9px] tracking-[0.15em] uppercase truncate"
+          style={{ color: "var(--muted)" }}
+        >
+          {product.faction.replace(/-/g, " ")}
+        </p>
+        <h4
+          className="font-body text-xs font-semibold leading-tight line-clamp-2"
+          style={{ color: "var(--text)" }}
+        >
+          {product.name}
+        </h4>
+        <div className="flex items-center gap-1.5">
+          <span className={`font-body text-[8px] tracking-wider ${printBadgeClass}`}>
+            {product.printType}
+          </span>
+        </div>
+
+        <div
+          className="pt-2 mt-auto"
+          style={{ borderTop: "1px solid var(--border)" }}
+        >
+          <div className="flex items-center justify-between">
+            <span
+              className="font-heading text-sm"
+              style={{ color: "var(--primary)" }}
+            >
+              {formatPrice(product.price)}
+            </span>
+
+            {/* Quantity controls */}
+            {isSelected ? (
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => onQtyChange(qty - 1)}
+                  className="w-6 h-6 flex items-center justify-center transition-colors"
+                  style={{
+                    border: "1px solid var(--border)",
+                    color: "var(--primary)",
+                  }}
+                  aria-label="Decrease quantity"
+                >
+                  −
+                </button>
+                <span
+                  className="font-body text-sm w-5 text-center"
+                  style={{ color: "var(--text)" }}
+                >
+                  {qty}
+                </span>
+                <button
+                  onClick={() => onQtyChange(qty + 1)}
+                  className="w-6 h-6 flex items-center justify-center transition-colors"
+                  style={{
+                    border: "1px solid var(--primary)",
+                    color: "var(--primary)",
+                  }}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => onQtyChange(1)}
+                className="font-body text-[9px] tracking-wider px-2.5 py-1 transition-all duration-150"
+                style={{
+                  background: "var(--primary)",
+                  color: "var(--bg)",
+                }}
+              >
+                + ADD
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function UpsellRow({
+  product,
+  active,
+  onToggle,
+  theme,
+}: {
+  product: Product;
+  active: boolean;
+  onToggle: (v: boolean) => void;
+  theme: ThemeTokens;
+}) {
+  return (
+    <label
+      className="flex items-center gap-4 p-4 cursor-pointer transition-all duration-150"
+      style={{
+        background: active
+          ? `color-mix(in srgb, var(--primary) 10%, var(--bg))`
+          : "var(--bg)",
+        border: active ? "1px solid var(--primary)" : "1px solid var(--border)",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={active}
+        onChange={(e) => onToggle(e.target.checked)}
+        className="sr-only"
+      />
+      {/* Custom checkbox */}
+      <div
+        className="w-5 h-5 flex-shrink-0 flex items-center justify-center transition-all"
+        style={{
+          border: `1px solid ${active ? "var(--primary)" : "var(--muted)"}`,
+          background: active ? "var(--primary)" : "transparent",
+        }}
+      >
+        {active && (
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            className="w-3 h-3"
+            style={{ color: "var(--bg)" }}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m4.5 12.75 6 6 9-13.5"
+            />
+          </svg>
+        )}
+      </div>
+
+      {/* Thumb */}
+      <div className="relative w-10 h-10 flex-shrink-0 overflow-hidden">
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          fill
+          className="object-cover opacity-70"
+        />
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <p
+          className="font-body text-sm font-semibold tracking-wider truncate"
+          style={{ color: "var(--text)" }}
+        >
+          {product.name}
+        </p>
+        <p
+          className="font-body text-xs"
+          style={{ color: "var(--muted)" }}
+        >
+          {product.printType} · Recommended add-on
+        </p>
+      </div>
+
+      <span
+        className="font-heading text-sm flex-shrink-0"
+        style={{ color: "var(--primary)" }}
+      >
+        {formatPrice(product.price)}
+      </span>
+    </label>
+  );
+}
+
+export default function ArmyBuilderClient({
+  brand,
+  theme,
+  mainProducts,
+  basingSuggestion,
+  battleEffectsSuggestion,
+}: Props) {
+  const [selections, setSelections] = useState<Record<string, number>>({});
+  const [basingActive, setBasingActive] = useState(false);
+  const [battleEffectsActive, setBattleEffectsActive] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const { addItem, updateQuantity, items: cartItems, openDrawer } = useCartStore();
+
+  function setQty(productId: string, qty: number) {
+    setAddedToCart(false);
+    setSelections((prev) => {
+      if (qty <= 0) {
+        const { [productId]: _removed, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [productId]: qty };
+    });
+  }
+
+  // Group products by role section
+  const productsByRole = useMemo(() => {
+    const map: Record<string, Product[]> = {};
+    for (const section of ROLE_SECTIONS) {
+      map[section.id] = mainProducts.filter(
+        (p) => p.role && (section.roles as readonly string[]).includes(p.role)
+      );
+    }
+    return map;
+  }, [mainProducts]);
+
+  // Summary: selected items
+  const selectedEntries = useMemo(() => {
+    return Object.entries(selections)
+      .filter(([, qty]) => qty > 0)
+      .map(([id, qty]) => {
+        const product = mainProducts.find((p) => p.id === id);
+        return product ? { product, qty } : null;
+      })
+      .filter(Boolean) as { product: Product; qty: number }[];
+  }, [selections, mainProducts]);
+
+  // Running total
+  const total = useMemo(() => {
+    let sum = selectedEntries.reduce(
+      (acc, { product, qty }) => acc + product.price * qty,
+      0
+    );
+    if (basingActive) sum += basingSuggestion.price;
+    if (battleEffectsActive) sum += battleEffectsSuggestion.price;
+    return sum;
+  }, [selectedEntries, basingActive, battleEffectsActive, basingSuggestion, battleEffectsSuggestion]);
+
+  const hasSelection =
+    selectedEntries.length > 0 || basingActive || battleEffectsActive;
+
+  function handleAddToCart() {
+    // Snapshot current cart state before mutations
+    const currentCartItems = [...cartItems];
+
+    // Helper to add one product with an explicit quantity delta
+    function addProductToCart(product: Product, qty: number) {
+      const existing = currentCartItems.find((i) => i.id === product.id);
+      if (existing) {
+        updateQuantity(product.id, existing.quantity + qty);
+      } else {
+        addItem({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          printType: product.printType,
+        });
+        if (qty > 1) {
+          updateQuantity(product.id, qty);
+        }
+      }
+    }
+
+    // Add selected units
+    for (const { product, qty } of selectedEntries) {
+      addProductToCart(product, qty);
+    }
+
+    // Add upsells (qty 1 each)
+    if (basingActive) addProductToCart(basingSuggestion, 1);
+    if (battleEffectsActive) addProductToCart(battleEffectsSuggestion, 1);
+
+    setAddedToCart(true);
+    openDrawer();
+  }
+
+  const roleCountMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const section of ROLE_SECTIONS) {
+      map[section.id] = section.roles.reduce((count, role) => {
+        return (
+          count +
+          Object.entries(selections)
+            .filter(([id, qty]) => {
+              const product = mainProducts.find((p) => p.id === id);
+              return qty > 0 && product?.role === role;
+            })
+            .reduce((s, [, qty]) => s + qty, 0)
+        );
+      }, 0);
+    }
+    return map;
+  }, [selections, mainProducts]);
+
+  return (
+    <div
+      style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh" }}
+    >
+      {/* Page Header */}
+      <div
+        className="border-b pt-24 pb-8"
+        style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <p
+            className="font-body text-[10px] tracking-[0.35em] uppercase mb-2"
+            style={{ color: "var(--primary)", opacity: 0.7 }}
+          >
+            {theme.icon} {theme.label}
+          </p>
+          <h1
+            className="font-heading text-3xl sm:text-5xl tracking-wider"
+            style={{ color: "var(--text)" }}
+          >
+            ARMY BUILDER
+          </h1>
+          <p
+            className="font-body text-sm mt-2 tracking-wide"
+            style={{ color: "var(--muted)" }}
+          >
+            Select units by role · Add basing &amp; battle effects · Add
+            warband to cart
+          </p>
+        </div>
+      </div>
+
+      {/* Main Layout */}
+      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-8">
+        {/* Left: Role sections */}
+        <div className="flex-1 space-y-6">
+          {ROLE_SECTIONS.map((section) => {
+            const sectionProducts = productsByRole[section.id] ?? [];
+            return (
+              <section
+                key={section.id}
+                className="p-6"
+                style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-2xl">{section.icon}</span>
+                  <div className="flex-1">
+                    <h2
+                      className="font-heading text-lg tracking-wider"
+                      style={{ color: "var(--text)" }}
+                    >
+                      {section.label.toUpperCase()}
+                    </h2>
+                    <p
+                      className="font-body text-xs"
+                      style={{ color: "var(--muted)" }}
+                    >
+                      {section.description}
+                    </p>
+                  </div>
+                  {roleCountMap[section.id] > 0 && (
+                    <span
+                      className="font-body text-xs px-2 py-0.5"
+                      style={{
+                        background: "var(--primary)",
+                        color: "var(--bg)",
+                      }}
+                    >
+                      {roleCountMap[section.id]} selected
+                    </span>
+                  )}
+                </div>
+
+                {sectionProducts.length === 0 ? (
+                  <p
+                    className="font-body text-xs italic"
+                    style={{ color: "var(--muted)" }}
+                  >
+                    No units available in this category.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {sectionProducts.map((product) => (
+                      <UnitCard
+                        key={product.id}
+                        product={product}
+                        qty={selections[product.id] ?? 0}
+                        onQtyChange={(qty) => setQty(product.id, qty)}
+                        theme={theme}
+                      />
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
+
+          {/* Upsell Add-Ons */}
+          <section
+            className="p-6"
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+            }}
+          >
+            <h2
+              className="font-heading text-lg tracking-wider mb-2"
+              style={{ color: "var(--text)" }}
+            >
+              OPTIONAL ADD-ONS
+            </h2>
+            <p
+              className="font-body text-xs mb-5"
+              style={{ color: "var(--muted)" }}
+            >
+              Recommended basing &amp; battle effects to complete your army.
+            </p>
+            <div className="space-y-3">
+              <UpsellRow
+                product={basingSuggestion}
+                active={basingActive}
+                onToggle={setBasingActive}
+                theme={theme}
+              />
+              <UpsellRow
+                product={battleEffectsSuggestion}
+                active={battleEffectsActive}
+                onToggle={setBattleEffectsActive}
+                theme={theme}
+              />
+            </div>
+          </section>
+        </div>
+
+        {/* Right: Sticky Summary Panel */}
+        <aside
+          className="lg:w-80 xl:w-96 shrink-0"
+          style={{
+            position: "sticky",
+            top: "80px",
+            alignSelf: "flex-start",
+          }}
+        >
+          <div
+            className="p-6"
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+            }}
+          >
+            <h3
+              className="font-heading text-base tracking-wider mb-6 pb-4"
+              style={{
+                color: "var(--text)",
+                borderBottom: "1px solid var(--border)",
+              }}
+            >
+              YOUR WARBAND
+            </h3>
+
+            {/* Selected units by role */}
+            <div className="space-y-1 mb-4 min-h-[80px]">
+              {selectedEntries.length === 0 && !basingActive && !battleEffectsActive ? (
+                <p
+                  className="font-body text-xs italic"
+                  style={{ color: "var(--muted)" }}
+                >
+                  No units selected. Choose from the left panel.
+                </p>
+              ) : (
+                <>
+                  {selectedEntries.map(({ product, qty }) => (
+                    <div
+                      key={product.id}
+                      className="flex items-start justify-between gap-2"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p
+                          className="font-body text-xs leading-snug truncate"
+                          style={{ color: "var(--text)" }}
+                        >
+                          {product.name}
+                        </p>
+                        <p
+                          className="font-body text-[9px] tracking-wider"
+                          style={{ color: "var(--muted)" }}
+                        >
+                          ×{qty}
+                        </p>
+                      </div>
+                      <span
+                        className="font-body text-xs flex-shrink-0"
+                        style={{ color: "var(--primary)" }}
+                      >
+                        {formatPrice(product.price * qty)}
+                      </span>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+
+            {/* Upsell rows in summary */}
+            {(basingActive || battleEffectsActive) && (
+              <>
+                <div
+                  className="my-3"
+                  style={{ borderTop: "1px solid var(--border)" }}
+                />
+                <div className="space-y-1 mb-4">
+                  {basingActive && (
+                    <div className="flex items-center justify-between gap-2">
+                      <p
+                        className="font-body text-xs truncate"
+                        style={{ color: "var(--muted)" }}
+                      >
+                        🪨 {basingSuggestion.name}
+                      </p>
+                      <span
+                        className="font-body text-xs flex-shrink-0"
+                        style={{ color: "var(--primary)" }}
+                      >
+                        {formatPrice(basingSuggestion.price)}
+                      </span>
+                    </div>
+                  )}
+                  {battleEffectsActive && (
+                    <div className="flex items-center justify-between gap-2">
+                      <p
+                        className="font-body text-xs truncate"
+                        style={{ color: "var(--muted)" }}
+                      >
+                        💥 {battleEffectsSuggestion.name}
+                      </p>
+                      <span
+                        className="font-body text-xs flex-shrink-0"
+                        style={{ color: "var(--primary)" }}
+                      >
+                        {formatPrice(battleEffectsSuggestion.price)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* Role summary counts */}
+            <div
+              className="my-4"
+              style={{ borderTop: "1px solid var(--border)" }}
+            />
+            <div className="space-y-2 mb-4">
+              {ROLE_SECTIONS.map((section) => (
+                <div key={section.id} className="flex items-center justify-between">
+                  <span
+                    className="font-body text-[10px] tracking-wider flex items-center gap-1.5"
+                    style={{ color: "var(--muted)" }}
+                  >
+                    {section.icon} {section.label}
+                  </span>
+                  <span
+                    className="font-body text-[10px]"
+                    style={{
+                      color:
+                        roleCountMap[section.id] > 0
+                          ? "var(--primary)"
+                          : "var(--muted)",
+                    }}
+                  >
+                    {roleCountMap[section.id] > 0
+                      ? `${roleCountMap[section.id]} unit${roleCountMap[section.id] > 1 ? "s" : ""}`
+                      : "—"}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Total */}
+            <div
+              className="my-5"
+              style={{ borderTop: "1px solid var(--border)" }}
+            />
+            <div className="flex items-baseline justify-between mb-6">
+              <span
+                className="font-body text-xs tracking-[0.2em]"
+                style={{ color: "var(--muted)" }}
+              >
+                TOTAL
+              </span>
+              <span
+                className="font-heading text-xl"
+                style={{ color: "var(--primary)" }}
+              >
+                {formatPrice(total)}
+              </span>
+            </div>
+
+            {/* CTA */}
+            <button
+              disabled={!hasSelection}
+              onClick={handleAddToCart}
+              className="w-full font-body text-sm tracking-[0.2em] py-4 transition-all duration-200"
+              style={
+                hasSelection
+                  ? {
+                      background: addedToCart
+                        ? "color-mix(in srgb, var(--primary) 60%, transparent)"
+                        : "var(--primary)",
+                      color: "var(--bg)",
+                      cursor: "pointer",
+                    }
+                  : {
+                      background: "var(--surface)",
+                      color: "var(--muted)",
+                      cursor: "not-allowed",
+                      border: "1px solid var(--border)",
+                    }
+              }
+            >
+              {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+            </button>
+
+            {!hasSelection && (
+              <p
+                className="font-body text-[10px] text-center mt-3"
+                style={{ color: "var(--muted)" }}
+              >
+                Select at least one unit to continue
+              </p>
+            )}
+
+            {addedToCart && (
+              <p
+                className="font-body text-[10px] text-center mt-3"
+                style={{ color: "var(--primary)" }}
+              >
+                Your warband has been added to cart.
+              </p>
+            )}
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
