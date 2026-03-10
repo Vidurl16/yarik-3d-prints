@@ -46,20 +46,20 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0c0902] flex items-center justify-center px-4 pt-16">
+    <div className="min-h-screen flex items-center justify-center px-4 pt-16" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <h1 className="font-heading text-2xl tracking-[0.15em] text-[#c4a045] mb-2">
+          <h1 className="font-heading text-2xl tracking-[0.15em] mb-2" style={{ color: "var(--primary)" }}>
             {mode === "login" ? "SIGN IN" : "CREATE ACCOUNT"}
           </h1>
-          <p className="font-body text-xs tracking-wider text-[rgba(196,160,69,0.4)]">
+          <p className="font-body text-xs tracking-wider" style={{ color: "var(--muted)" }}>
             THE DEXARIUM
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block font-body text-xs tracking-[0.2em] text-[rgba(240,232,216,0.5)] mb-2 uppercase">
+            <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Email
             </label>
             <input
@@ -67,13 +67,14 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full bg-[#140e06] border border-[rgba(196,160,69,0.2)] px-4 py-3 font-body text-sm text-[#f0e8d8] placeholder-[#3a3228] focus:outline-none focus:border-[rgba(196,160,69,0.6)] transition-colors"
+              className="w-full px-4 py-3 font-body text-sm focus:outline-none transition-colors"
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="your@email.com"
             />
           </div>
 
           <div>
-            <label className="block font-body text-xs tracking-[0.2em] text-[rgba(240,232,216,0.5)] mb-2 uppercase">
+            <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Password
             </label>
             <input
@@ -82,7 +83,8 @@ function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full bg-[#140e06] border border-[rgba(196,160,69,0.2)] px-4 py-3 font-body text-sm text-[#f0e8d8] placeholder-[#3a3228] focus:outline-none focus:border-[rgba(196,160,69,0.6)] transition-colors"
+              className="w-full px-4 py-3 font-body text-sm focus:outline-none transition-colors"
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="••••••••"
             />
           </div>
@@ -96,7 +98,8 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#8b0000] hover:bg-[#b50000] disabled:opacity-50 text-[#f0e8d8] font-body text-xs tracking-[0.2em] py-3.5 transition-colors duration-200 uppercase"
+            className="w-full disabled:opacity-50 font-body text-xs tracking-[0.2em] py-3.5 transition-colors duration-200 uppercase"
+            style={{ background: "var(--accent)", color: "var(--bg)" }}
           >
             {loading ? "..." : mode === "login" ? "Sign In" : "Create Account"}
           </button>
@@ -105,12 +108,13 @@ function LoginForm() {
         <div className="mt-6 text-center space-y-3">
           <button
             onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); }}
-            className="font-body text-xs text-[rgba(196,160,69,0.5)] hover:text-[#c4a045] transition-colors tracking-wider"
+            className="font-body text-xs tracking-wider transition-colors"
+            style={{ color: "var(--muted)" }}
           >
             {mode === "login" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </button>
           <div>
-            <Link href="/" className="font-body text-xs text-[rgba(240,232,216,0.3)] hover:text-[rgba(240,232,216,0.6)] transition-colors tracking-wider">
+            <Link href="/" className="font-body text-xs tracking-wider transition-colors" style={{ color: "var(--muted)", opacity: 0.6 }}>
               ← Back to Dexarium
             </Link>
           </div>

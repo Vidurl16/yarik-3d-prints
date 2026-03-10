@@ -8,30 +8,31 @@ export const metadata = {
 
 export default function ShopPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-20">
+    <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest text-[#6b6b6b] font-body mb-8">
-          <Link href="/" className="hover:text-[#c9a84c] transition-colors">HOME</Link>
-          <span className="text-[rgba(201,168,76,0.3)]">›</span>
-          <span className="text-[rgba(232,224,208,0.5)]">SHOP</span>
+        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
+          <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }} onMouseOver={e=>(e.currentTarget.style.color="var(--primary)")} onMouseOut={e=>(e.currentTarget.style.color="var(--muted)")}>HOME</Link>
+          <span style={{ color: "var(--border)" }}>›</span>
+          <span style={{ color: "var(--text)", opacity: 0.5 }}>SHOP</span>
         </div>
 
         <div
           className="h-px mb-8"
           style={{
-            background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent)",
+            background: "linear-gradient(90deg, transparent, var(--primary), transparent)",
+            opacity: 0.4,
           }}
         />
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(201,168,76,0.5)] mb-3 uppercase">
+            <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--primary)", opacity: 0.7 }}>
               Browse Collections
             </p>
-            <h1 className="font-heading text-3xl sm:text-4xl text-[#e8e0d0]">SHOP</h1>
+            <h1 className="font-heading text-3xl sm:text-4xl" style={{ color: "var(--text)" }}>SHOP</h1>
           </div>
-          <p className="font-body text-sm text-[#6b6b6b] max-w-xs leading-relaxed">
+          <p className="font-body text-sm max-w-xs leading-relaxed" style={{ color: "var(--muted)" }}>
             {siteCategories.length} categories. Premium 16K resin &amp; multicolour FDM.
           </p>
         </div>
@@ -46,7 +47,7 @@ export default function ShopPage() {
               href={`/shop/${cat.id}`}
               className="group relative flex flex-col p-8 transition-all duration-300 hover:-translate-y-1"
               style={{
-                background: "linear-gradient(135deg, #141414 0%, #1a1414 100%)",
+                background: "var(--surface)",
                 border: `1px solid ${cat.borderColor}`,
               }}
             >
@@ -64,10 +65,10 @@ export default function ShopPage() {
                     style={{ color: cat.accentColor }}
                   />
                 </div>
-                <h2 className="font-heading text-xl tracking-[0.08em] text-[#e8e0d0] mb-2 group-hover:text-[#c9a84c] transition-colors">
+                <h2 className="font-heading text-xl tracking-[0.08em] mb-2 transition-colors" style={{ color: "var(--text)" }}>
                   {cat.name.toUpperCase()}
                 </h2>
-                <p className="font-body text-sm text-[#6b6b6b] leading-relaxed mb-6">
+                <p className="font-body text-sm leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
                   {cat.flavorText}
                 </p>
                 <span

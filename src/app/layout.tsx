@@ -31,7 +31,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${cinzel.variable} ${rajdhani.variable}`}>
-      <body data-theme="dexarium" className="font-body bg-[#0c0902] text-[#f0e8d8] antialiased">
+      <body
+        data-theme="dexarium"
+        className="font-body antialiased"
+        style={{ background: "var(--bg)", color: "var(--text)" }}
+      >
         {/* Noise texture overlay */}
         <div className="noise-overlay" aria-hidden="true" />
 

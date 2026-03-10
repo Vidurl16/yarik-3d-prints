@@ -100,8 +100,8 @@ html {
 }
 
 body {
-  background-color: #0c0902;
-  color: #f0e8d8;
+  background: var(--bg);
+  color: var(--text);
   min-height: 100vh;
 }
 

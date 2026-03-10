@@ -14,25 +14,25 @@ export default async function NewArrivalsPage() {
   const products = await getNewArrivals();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-20">
+    <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest text-[#6b6b6b] font-body mb-8">
-          <Link href="/" className="hover:text-[#c9a84c] transition-colors">HOME</Link>
-          <span className="text-[rgba(201,168,76,0.3)]">›</span>
-          <span className="text-[rgba(232,224,208,0.5)]">NEW ARRIVALS</span>
+        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
+          <Link href="/" className="transition-colors hover:opacity-100" style={{ color: "var(--muted)" }}>HOME</Link>
+          <span style={{ color: "var(--border)" }}>›</span>
+          <span style={{ color: "var(--text)", opacity: 0.5 }}>NEW ARRIVALS</span>
         </div>
 
         <div
           className="h-px mb-8"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent)" }}
+          style={{ background: "linear-gradient(90deg, transparent, var(--primary), transparent)", opacity: 0.4 }}
         />
 
-        <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(201,168,76,0.5)] mb-3 uppercase">
+        <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--primary)", opacity: 0.7 }}>
           Just Landed
         </p>
-        <h1 className="font-heading text-3xl sm:text-4xl text-[#e8e0d0] mb-2">NEW ARRIVALS</h1>
-        <p className="font-body text-sm text-[#6b6b6b]">
+        <h1 className="font-heading text-3xl sm:text-4xl mb-2" style={{ color: "var(--text)" }}>NEW ARRIVALS</h1>
+        <p className="font-body text-sm" style={{ color: "var(--muted)" }}>
           {products.length} fresh prints — 16K resin &amp; multicolour FDM.
         </p>
       </div>
@@ -47,12 +47,13 @@ export default async function NewArrivalsPage() {
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="font-heading text-sm text-[rgba(201,168,76,0.4)] tracking-widest mb-4">
+            <p className="font-heading text-sm tracking-widest mb-4" style={{ color: "var(--primary)", opacity: 0.5 }}>
               NO NEW ARRIVALS YET
             </p>
             <Link
               href="/shop"
-              className="font-body text-xs tracking-[0.2em] px-6 py-2 border border-[rgba(201,168,76,0.4)] text-[#c9a84c] hover:bg-[rgba(201,168,76,0.1)] transition-all"
+              className="font-body text-xs tracking-[0.2em] px-6 py-2 transition-all"
+              style={{ border: "1px solid var(--border)", color: "var(--primary)" }}
             >
               BROWSE SHOP
             </Link>

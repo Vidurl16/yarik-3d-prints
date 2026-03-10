@@ -11,9 +11,34 @@ interface BrandPageProps {
   products?: DbProduct[];
 }
 
+/** Cross-sell add-ons per brand — uses real DB brand slugs */
+const BRAND_ADDONS: Record<string, { label: string; sub: string; icon: string; slug: string }[]> = {
+  "grimdark-future": [
+    { label: "Basing & Battle Effects", sub: "Urban rubble, craters & scatter", icon: "🪨", slug: "basing-battle-effects" },
+    { label: "Gaming Accessories & Terrain", sub: "Ruins, walls & fortifications", icon: "🗺️", slug: "gaming-accessories-terrain" },
+  ],
+  "age-of-fantasy": [
+    { label: "Basing & Battle Effects", sub: "Grass tufts, dead forest & nature bases", icon: "🪨", slug: "basing-battle-effects" },
+    { label: "Gaming Accessories & Terrain", sub: "Ancient ruins, forests & dungeons", icon: "🗺️", slug: "gaming-accessories-terrain" },
+  ],
+  "pokemon": [
+    { label: "Gaming Accessories & Terrain", sub: "Display stands, arenas & accessories", icon: "🗺️", slug: "gaming-accessories-terrain" },
+    { label: "Basing & Battle Effects", sub: "Scenic bases & diorama elements", icon: "🪨", slug: "basing-battle-effects" },
+  ],
+  "basing-battle-effects": [
+    { label: "Grimdark Future", sub: "Sci-fi infantry, vehicles & characters", icon: "⚙️", slug: "grimdark-future" },
+    { label: "Age of Fantasy", sub: "Fantasy warriors & monsters to base", icon: "⚔️", slug: "age-of-fantasy" },
+  ],
+  "gaming-accessories-terrain": [
+    { label: "Grimdark Future", sub: "Populate your sci-fi battlefields", icon: "⚙️", slug: "grimdark-future" },
+    { label: "Age of Fantasy", sub: "Populate your fantasy landscapes", icon: "⚔️", slug: "age-of-fantasy" },
+  ],
+};
+
 export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPageProps) {
   const theme = THEMES[themeId];
   const hasArmyBuilder = (ARMY_BUILDER_BRANDS as readonly string[]).includes(brandSlug);
+  const addons = BRAND_ADDONS[brandSlug] ?? [];
 
   return (
     <div style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -139,12 +164,9 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              { label: "Basing Materials", icon: "🪨", slug: "basing-battle-effects" },
-              { label: "Battle Effects", icon: "💥", slug: "basing-battle-effects" },
-            ].map(({ label, icon, slug }) => (
+            {addons.map(({ label, sub, icon, slug }) => (
               <Link
-                key={label}
+                key={slug}
                 href={`/${slug}`}
                 className="group flex items-center gap-4 p-5 transition-all duration-200"
                 style={{
@@ -164,7 +186,7 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
                     className="font-body text-xs mt-1"
                     style={{ color: "var(--muted)" }}
                   >
-                    Browse collection →
+                    {sub}
                   </p>
                 </div>
               </Link>

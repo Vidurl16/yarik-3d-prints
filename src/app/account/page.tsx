@@ -21,14 +21,14 @@ export default async function AccountPage() {
   const orders = await getOrdersByUser(user.id);
 
   return (
-    <div className="min-h-screen bg-[#0c0902] pt-24 pb-20 px-4">
+    <div className="min-h-screen pt-24 pb-20 px-4" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="max-w-3xl mx-auto">
         <div className="mb-10 flex items-start justify-between">
           <div>
-            <h1 className="font-heading text-2xl tracking-[0.15em] text-[#c4a045] mb-1">
+            <h1 className="font-heading text-2xl tracking-[0.15em] mb-1" style={{ color: "var(--primary)" }}>
               YOUR ACCOUNT
             </h1>
-            <p className="font-body text-xs text-[rgba(240,232,216,0.4)] tracking-wider">
+            <p className="font-body text-xs tracking-wider" style={{ color: "var(--muted)" }}>
               {user.email}
             </p>
           </div>
@@ -36,14 +36,14 @@ export default async function AccountPage() {
         </div>
 
         <section>
-          <h2 className="font-heading text-sm tracking-[0.2em] text-[rgba(196,160,69,0.6)] mb-4 uppercase border-b border-[rgba(196,160,69,0.1)] pb-2">
+          <h2 className="font-heading text-sm tracking-[0.2em] mb-4 uppercase pb-2" style={{ color: "var(--primary)", opacity: 0.7, borderBottom: "1px solid var(--border)" }}>
             Order History
           </h2>
 
           {orders.length === 0 ? (
             <div className="text-center py-12">
-              <p className="font-body text-sm text-[rgba(240,232,216,0.3)]">No orders yet.</p>
-              <Link href="/shop" className="font-body text-xs text-[#c4a045] hover:underline mt-3 inline-block tracking-wider">
+              <p className="font-body text-sm" style={{ color: "var(--muted)" }}>No orders yet.</p>
+              <Link href="/shop" className="font-body text-xs hover:underline mt-3 inline-block tracking-wider" style={{ color: "var(--primary)" }}>
                 Start shopping →
               </Link>
             </div>
@@ -52,19 +52,20 @@ export default async function AccountPage() {
               {orders.map((order) => (
                 <div
                   key={order.id}
-                  className="border border-[rgba(196,160,69,0.1)] p-4 bg-[#110d05]"
+                  className="p-4"
+                  style={{ border: "1px solid var(--border)", background: "var(--surface)" }}
                 >
                   <div className="flex items-center justify-between flex-wrap gap-3">
                     <div>
-                      <p className="font-body text-xs text-[rgba(240,232,216,0.5)] mb-1">
+                      <p className="font-body text-xs mb-1" style={{ color: "var(--muted)" }}>
                         {formatDate(order.created_at)}
                       </p>
-                      <p className="font-body text-xs font-mono text-[rgba(196,160,69,0.4)] truncate max-w-[180px]">
+                      <p className="font-body text-xs font-mono truncate max-w-[180px]" style={{ color: "var(--primary)", opacity: 0.5 }}>
                         #{order.id.slice(0, 8).toUpperCase()}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-body text-sm text-[#f0e8d8]">
+                      <p className="font-body text-sm" style={{ color: "var(--text)" }}>
                         {formatPrice(order.total_amount_cents ?? 0, order.currency ?? "ZAR")}
                       </p>
                       <span
