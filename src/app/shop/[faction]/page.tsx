@@ -114,7 +114,7 @@ export default async function FactionPage({ params }: PageProps) {
 
       {/* Products */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ProductGrid products={products} />
+        <ProductGrid products={products} siteCategory={siteCategory?.id ?? faction?.id} />
       </div>
     </div>
   );

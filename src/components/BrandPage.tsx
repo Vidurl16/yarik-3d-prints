@@ -142,7 +142,7 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
       </section>
 
       {/* ── FILTER BAR + PRODUCT GRID ────────────────────────── */}
-      <BrandProductGrid products={products} />
+      <BrandProductGrid products={products} brandSlug={brandSlug} />
 
       {/* ── UPSELL SECTION (placeholder) ─────────────────────── */}
       <section

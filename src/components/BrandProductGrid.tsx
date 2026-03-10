@@ -3,39 +3,24 @@
 import { useState } from "react";
 import type { DbProduct } from "@/lib/data/types";
 import DbProductCard from "./DbProductCard";
-
-const FILTER_TABS = ["All", "Infantry", "Vehicles", "Characters", "Terrain"] as const;
-type FilterTab = (typeof FILTER_TABS)[number];
-
-function matchesFilter(product: DbProduct, filter: FilterTab): boolean {
-  if (filter === "All") return true;
-  const type = product.type.toLowerCase();
-  const tags = product.tags.map((t) => t.toLowerCase());
-  switch (filter) {
-    case "Infantry":
-      return type === "infantry" || tags.some((t) => t === "infantry" || t === "cavalry");
-    case "Vehicles":
-      return type === "vehicle" || tags.some((t) => t === "vehicle" || t === "vehicles" || t === "transports");
-    case "Characters":
-      return (
-        type === "character" ||
-        tags.some((t) => t === "character" || t === "hq")
-      );
-    case "Terrain":
-      return type === "terrain" || tags.some((t) => t === "terrain");
-    default:
-      return true;
-  }
-}
+import { dbBrandFilters, type DbFilterDef } from "@/lib/brandFilters";
 
 interface BrandProductGridProps {
   products: DbProduct[];
+  brandSlug: string;
 }
 
-export default function BrandProductGrid({ products }: BrandProductGridProps) {
-  const [activeFilter, setActiveFilter] = useState<FilterTab>("All");
+export default function BrandProductGrid({ products, brandSlug }: BrandProductGridProps) {
+  const brandFilterDefs: DbFilterDef[] = dbBrandFilters[brandSlug] ?? [];
+  const [activeFilter, setActiveFilter] = useState<string>("All");
 
-  const filtered = products.filter((p) => matchesFilter(p, activeFilter));
+  const activeFilterDef = brandFilterDefs.find((f) => f.label === activeFilter);
+  const filtered = activeFilter === "All" || !activeFilterDef
+    ? products
+    : products.filter(activeFilterDef.match);
+
+  // Only surface filter tabs that have at least one matching product
+  const availableTabs = brandFilterDefs.filter((f) => products.some(f.match));
 
   return (
     <>
@@ -51,18 +36,30 @@ export default function BrandProductGrid({ products }: BrandProductGridProps) {
           >
             Filter
           </span>
-          {FILTER_TABS.map((tab) => (
+          <button
+            key="All"
+            onClick={() => setActiveFilter("All")}
+            className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all duration-150"
+            style={{
+              border: "1px solid var(--border)",
+              color: activeFilter === "All" ? "var(--bg)" : "var(--muted)",
+              background: activeFilter === "All" ? "var(--primary)" : "transparent",
+            }}
+          >
+            All
+          </button>
+          {availableTabs.map((f) => (
             <button
-              key={tab}
-              onClick={() => setActiveFilter(tab)}
+              key={f.label}
+              onClick={() => setActiveFilter(f.label)}
               className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all duration-150"
               style={{
                 border: "1px solid var(--border)",
-                color: activeFilter === tab ? "var(--bg)" : "var(--muted)",
-                background: activeFilter === tab ? "var(--primary)" : "transparent",
+                color: activeFilter === f.label ? "var(--bg)" : "var(--muted)",
+                background: activeFilter === f.label ? "var(--primary)" : "transparent",
               }}
             >
-              {tab}
+              {f.label}
             </button>
           ))}
           {products.length > 0 && (

@@ -2,59 +2,63 @@
 
 import { useState, useMemo } from "react";
 import ProductCard from "@/components/ProductCard";
-import type { Product, Category } from "@/lib/products";
-
-const CATEGORIES: Array<"All" | Category> = [
-  "All",
-  "Infantry",
-  "Characters",
-  "Vehicles",
-  "Terrain",
-];
+import type { Product } from "@/lib/products";
+import { staticBrandFilters, type StaticFilterDef } from "@/lib/brandFilters";
 
 interface ProductGridProps {
   products: Product[];
+  siteCategory?: string;
 }
 
-export default function ProductGrid({ products }: ProductGridProps) {
-  const [activeFilter, setActiveFilter] = useState<"All" | Category>("All");
+export default function ProductGrid({ products, siteCategory }: ProductGridProps) {
+  const brandFilters: StaticFilterDef[] = siteCategory
+    ? (staticBrandFilters[siteCategory] ?? [])
+    : [];
 
-  const filtered = useMemo(
-    () =>
-      activeFilter === "All"
-        ? products
-        : products.filter((p) => p.category === activeFilter),
-    [products, activeFilter]
-  );
+  const [activeFilter, setActiveFilter] = useState<string>("All");
 
-  // Only show filter buttons for categories that have products
-  const availableCategories = useMemo(
-    () =>
-      CATEGORIES.filter(
-        (cat) =>
-          cat === "All" || products.some((p) => p.category === cat)
-      ),
-    [products]
+  const filtered = useMemo(() => {
+    if (activeFilter === "All") return products;
+    const def = brandFilters.find((f) => f.label === activeFilter);
+    return def ? products.filter(def.match) : products;
+  }, [products, activeFilter, brandFilters]);
+
+  // Only show filter buttons that have at least one matching product
+  const availableFilters = useMemo(
+    () => brandFilters.filter((f) => products.some(f.match)),
+    [products, brandFilters]
   );
 
   return (
     <div>
       {/* Filter Bar */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {availableCategories.map((cat) => (
+      {availableFilters.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-8">
           <button
-            key={cat}
-            onClick={() => setActiveFilter(cat)}
+            onClick={() => setActiveFilter("All")}
             className={`font-body text-[10px] tracking-[0.2em] px-4 py-2 transition-all duration-200 ${
-              activeFilter === cat
+              activeFilter === "All"
                 ? "bg-[#8b0000] text-[#e8e0d0] border border-[#8b0000]"
                 : "text-[rgba(232,224,208,0.5)] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.4)] hover:text-[#e8e0d0]"
             }`}
           >
-            {cat.toUpperCase()}
+            ALL
           </button>
-        ))}
-      </div>
+          {availableFilters.map((f) => (
+            <button
+              key={f.label}
+              onClick={() => setActiveFilter(f.label)}
+              className={`font-body text-[10px] tracking-[0.2em] px-4 py-2 transition-all duration-200 ${
+                activeFilter === f.label
+                  ? "bg-[#8b0000] text-[#e8e0d0] border border-[#8b0000]"
+                  : "text-[rgba(232,224,208,0.5)] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.4)] hover:text-[#e8e0d0]"
+              }`}
+            >
+              {f.label.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Grid */}
       {filtered.length === 0 ? (
@@ -73,3 +77,4 @@ export default function ProductGrid({ products }: ProductGridProps) {
     </div>
   );
 }
+
