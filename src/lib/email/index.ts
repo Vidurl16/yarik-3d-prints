@@ -1,8 +1,6 @@
 import { Resend } from "resend";
 import type { DbOrder, DbOrderItem } from "@/lib/data/types";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@yarik3d.co.za>";
 
@@ -132,6 +130,8 @@ export async function sendOrderConfirmationEmail(
     console.warn("[Email] RESEND_API_KEY not set — skipping confirmation email");
     return;
   }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
