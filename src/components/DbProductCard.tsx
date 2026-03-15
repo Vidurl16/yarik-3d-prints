@@ -38,12 +38,12 @@ export default function DbProductCard({ product }: DbProductCardProps) {
   return (
     <div className="group card-bg flex flex-col overflow-hidden transition-all duration-300 hover:border-[rgba(201,168,76,0.35)]">
       {/* Image */}
-      <div className="relative w-full aspect-square overflow-hidden bg-[#111]">
+      <div className="product-card-frame bg-[#111]">
         <Image
           src={imageUrl}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+          className="product-card-image opacity-80 group-hover:opacity-100"
           sizes="(max-width: 768px) 50vw, 25vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />

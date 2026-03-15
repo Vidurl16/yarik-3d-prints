@@ -80,12 +80,15 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
       }}
     >
       {/* Image */}
-      <div className="relative w-full aspect-square overflow-hidden">
+      <div
+        className="product-card-frame"
+        style={{ background: "color-mix(in srgb, var(--surface) 80%, black)" }}
+      >
         <Image
           src={product.imageUrl}
           alt={product.name}
           fill
-          className="object-cover opacity-75"
+          className="product-card-image opacity-75"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
         />
         <div
@@ -269,7 +272,7 @@ function UpsellRow({
           src={product.imageUrl}
           alt={product.name}
           fill
-          className="object-cover opacity-70"
+          className="product-thumb-image opacity-70"
         />
       </div>
 

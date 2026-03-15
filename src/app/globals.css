@@ -222,6 +222,31 @@ body {
   border: 1px solid rgba(196, 160, 69, 0.12);
 }
 
+.product-card-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.product-card-image {
+  object-fit: contain;
+  object-position: center top;
+  padding: 0.75rem;
+  transition: transform 500ms ease, opacity 500ms ease;
+  transform-origin: center top;
+}
+
+.group:hover .product-card-image {
+  transform: scale(1.04);
+}
+
+.product-thumb-image {
+  object-fit: contain;
+  object-position: center;
+  padding: 0.2rem;
+}
+
 /* Light override for dexarium theme */
 [data-theme="dexarium"] .card-bg {
   background: var(--surface);

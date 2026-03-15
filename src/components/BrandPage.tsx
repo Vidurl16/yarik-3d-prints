@@ -48,8 +48,9 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
         className="relative min-h-[60vh] flex items-end overflow-hidden"
         style={{
           backgroundImage: `url('${theme.heroImage}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
+          backgroundSize: theme.heroFit ?? "cover",
+          backgroundPosition: theme.heroPosition ?? "center top",
+          backgroundRepeat: "no-repeat",
         }}
       >
         {/* Texture overlay (noise) */}

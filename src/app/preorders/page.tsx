@@ -50,13 +50,13 @@ export default async function PreordersPage() {
                   border: "1px solid rgba(139,0,0,0.3)",
                 }}
               >
-                <div className="relative w-full aspect-square overflow-hidden" style={{ background: "var(--surface)" }}>
+                <div className="product-card-frame" style={{ background: "var(--surface)" }}>
                   <Image
                     src={product.image_url ?? `https://picsum.photos/seed/${product.slug}/400/400`}
                     alt={product.name}
                     fill
                     loading="lazy"
-                    className="object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-500"
+                    className="product-card-image opacity-50 group-hover:opacity-70"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

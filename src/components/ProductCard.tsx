@@ -35,12 +35,12 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group card-bg flex flex-col overflow-hidden transition-all duration-300 hover:border-[rgba(201,168,76,0.35)]">
       {/* Image */}
-      <div className="relative w-full aspect-square overflow-hidden bg-[#111]">
+      <div className="product-card-frame bg-[#111]">
         <Image
           src={product.imageUrl}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+          className="product-card-image opacity-80 group-hover:opacity-100"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         {/* Overlay gradient */}

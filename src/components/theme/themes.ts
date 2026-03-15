@@ -44,6 +44,10 @@ export interface ThemeTokens {
   border: string;
   /** Hero image path under public/ */
   heroImage: string;
+  /** How the hero image should fit inside the banner */
+  heroFit?: "cover" | "contain";
+  /** Background position for the hero image */
+  heroPosition?: string;
   /** Human-readable brand label */
   label: string;
   /** Emoji icon for nav / tiles (fallback) */
@@ -78,6 +82,8 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     accent: "#c0392b",
     border: "rgba(155,64,96,0.25)",
     heroImage: "/brand-assets/grimdark/hero.jpeg",
+    heroFit: "cover",
+    heroPosition: "center top",
     label: "Grimdark Future",
     icon: "⚔️",
     iconSrc: "/brand-icons/grimdark-future.svg",
@@ -92,6 +98,8 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     accent: "#2e7d2e",
     border: "rgba(92,168,92,0.25)",
     heroImage: "/brand-assets/fantasy/hero.jpeg",
+    heroFit: "cover",
+    heroPosition: "center top",
     label: "Age of Fantasy",
     icon: "🏰",
     iconSrc: "/brand-icons/age-of-fantasy.svg",
@@ -106,6 +114,8 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     accent: "#c8281c",
     border: "rgba(232,200,56,0.25)",
     heroImage: "/brand-assets/pokemon/hero.jpeg",
+    heroFit: "contain",
+    heroPosition: "center center",
     label: "Pokémon",
     icon: "✨",
     iconSrc: "/brand-icons/pokemon.svg",
@@ -120,6 +130,8 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     accent: "#6b4e20",
     border: "rgba(160,128,64,0.25)",
     heroImage: "/brand-assets/basing/hero.jpeg",
+    heroFit: "contain",
+    heroPosition: "center center",
     label: "Basing & Battle Effects",
     icon: "🪨",
     iconSrc: "/brand-icons/basing-battle-effects.svg",
@@ -134,6 +146,8 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     accent: "#3a5c3a",
     border: "rgba(96,128,96,0.25)",
     heroImage: "/brand-assets/terrain/hero.jpeg",
+    heroFit: "contain",
+    heroPosition: "center center",
     label: "Gaming Accessories & Terrain",
     icon: "🗺️",
     iconSrc: "/brand-icons/gaming-accessories-terrain.svg",

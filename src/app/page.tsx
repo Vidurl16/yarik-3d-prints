@@ -278,18 +278,18 @@ export default function HeroPage() {
                   className="group card-bg overflow-hidden transition-all duration-300"
                   style={{ border: "1px solid var(--border)" }}
                 >
-                  <div
-                    className="relative w-full aspect-square overflow-hidden"
-                    style={{ background: "var(--surface)" }}
-                  >
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      fill
-                      loading="lazy"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
-                      sizes="(max-width: 640px) 50vw, 25vw"
-                    />
+                    <div
+                      className="product-card-frame"
+                      style={{ background: "var(--surface)" }}
+                    >
+                      <Image
+                        src={product.imageUrl}
+                        alt={product.name}
+                        fill
+                        loading="lazy"
+                        className="product-card-image opacity-90 group-hover:opacity-100"
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                      />
                     <span
                       className="absolute top-2 left-2 font-body text-[9px] tracking-[0.15em] px-2 py-0.5"
                       style={{
@@ -360,18 +360,18 @@ export default function HeroPage() {
                   className="group card-bg overflow-hidden transition-all duration-300"
                   style={{ border: "1px solid var(--border)" }}
                 >
-                  <div
-                    className="relative w-full aspect-square overflow-hidden"
-                    style={{ background: "var(--surface)" }}
-                  >
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      fill
-                      loading="lazy"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-70 group-hover:opacity-90"
-                      sizes="(max-width: 640px) 50vw, 25vw"
-                    />
+                    <div
+                      className="product-card-frame"
+                      style={{ background: "var(--surface)" }}
+                    >
+                      <Image
+                        src={product.imageUrl}
+                        alt={product.name}
+                        fill
+                        loading="lazy"
+                        className="product-card-image opacity-70 group-hover:opacity-90"
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                      />
                     <span
                       className="absolute top-2 left-2 font-body text-[9px] tracking-[0.15em] px-2 py-0.5"
                       style={{
