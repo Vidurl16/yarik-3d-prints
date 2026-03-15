@@ -12,8 +12,18 @@ function CartContent() {
   const searchParams = useSearchParams();
   const isSuccess = searchParams.get("success") === "true";
   const isCancelled = searchParams.get("cancelled") === "true";
+  const orderId = searchParams.get("order");
   const [checkingOut, setCheckingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
+
+  async function copyOrderId() {
+    if (!orderId) return;
+    await navigator.clipboard.writeText(orderId);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   const total = getTotal();
   const DISCOUNT_THRESHOLD = 3;
@@ -36,7 +46,9 @@ function CartContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          customerEmail: guestEmail.trim() || undefined,
           items: items.map((item) => ({
+            product_id: item.id.startsWith("b-") ? undefined : item.id,
             name: item.name,
             price: item.price,
             quantity: item.quantity,
@@ -84,6 +96,31 @@ function CartContent() {
           <p className="font-body text-sm leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
             Your payment is being confirmed. You will receive an email once your order is verified.
           </p>
+          {orderId && (
+            <div
+              className="mb-6 text-left"
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", padding: "12px 16px" }}
+            >
+              <p className="font-body text-[10px] tracking-[0.2em] mb-2" style={{ color: "var(--muted)" }}>
+                ORDER REFERENCE
+              </p>
+              <div className="flex items-center gap-3">
+                <code className="font-body text-xs flex-1 break-all" style={{ color: "var(--primary)", fontFamily: "monospace" }}>
+                  {orderId}
+                </code>
+                <button
+                  onClick={copyOrderId}
+                  className="font-body text-[10px] tracking-widest px-3 py-1.5 flex-shrink-0 transition-all duration-200"
+                  style={{
+                    border: "1px solid var(--border)",
+                    color: copied ? "var(--accent)" : "var(--muted)",
+                  }}
+                >
+                  {copied ? "COPIED" : "COPY"}
+                </button>
+              </div>
+            </div>
+          )}
           <p className="font-body text-xs leading-relaxed mb-8" style={{ color: "var(--muted)", opacity: 0.7 }}>
             If payment succeeded but your order is not confirmed within a few minutes,{" "}
             <Link href="/contact" style={{ color: "var(--primary)" }} className="hover:underline">contact support</Link>{" "}
@@ -312,6 +349,35 @@ function CartContent() {
               </div>
 
               <div className="pt-4" style={{ borderTop: "1px solid var(--border)" }}>
+                <div className="mb-4">
+                  <label
+                    htmlFor="guest-email"
+                    className="block font-body text-[10px] tracking-[0.2em] mb-2"
+                    style={{ color: "var(--muted)" }}
+                  >
+                    EMAIL FOR ORDER UPDATES
+                  </label>
+                  <input
+                    id="guest-email"
+                    type="email"
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full px-3 py-3 font-body text-sm"
+                    style={{
+                      background: "var(--bg)",
+                      border: "1px solid var(--border)",
+                      color: "var(--text)",
+                    }}
+                  />
+                  <p
+                    className="font-body text-[10px] mt-2 leading-relaxed"
+                    style={{ color: "var(--muted)", opacity: 0.8 }}
+                  >
+                    Required for guest checkout. Logged-in customers can leave this blank.
+                  </p>
+                </div>
+
                 <div className="flex items-center justify-between mb-6">
                   <span className="font-heading text-xs tracking-[0.15em]" style={{ color: "var(--text)" }}>
                     TOTAL

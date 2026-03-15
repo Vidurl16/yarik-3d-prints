@@ -10,9 +10,19 @@ interface CartLineItem {
   quantity: number;
 }
 
+function normalizeEmail(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return null;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) ? normalized : null;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { items }: { items: CartLineItem[] } = await req.json();
+    const {
+      items,
+      customerEmail,
+    }: { items: CartLineItem[]; customerEmail?: string } = await req.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
@@ -27,6 +37,14 @@ export async function POST(req: NextRequest) {
 
     // Get session user (optional — guest checkout allowed)
     const user = await getSession();
+    const fallbackEmail = normalizeEmail(customerEmail);
+
+    if (!user?.email && !fallbackEmail) {
+      return NextResponse.json(
+        { error: "Email is required for guest checkout" },
+        { status: 400 }
+      );
+    }
 
     const totalCents = items.reduce(
       (sum, item) => sum + Math.round(item.price * 100) * item.quantity,
@@ -40,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     const orderId = await createOrder({
       user_id: user?.id ?? null,
-      email: user?.email ?? null,
+      email: user?.email ?? fallbackEmail,
       currency: "ZAR",
       total_amount_cents: totalCents,
       payment_provider: provider.name,
@@ -57,7 +75,7 @@ export async function POST(req: NextRequest) {
       orderId,
       amountCents: totalCents,
       currency: "ZAR",
-      customerEmail: user?.email ?? null,
+      customerEmail: user?.email ?? fallbackEmail,
       successUrl: `${baseUrl}/cart?success=true&order=${orderId}`,
       cancelUrl: `${baseUrl}/cart?cancelled=true`,
       metadata: {

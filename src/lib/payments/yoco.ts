@@ -12,7 +12,7 @@ const YOCO_CHECKOUT_URL = "https://payments.yoco.com/api/checkouts";
 export class YocoProvider implements PaymentProvider {
   readonly name = "yoco";
   private secretKey: string;
-  private webhookSecret: string;
+  private webhookSecret?: string;
 
   constructor() {
     const secretKey =
@@ -23,7 +23,6 @@ export class YocoProvider implements PaymentProvider {
       process.env.YOCO_WEBHOOK_SECRET;
 
     if (!secretKey) throw new Error("Yoco secret key not configured (PAYMENT_SECRET_KEY)");
-    if (!webhookSecret) throw new Error("Yoco webhook secret not configured (PAYMENT_WEBHOOK_SECRET)");
 
     this.secretKey = secretKey;
     this.webhookSecret = webhookSecret;
@@ -70,6 +69,10 @@ export class YocoProvider implements PaymentProvider {
     headers: Record<string, string>,
     rawBody: string
   ): Promise<WebhookEvent> {
+    if (!this.webhookSecret) {
+      throw new Error("Yoco webhook secret not configured (PAYMENT_WEBHOOK_SECRET)");
+    }
+
     const webhookId = headers["webhook-id"];
     const webhookTimestamp = headers["webhook-timestamp"];
     const webhookSignature = headers["webhook-signature"];

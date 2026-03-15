@@ -1,3 +1,4 @@
+import { YocoProvider } from "./yoco";
 import type { PaymentProvider } from "./types";
 
 let _provider: PaymentProvider | null = null;
@@ -12,7 +13,6 @@ export function getPaymentProvider(): PaymentProvider {
   const providerName = (process.env.PAYMENT_PROVIDER ?? "yoco").toLowerCase();
 
   if (providerName === "yoco") {
-    const { YocoProvider } = require("./yoco") as typeof import("./yoco");
     _provider = new YocoProvider();
     return _provider;
   }

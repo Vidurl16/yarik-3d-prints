@@ -45,7 +45,6 @@ const ROLE_SECTIONS = [
 ] as const;
 
 interface Props {
-  brand: string;
   theme: ThemeTokens;
   mainProducts: Product[];
   basingSuggestion: Product;
@@ -56,10 +55,9 @@ interface UnitCardProps {
   product: Product;
   qty: number;
   onQtyChange: (qty: number) => void;
-  theme: ThemeTokens;
 }
 
-function UnitCard({ product, qty, onQtyChange, theme }: UnitCardProps) {
+function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
   const isSelected = qty > 0;
 
   const printBadgeClass =
@@ -218,12 +216,10 @@ function UpsellRow({
   product,
   active,
   onToggle,
-  theme,
 }: {
   product: Product;
   active: boolean;
   onToggle: (v: boolean) => void;
-  theme: ThemeTokens;
 }) {
   return (
     <label
@@ -303,7 +299,6 @@ function UpsellRow({
 }
 
 export default function ArmyBuilderClient({
-  brand,
   theme,
   mainProducts,
   basingSuggestion,
@@ -320,7 +315,8 @@ export default function ArmyBuilderClient({
     setAddedToCart(false);
     setSelections((prev) => {
       if (qty <= 0) {
-        const { [productId]: _removed, ...rest } = prev;
+        const rest = { ...prev };
+        delete rest[productId];
         return rest;
       }
       return { ...prev, [productId]: qty };
@@ -508,7 +504,6 @@ export default function ArmyBuilderClient({
                         product={product}
                         qty={selections[product.id] ?? 0}
                         onQtyChange={(qty) => setQty(product.id, qty)}
-                        theme={theme}
                       />
                     ))}
                   </div>
@@ -542,13 +537,11 @@ export default function ArmyBuilderClient({
                 product={basingSuggestion}
                 active={basingActive}
                 onToggle={setBasingActive}
-                theme={theme}
               />
               <UpsellRow
                 product={battleEffectsSuggestion}
                 active={battleEffectsActive}
                 onToggle={setBattleEffectsActive}
-                theme={theme}
               />
             </div>
           </section>

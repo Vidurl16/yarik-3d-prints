@@ -8,7 +8,14 @@ import { revalidatePath } from "next/cache";
  */
 export async function POST(req: NextRequest) {
   const secret = req.headers.get("x-revalidate-secret");
-  const expected = process.env.REVALIDATE_SECRET ?? "dev";
+  const expected = process.env.REVALIDATE_SECRET;
+
+  if (!expected) {
+    return NextResponse.json(
+      { error: "REVALIDATE_SECRET is not configured" },
+      { status: 500 }
+    );
+  }
 
   if (secret !== expected) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

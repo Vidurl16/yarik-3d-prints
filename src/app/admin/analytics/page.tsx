@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 
+const DEFAULT_DATE_RANGE = getDefaultDateRange();
+
 interface Analytics {
   from: string;
   to: string;
@@ -16,12 +18,20 @@ function formatPrice(cents: number) {
   return new Intl.NumberFormat("en-ZA", { style: "currency", currency: "ZAR" }).format(cents / 100);
 }
 
-export default function AdminAnalyticsPage() {
-  const today = new Date().toISOString().slice(0, 10);
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+function getDefaultDateRange() {
+  const today = new Date();
+  const thirtyDaysAgo = new Date(today);
+  thirtyDaysAgo.setDate(today.getDate() - 30);
 
-  const [from, setFrom] = useState(thirtyDaysAgo);
-  const [to, setTo] = useState(today);
+  return {
+    today: today.toISOString().slice(0, 10),
+    thirtyDaysAgo: thirtyDaysAgo.toISOString().slice(0, 10),
+  };
+}
+
+export default function AdminAnalyticsPage() {
+  const [from, setFrom] = useState(DEFAULT_DATE_RANGE.thirtyDaysAgo);
+  const [to, setTo] = useState(DEFAULT_DATE_RANGE.today);
   const [data, setData] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(false);
 

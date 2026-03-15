@@ -16,17 +16,14 @@ const BRAND_ROUTE_MAP: Record<string, string> = {
 };
 
 export default function Nav() {
-  const { getItemCount, openDrawer } = useCartStore();
-  const [itemCount, setItemCount] = useState(0);
+  const openDrawer = useCartStore((state) => state.openDrawer);
+  const itemCount = useCartStore((state) =>
+    state.items.reduce((sum, item) => sum + item.quantity, 0)
+  );
   const [scrolled, setScrolled] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setItemCount(getItemCount());
-    return useCartStore.subscribe(() => setItemCount(getItemCount()));
-  }, [getItemCount]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);

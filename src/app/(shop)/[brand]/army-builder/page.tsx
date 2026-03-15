@@ -2,6 +2,7 @@ import { ARMY_BUILDER_BRANDS, BRAND_THEME_MAP, THEMES } from "@/components/theme
 import { products } from "@/lib/products";
 import ArmyBuilderClient from "@/components/ArmyBuilderClient";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ brand: string }>;
@@ -23,12 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArmyBuilderPage({ params }: Props) {
   const { brand } = await params;
+  if (!ARMY_BUILDER_BRANDS.includes(brand as (typeof ARMY_BUILDER_BRANDS)[number])) {
+    notFound();
+  }
   const themeId = BRAND_THEME_MAP[brand] ?? "dexarium";
   const theme = THEMES[themeId];
 
   // Filter main products for this brand
-  const siteCategory =
-    brand === "grimdark-future" ? "grimdark-future" : "age-of-fantasy";
+  const siteCategory = brand;
   const mainProducts = products.filter((p) => p.siteCategory === siteCategory);
 
   // Pick brand-appropriate basing upsell (urban rubble for grimdark, dead forest for fantasy)
@@ -39,7 +42,6 @@ export default async function ArmyBuilderPage({ params }: Props) {
 
   return (
     <ArmyBuilderClient
-      brand={brand}
       theme={theme}
       mainProducts={mainProducts}
       basingSuggestion={basingSuggestion}

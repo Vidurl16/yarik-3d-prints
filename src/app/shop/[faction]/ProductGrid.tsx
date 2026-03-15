@@ -11,9 +11,10 @@ interface ProductGridProps {
 }
 
 export default function ProductGrid({ products, siteCategory }: ProductGridProps) {
-  const brandFilters: StaticFilterDef[] = siteCategory
-    ? (staticBrandFilters[siteCategory] ?? [])
-    : [];
+  const brandFilters: StaticFilterDef[] = useMemo(
+    () => (siteCategory ? (staticBrandFilters[siteCategory] ?? []) : []),
+    [siteCategory]
+  );
 
   const [activeFilter, setActiveFilter] = useState<string>("All");
 
@@ -77,4 +78,3 @@ export default function ProductGrid({ products, siteCategory }: ProductGridProps
     </div>
   );
 }
-

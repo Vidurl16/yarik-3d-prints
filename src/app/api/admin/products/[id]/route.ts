@@ -77,15 +77,24 @@ export async function DELETE(
 }
 
 async function triggerRevalidation() {
+  const secret = process.env.REVALIDATE_SECRET;
+  if (!secret) {
+    console.warn("[Revalidate] REVALIDATE_SECRET is not configured — skipping trigger");
+    return;
+  }
+
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
     `http://localhost:${process.env.PORT ?? 3000}`;
   try {
-    await fetch(`${baseUrl}/api/admin/revalidate`, {
+    const res = await fetch(`${baseUrl}/api/admin/revalidate`, {
       method: "POST",
-      headers: { "x-revalidate-secret": process.env.REVALIDATE_SECRET ?? "dev" },
+      headers: { "x-revalidate-secret": secret },
     });
+    if (!res.ok) {
+      console.error("[Revalidate] Trigger failed:", res.status, await res.text());
+    }
   } catch {
-    // Non-critical
+    console.error("[Revalidate] Trigger request failed");
   }
 }

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import type { DbOrder } from "@/lib/data/types";
 
+const DEFAULT_DATE_RANGE = getDefaultDateRange();
+
 function formatPrice(cents: number, currency = "ZAR") {
   return new Intl.NumberFormat("en-ZA", { style: "currency", currency }).format(cents / 100);
 }
@@ -15,12 +17,20 @@ function formatDate(iso: string) {
 
 const STATUS_OPTIONS = ["", "pending", "paid", "failed", "refunded"];
 
-export default function AdminOrdersPage() {
-  const today = new Date().toISOString().slice(0, 10);
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+function getDefaultDateRange() {
+  const today = new Date();
+  const thirtyDaysAgo = new Date(today);
+  thirtyDaysAgo.setDate(today.getDate() - 30);
 
-  const [from, setFrom] = useState(thirtyDaysAgo);
-  const [to, setTo] = useState(today);
+  return {
+    today: today.toISOString().slice(0, 10),
+    thirtyDaysAgo: thirtyDaysAgo.toISOString().slice(0, 10),
+  };
+}
+
+export default function AdminOrdersPage() {
+  const [from, setFrom] = useState(DEFAULT_DATE_RANGE.thirtyDaysAgo);
+  const [to, setTo] = useState(DEFAULT_DATE_RANGE.today);
   const [status, setStatus] = useState("");
   const [orders, setOrders] = useState<DbOrder[]>([]);
   const [loading, setLoading] = useState(false);

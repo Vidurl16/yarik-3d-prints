@@ -45,9 +45,9 @@ export default function ContactPage() {
             {
               icon: "💬",
               label: "WHATSAPP",
-              value: "+27 XX XXX XXXX",
+              value: "+27 73 914 0709",
               sub: "Mon–Sat, 9am–6pm SAST",
-              href: "https://wa.me/27XXXXXXXXXX",
+              href: "https://wa.me/27739140709",
             },
           ].map((item) => (
             <a
