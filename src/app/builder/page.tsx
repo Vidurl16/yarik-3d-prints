@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Army Builder — YARIK 3D Prints",
-  description: "Build your custom army. Select 3+ units for a 15% warband discount.",
+  description: "Build your custom army by mixing units across supported factions and adding them to your cart.",
 };
 
 export default function BuilderPage() {
@@ -28,17 +28,16 @@ export default function BuilderPage() {
           </div>
 
           <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--primary)", opacity: 0.7 }}>
-            Multi-Faction Builder · Pick 3+ for 15% Off
+            Multi-Faction Builder
           </p>
           <h1 className="font-heading text-3xl sm:text-5xl mb-3" style={{ color: "var(--text)" }}>
             ARMY BUILDER
           </h1>
           <p className="font-body text-sm max-w-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-            Mix units across Space Marines, Orks, Chaos, and Tyranids. Bundle 3 or more
-            and the 15% warband discount activates automatically.
+            Mix units across Space Marines, Orks, Chaos, Tyranids, and the fantasy factions
+            to assemble a custom force, then add your picks straight to cart.
           </p>
 
-          {/* Discount callout */}
           <div
             className="inline-flex items-center gap-3 mt-6 px-4 py-2"
             style={{ border: "1px solid var(--border)", background: "var(--surface)" }}
@@ -47,7 +46,7 @@ export default function BuilderPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
             </svg>
             <span className="font-body text-xs tracking-wider" style={{ color: "var(--primary)" }}>
-              SELECT 3+ PARTS TO UNLOCK 15% WARBAND DISCOUNT
+              PICK UNITS, REVIEW THE SUMMARY, THEN ADD YOUR BUILD TO CART
             </span>
           </div>
         </div>

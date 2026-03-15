@@ -26,15 +26,6 @@ function CartContent() {
   }
 
   const total = getTotal();
-  const DISCOUNT_THRESHOLD = 3;
-  const hasDiscount = items.length >= DISCOUNT_THRESHOLD;
-  const subtotalBeforeDiscount = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-  const discountAmount = hasDiscount
-    ? Math.round(subtotalBeforeDiscount * 0.15)
-    : 0;
 
   async function handleCheckout() {
     if (items.length === 0) return;
@@ -327,25 +318,9 @@ function CartContent() {
                     SUBTOTAL
                   </span>
                   <span className="font-body text-sm" style={{ color: "var(--text)" }}>
-                    {formatPrice(subtotalBeforeDiscount)}
+                    {formatPrice(total)}
                   </span>
                 </div>
-
-                {hasDiscount && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="font-body text-xs tracking-wider" style={{ color: "var(--primary)" }}>
-                        BUNDLE DISCOUNT
-                      </span>
-                      <span className="font-body text-[9px] px-1.5 py-0.5" style={{ background: "var(--glow)", color: "var(--primary)", border: "1px solid var(--border)" }}>
-                        −15%
-                      </span>
-                    </div>
-                    <span className="font-body text-sm" style={{ color: "var(--primary)" }}>
-                      −{formatPrice(discountAmount)}
-                    </span>
-                  </div>
-                )}
               </div>
 
               <div className="pt-4" style={{ borderTop: "1px solid var(--border)" }}>
@@ -383,7 +358,7 @@ function CartContent() {
                     TOTAL
                   </span>
                   <span className="font-heading text-2xl" style={{ color: "var(--primary)" }}>
-                    {formatPrice(total - discountAmount)}
+                    {formatPrice(total)}
                   </span>
                 </div>
 
