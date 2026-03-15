@@ -112,18 +112,18 @@ src/
 
 ## Manual Testing Guide
 
-> Run these steps against `http://localhost:3000` (or your deployed URL) with the DB migration applied and Supabase Auth enabled.
+> Run these steps against your deployed Vercel Preview or Production URL with the DB migration applied and Supabase Auth enabled.
 
 ### Prerequisites
 
 Before testing, confirm:
 
 - [ ] `supabase/migration_phase2.sql` has been run in the Supabase SQL Editor
-- [ ] `.env.local` has real values for all keys (not placeholder `xxx`)
+- [ ] The Vercel project environment variables have real values for all required secrets (not placeholder `xxx`)
 - [ ] `ADMIN_EMAIL_ALLOWLIST` contains the email you'll use to test admin
 - [ ] `RESEND_API_KEY` is set with a valid Resend key (safe to omit — emails are skipped gracefully if missing)
 - [ ] Supabase Auth → Email provider is **enabled** (Dashboard → Auth → Providers)
-- [ ] Dev server is running: `npm run dev` → `http://localhost:3000`
+- [ ] The Vercel deployment is live and reachable at the URL you're testing
 
 ---
 
@@ -215,7 +215,7 @@ Before testing, confirm:
 
 ### 6. Checkout Flow (Yoco)
 
-> **Note:** Requires real Yoco test keys in `.env.local`. Use Yoco test card numbers from https://developer.yoco.com/testing
+> **Note:** Requires real Yoco test keys in the Vercel environment you're testing. Use Yoco test card numbers from https://developer.yoco.com/testing
 
 | # | Step | Expected |
 |---|------|----------|
@@ -228,7 +228,7 @@ Before testing, confirm:
 | 6.7 | Customer receives order confirmation email | Branded **"The Dexarium"** email sent via Resend (requires `RESEND_API_KEY`) |
 | 6.8 | **Failed payment** — use Yoco declined-card test number | Yoco redirects back to `/cart?cancelled=true`; red banner shown; cart intact |
 
-> ⚠️ Webhook won't fire locally. Use [ngrok](https://ngrok.com): `ngrok http 3000` and set the Yoco dashboard webhook URL to `https://<your-ngrok-url>/api/webhooks/yoco`
+> ⚠️ If the webhook doesn't fire during hosted QA, confirm the Yoco dashboard webhook URL points to `https://<your-vercel-domain>/api/webhooks/yoco` and that `PAYMENT_WEBHOOK_SECRET` matches the selected Vercel environment.
 
 ---
 
@@ -278,33 +278,34 @@ Log in with an admin email first.
 |---|-------|-------|
 | 10.1 | **Yoco redirect URL field name unverified** | Adapter tries `data.redirectUrl ?? data.paymentUrl ?? data.url` — confirm against Yoco docs with a live test |
 | 10.2 | **No guest order status page** | No way to check order status without logging in |
-| 10.3 | **ADMIN_EMAIL_ALLOWLIST placeholder** | If `.env.local` still has `you@yourdomain.com`, admin portal is inaccessible |
+| 10.3 | **ADMIN_EMAIL_ALLOWLIST placeholder** | If the selected Vercel environment still has `you@yourdomain.com` or is empty, the admin portal is inaccessible |
 
 ---
 
 ### Quick Smoke Test (5 minutes)
 
 ```bash
+BASE_URL="https://<your-vercel-domain>"
+
 # Homepage
-curl -s -o /dev/null -w "/ → %{http_code}\n" http://localhost:3000
+curl -s -o /dev/null -w "/ → %{http_code}\n" "$BASE_URL"
 
 # Shop
-curl -s -o /dev/null -w "/shop → %{http_code}\n" http://localhost:3000/shop
+curl -s -o /dev/null -w "/shop → %{http_code}\n" "$BASE_URL/shop"
 
 # Admin redirect (should be 307 when not logged in)
-curl -s -o /dev/null -w "/admin → %{http_code}\n" http://localhost:3000/admin
+curl -s -o /dev/null -w "/admin → %{http_code}\n" "$BASE_URL/admin"
 
 # Checkout with empty cart → expect {"error":"Cart is empty"}
-curl -s -X POST http://localhost:3000/api/checkout \
+curl -s -X POST "$BASE_URL/api/checkout" \
   -H "Content-Type: application/json" \
   -d '{"items":[]}' | python3 -m json.tool
 
 # Webhook with bad signature → expect 400
-curl -s -X POST http://localhost:3000/api/webhooks/yoco \
+curl -s -X POST "$BASE_URL/api/webhooks/yoco" \
   -H "Content-Type: application/json" \
   -H "webhook-id: test" \
   -H "webhook-timestamp: 0" \
   -H "webhook-signature: v1,invalidsig" \
   -d '{}' | python3 -m json.tool
 ```
-

@@ -12,7 +12,7 @@ Complete manual testing checklist for the entire site. Run through every section
 | Admin account | An account whose email is in `ADMIN_EMAIL_ALLOWLIST` |
 | Test card | Yoco sandbox card `4111 1111 1111 1111`, exp any future, CVV `123` |
 | Browser | Chrome + Firefox (mobile viewport in DevTools for mobile checks) |
-| Base URL | `https://yarik3d.co.za` (or local `http://localhost:3000`) |
+| Base URL | Current Vercel Preview/Production URL (for example `https://yarik3d.co.za`) |
 
 ---
 

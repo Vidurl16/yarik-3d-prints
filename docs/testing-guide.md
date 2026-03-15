@@ -1,6 +1,6 @@
 # Yarik 3D Prints — Manual Testing Guide
 
-> Run these steps against `http://localhost:3000` (or your deployed URL) with the DB migration applied and Supabase Auth enabled.
+> Run these steps against your deployed Vercel Preview or Production URL with the DB migration applied and Supabase Auth enabled.
 
 ---
 
@@ -9,11 +9,41 @@
 Before testing, confirm:
 
 - [ ] `supabase/migration_phase2.sql` has been run in the Supabase SQL Editor
-- [ ] `.env.local` has real values for all keys (not placeholder `xxx`)
+- [ ] The Vercel project environment variables have real values for all required secrets (not placeholder `xxx`)
 - [ ] `ADMIN_EMAIL_ALLOWLIST` contains the email you'll use to test admin
 - [ ] `RESEND_API_KEY` is set with a valid Resend key (for order confirmation emails; safe to omit — emails are skipped gracefully if missing)
 - [ ] Supabase Auth → Email provider is **enabled** (Dashboard → Auth → Providers)
-- [ ] Dev server is running: `npm run dev` → `http://localhost:3000`
+- [ ] The Vercel deployment is live and reachable at the URL you're testing
+
+---
+
+## Pre-E2E gate
+
+Do **not** start full end-to-end testing until all items below are true:
+
+> Tip: verify Vercel Project Settings -> Environment Variables, plus the relevant Supabase and Yoco dashboard settings, before starting end-to-end QA.
+
+- [ ] Theme hero assets resolve successfully from `public/brand-assets/**`
+- [ ] Placeholder SVG heroes are acceptable for internal QA, or licensed production art has replaced them
+- [ ] If visual sign-off matters, the stakeholder reference images have been reviewed and replaced with licensed final artwork
+- [ ] A final `dexarium` hero direction has been chosen (only the placeholder exists right now)
+- [ ] Yoco sandbox keys are configured
+- [ ] Yoco webhook is pointed at the Vercel deployment URL you're testing
+- [ ] Supabase schema + Phase 2 migration are both applied
+- [ ] Admin email allowlist contains the real admin tester address
+
+### Brand asset reference map
+
+| Theme | Current asset in repo | Reference supplied | Notes |
+|---|---|---|---|
+| `grimdark` | Bundled JPEG hero | `IMG_7902.jpeg` | User-provided image now used for internal QA; confirm final approval before release |
+| `fantasy` | Bundled JPEG hero | `IMG_7901.jpeg` | User-provided image now used for internal QA; confirm final approval before release |
+| `basing` | Bundled JPEG hero | `IMG_7900.jpeg` | User-provided image now used for internal QA; confirm final approval before release |
+| `pokemon` | Bundled JPEG hero | `IMG_7899.jpeg` | User-provided image now used for internal QA; confirm final approval before release |
+| `terrain` | Bundled JPEG hero | `IMG_7903.jpeg` | User-provided image now used for internal QA; confirm final approval before release |
+| `dexarium` | Placeholder SVG hero | None yet | Final branded hero still needed |
+
+See `public/brand-assets/ASSET_ATTRIBUTION.md` for the current placeholder inventory and replacement notes.
 
 ---
 
@@ -23,7 +53,7 @@ Before testing, confirm:
 |---|------|----------|
 | 1.1 | Visit `/` | Landing page loads with Dexarium theme, no errors |
 | 1.2 | Visit `/shop` | Product grid renders; at least one product card visible |
-| 1.3 | Click a brand tile (e.g. `/shop/warhammer`) | Brand page loads with brand theme |
+| 1.3 | Click a brand tile (e.g. `/grimdark-future`) | Brand page loads with brand theme |
 | 1.4 | Visit `/new-arrivals` | Page renders (may be empty if no new products) |
 | 1.5 | Visit `/preorders` | Page renders |
 | 1.6 | Visit `/contact` | Contact page renders |
@@ -90,7 +120,7 @@ Before testing, confirm:
 
 ## 5. Checkout Flow (Yoco)
 
-> **Note:** Requires real Yoco test keys in `.env.local`. Use Yoco test card numbers from https://developer.yoco.com/testing
+> **Note:** Requires real Yoco test keys in the Vercel environment you're testing. Use Yoco test card numbers from https://developer.yoco.com/testing
 
 | # | Step | Expected |
 |---|------|----------|
@@ -105,7 +135,7 @@ Before testing, confirm:
 | 5.9 | **Failed payment** — use Yoco declined-card test number | Yoco redirects back to `/cart?cancelled=true` |
 | 5.10 | Cart page after failed payment | Red "Payment was cancelled or declined" banner appears above cart items; items are still in cart |
 
-> ⚠️ If the webhook doesn't fire locally, use [ngrok](https://ngrok.com) to expose localhost and configure the Yoco dashboard webhook URL to `https://<your-ngrok-url>/api/webhooks/yoco`
+> ⚠️ If the webhook doesn't fire during hosted QA, confirm the Yoco dashboard webhook URL points to `https://<your-vercel-domain>/api/webhooks/yoco` and that `PAYMENT_WEBHOOK_SECRET` matches the selected Vercel environment.
 
 ---
 
@@ -186,59 +216,65 @@ Log in with an admin email first.
 
 ## 12. Known Issues & Gaps to Verify
 
-These are known gaps in the current implementation. Test each one and note behaviour.
+Use this section as a **go / no-go gate** before full E2E.
+
+- If any **red** item below is unresolved, stop and fix setup first.
+- **Yellow** items do not always block functional QA, but they should be acknowledged before sign-off.
+- **Orange** items are implementation caveats that need explicit verification during testing.
 
 ### 🔴 Critical — will break real usage
 
 | # | Issue | How to test | Current behaviour |
 |---|-------|-------------|-------------------|
-| ~~12.1~~ | ~~**Cart sync never fires on login**~~ | ~~Add items as guest → log in → check cart~~ | ✅ **Fixed** — `CartSyncProvider` in root layout listens to `onAuthStateChange`; calls `mergeAndSync` on `SIGNED_IN` and `INITIAL_SESSION`, and debounce-saves on every cart change while logged in |
-| 12.2 | **Yoco keys not set** | Add item to cart → click Checkout | Expect 500 error until `PAYMENT_SECRET_KEY` and `PAYMENT_WEBHOOK_SECRET` are set in `.env.local` |
-| 12.3 | **DB migration may not be run** | Add to cart → attempt checkout | If `carts` / `payment_provider` columns missing, you'll see DB errors — run `supabase/migration_phase2.sql` in Supabase SQL Editor |
+| 12.1 | **Yoco checkout key is set, but the webhook signing secret is not production-ready** | Inspect Vercel environment variables, then run a hosted checkout | `PAYMENT_SECRET_KEY` is configured, but `PAYMENT_WEBHOOK_SECRET` in the selected Vercel environment is still using a short placeholder-style value and must be replaced with the real Yoco webhook secret before webhook testing can pass |
+| 12.2 | **DB migration may not be run** | Add to cart → attempt checkout | If `carts` / `payment_provider` columns are missing, you'll hit DB errors — run `supabase/migration_phase2.sql` in Supabase SQL Editor |
+| 12.3 | **Webhook points at the wrong environment or is not publicly reachable** | Complete a hosted checkout, then inspect webhook delivery in the Yoco dashboard | If the Yoco webhook URL still points to `localhost`, an old domain, or another environment, payment success will not update the order to `paid` |
+| 12.4 | **ADMIN_EMAIL_ALLOWLIST is placeholder** | Try to access `/admin` in the Vercel deployment | If the selected Vercel environment still has a placeholder or empty admin allowlist, admin testing is effectively blocked |
 
 ### 🟡 Important — missing features
 
 | # | Issue | How to test | Expected fix |
 |---|-------|-------------|--------------|
-| ~~12.4~~ | ~~**No order confirmation email**~~ | ~~Complete a successful Yoco payment~~ | ✅ **Fixed** — Resend integration sends a branded order confirmation email on `payment.succeeded` webhook. Requires `RESEND_API_KEY` in `.env.local`. |
 | 12.5 | **No guest order status page** | Complete checkout as guest | No way to check order status without logging in |
-| ~~12.6~~ | ~~**Failed payment not handled**~~ | ~~Trigger a declined card in Yoco test mode~~ | ✅ **Fixed** — `cancelUrl` now includes `?cancelled=true`; cart page shows a "Payment was cancelled or declined" banner with cart items intact. |
-| 12.7 | **ADMIN_EMAIL_ALLOWLIST is placeholder** | Try to access `/admin` | If `.env.local` still has `you@yourdomain.com`, admin portal is inaccessible to everyone |
+| 12.6 | **Theme art is placeholder-only** | Visit each brand page hero | Pages should render correctly for functional QA, but final licensed artwork is still needed for visual sign-off |
+| 12.7 | **Dexarium final hero art missing** | Visit `/` and compare against brand expectations | Placeholder renders, but final approved homepage art still needs to be supplied |
+| 12.8 | **Reference images are not production-cleared assets** | Compare the placeholder heroes against the supplied reference mapping | Functional QA can proceed, but release art should only use licensed / approved source material |
 
 ### 🟠 Code gaps
 
 | # | Issue | How to test | Notes |
 |---|-------|-------------|-------|
-| ~~12.8~~ | ~~**Cart cleared before payment confirmed**~~ | ~~Start checkout → close Yoco window without paying~~ | ✅ **Fixed** — cart is now cleared via `useEffect` only when `?success=true` is in the URL (i.e., after Yoco redirects back). Abandoning the Yoco window leaves cart intact. |
-| 12.9 | **Yoco redirect URL field name unverified** | Complete a real Yoco test checkout | Adapter tries `data.redirectUrl ?? data.paymentUrl ?? data.url` — if none match, checkout silently fails with no redirect |
-| 12.10 | **Webhook unreachable locally** | Run locally without ngrok | Yoco cannot POST to `localhost:3000` — use `ngrok http 3000` and update Yoco dashboard webhook URL |
+| 12.9 | **Yoco redirect URL field name unverified** | Complete a real Yoco test checkout | Adapter tries `data.redirectUrl ?? data.paymentUrl ?? data.url` — confirm one of these is returned in sandbox |
+| 12.10 | **Placeholder heroes should be replaced before release** | Compare rendered pages against approved art direction | Functional QA can proceed, but public release should use licensed final assets rather than placeholders |
 
 ### Setup checklist before any real testing
 
-```bash
-# 1. Confirm migration ran — should return rows
-# In Supabase SQL Editor:
+```sql
+-- 1. Confirm migration ran — should return rows
 SELECT column_name FROM information_schema.columns
 WHERE table_name = 'orders' AND column_name = 'payment_provider';
-# → should return 1 row
+-- → should return 1 row
 
 SELECT table_name FROM information_schema.tables
 WHERE table_name = 'carts';
-# → should return 1 row
-
-# 2. Confirm env vars set (run locally)
-grep "PAYMENT_SECRET_KEY\|PAYMENT_WEBHOOK_SECRET\|ADMIN_EMAIL_ALLOWLIST" .env.local
-# → none should contain "xxx" or placeholder values
+-- → should return 1 row
 ```
+
+2. Confirm environment variables in Vercel Project Settings -> Environment Variables:
+
+- `PAYMENT_SECRET_KEY`
+- `PAYMENT_WEBHOOK_SECRET`
+- `ADMIN_EMAIL_ALLOWLIST`
+
+None should contain placeholder values, and the webhook secret must match the value configured in the Yoco dashboard for the Vercel environment under test.
 
 ---
 
 ## Known Limitations / Out of Scope (Phase 2)
 
 - No discount/coupon codes
-- No email notifications on order (Phase 3)
-- Yoco webhook requires public URL — use ngrok for local testing
-- Cart sync to Supabase requires auth state listener to call `mergeAndSync()` on login (planned fix)
+- Yoco webhook requires a publicly reachable deployed URL configured in the Yoco dashboard
+- Placeholder brand artwork is suitable for functional QA, not final creative sign-off
 
 ---
 
@@ -247,26 +283,28 @@ grep "PAYMENT_SECRET_KEY\|PAYMENT_WEBHOOK_SECRET\|ADMIN_EMAIL_ALLOWLIST" .env.lo
 Run this after any deployment to confirm nothing is catastrophically broken:
 
 ```bash
+BASE_URL="https://<your-vercel-domain>"
+
 # 1. Homepage
-curl -s -o /dev/null -w "/ → %{http_code}\n" http://localhost:3000
+curl -s -o /dev/null -w "/ → %{http_code}\n" "$BASE_URL"
 
 # 2. Shop
-curl -s -o /dev/null -w "/shop → %{http_code}\n" http://localhost:3000/shop
+curl -s -o /dev/null -w "/shop → %{http_code}\n" "$BASE_URL/shop"
 
 # 3. Login page
-curl -s -o /dev/null -w "/login → %{http_code}\n" http://localhost:3000/login
+curl -s -o /dev/null -w "/login → %{http_code}\n" "$BASE_URL/login"
 
 # 4. Admin redirect (should be 307 when not logged in)
-curl -s -o /dev/null -w "/admin → %{http_code}\n" http://localhost:3000/admin
+curl -s -o /dev/null -w "/admin → %{http_code}\n" "$BASE_URL/admin"
 
 # 5. Checkout with empty cart
-curl -s -X POST http://localhost:3000/api/checkout \
+curl -s -X POST "$BASE_URL/api/checkout" \
   -H "Content-Type: application/json" \
   -d '{"items":[]}' | python3 -m json.tool
 # Expected: {"error":"Cart is empty"}
 
 # 6. Webhook with bad signature
-curl -s -X POST http://localhost:3000/api/webhooks/yoco \
+curl -s -X POST "$BASE_URL/api/webhooks/yoco" \
   -H "Content-Type: application/json" \
   -H "webhook-id: test" \
   -H "webhook-timestamp: 0" \
