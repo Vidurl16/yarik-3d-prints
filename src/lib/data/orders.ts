@@ -1,5 +1,6 @@
 import { getServiceClient } from "@/lib/supabase/server";
 import type { DbOrder, DbOrderItem, PaymentStatus } from "./types";
+import { normalizeEmail } from "@/lib/utils/normalizeEmail";
 
 export interface CreateOrderInput {
   user_id?: string | null;
@@ -185,6 +186,36 @@ export async function getOrderWithItems(
     return null;
   }
   if (!data) return null;
+  const { order_items, ...order } = data as DbOrder & { order_items: DbOrderItem[] };
+  return { order: order as DbOrder, items: order_items ?? [] };
+}
+
+export async function getGuestOrderWithItems(
+  orderId: string,
+  email: string
+): Promise<{ order: DbOrder; items: DbOrderItem[] } | null> {
+  const normalizedOrderId = orderId.trim();
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedOrderId || !normalizedEmail) return null;
+
+  // Validate UUID format before hitting the DB to avoid a postgres error
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!UUID_RE.test(normalizedOrderId)) return null;
+
+  const supabase = getServiceClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*, order_items(*)")
+    .eq("id", normalizedOrderId)
+    .eq("email", normalizedEmail)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[DB] getGuestOrderWithItems:", error.message);
+    return null;
+  }
+  if (!data) return null;
+
   const { order_items, ...order } = data as DbOrder & { order_items: DbOrderItem[] };
   return { order: order as DbOrder, items: order_items ?? [] };
 }
