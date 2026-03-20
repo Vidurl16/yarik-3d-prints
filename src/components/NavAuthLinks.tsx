@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { getBrowserClient } from "@/lib/supabase/browser";
 import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
+import type { User, AuthChangeEvent, Session } from "@supabase/supabase-js";
 
 export default function NavAuthLinks() {
   const [user, setUser] = useState<User | null>(null);
@@ -11,12 +11,12 @@ export default function NavAuthLinks() {
 
   useEffect(() => {
     const supabase = getBrowserClient();
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(({ data }: { data: { user: User | null } }) => {
       setUser(data.user);
       setReady(true);
     });
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       setUser(session?.user ?? null);
     });
     return () => sub.subscription.unsubscribe();

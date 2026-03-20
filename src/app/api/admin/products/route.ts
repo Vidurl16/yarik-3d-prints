@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
     name: body.name,
     brand: body.brand,
     type: body.type,
+    print_type: body.print_type ?? null,
+    faction: body.faction ?? null,
+    role: body.role ?? null,
     price_cents: Number(body.price_cents),
     currency: body.currency ?? "ZAR",
     tags: Array.isArray(body.tags) ? body.tags : (body.tags ?? "").split(",").map((t: string) => t.trim()).filter(Boolean),
@@ -79,6 +82,7 @@ async function triggerRevalidation() {
     const res = await fetch(`${baseUrl}/api/admin/revalidate`, {
       method: "POST",
       headers: { "x-revalidate-secret": secret },
+      signal: AbortSignal.timeout(5_000),
     });
     if (!res.ok) {
       console.error("[Revalidate] Trigger failed:", res.status, await res.text());

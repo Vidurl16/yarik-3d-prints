@@ -27,7 +27,7 @@ export async function PATCH(
 
   const updateData: Record<string, unknown> = {};
   const allowedFields = [
-    "slug", "name", "brand", "type", "price_cents", "currency",
+    "slug", "name", "brand", "type", "print_type", "faction", "role", "price_cents", "currency",
     "tags", "image_url", "is_preorder", "is_new", "is_active", "preorder_date",
   ];
 
@@ -90,6 +90,7 @@ async function triggerRevalidation() {
     const res = await fetch(`${baseUrl}/api/admin/revalidate`, {
       method: "POST",
       headers: { "x-revalidate-secret": secret },
+      signal: AbortSignal.timeout(5_000),
     });
     if (!res.ok) {
       console.error("[Revalidate] Trigger failed:", res.status, await res.text());

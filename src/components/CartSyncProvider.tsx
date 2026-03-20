@@ -16,6 +16,7 @@
 import { useEffect, useRef } from "react";
 import { getBrowserClient } from "@/lib/supabase/browser";
 import { useCartStore } from "@/store/cartStore";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 
 export default function CartSyncProvider() {
   const mergeAndSync = useCartStore((s) => s.mergeAndSync);
@@ -28,7 +29,7 @@ export default function CartSyncProvider() {
     const supabase = getBrowserClient();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (event: AuthChangeEvent, session: Session | null) => {
         if (event === "SIGNED_IN" && session?.user) {
           activeUserIdRef.current = session.user.id;
           await mergeAndSync(session.user.id);
