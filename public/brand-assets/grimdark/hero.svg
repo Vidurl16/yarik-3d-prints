@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1200" viewBox="0 0 2400 1200" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08080e"/>
+      <stop offset="100%" stop-color="#0f0f1a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="58%" r="52%">
+      <stop offset="0%" stop-color="#9b4060" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#9b4060" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="lines" width="180" height="180" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+      <line x1="0" y1="0" x2="0" y2="180" stroke="#d4cce0" stroke-opacity="0.08" stroke-width="6"/>
+    </pattern>
+  </defs>
+  <rect width="2400" height="1200" fill="url(#bg)"/>
+  <rect width="2400" height="1200" fill="url(#glow)"/>
+  <rect width="2400" height="1200" fill="url(#lines)"/>
+  <rect x="120" y="120" width="2160" height="960" rx="28" stroke="#d4cce0" stroke-opacity="0.28" stroke-width="5"/>
+  <rect x="180" y="180" width="2040" height="840" rx="24" stroke="#9b4060" stroke-opacity="0.44" stroke-width="3"/>
+  <circle cx="1820" cy="390" r="240" fill="#9b4060" fill-opacity="0.10"/>
+  <circle cx="520" cy="880" r="340" fill="#d4cce0" fill-opacity="0.04"/>
+  <text x="180" y="260" fill="#d4cce0" font-size="76" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="8">GRIMDARK</text>
+  <text x="180" y="340" fill="#d4cce0" fill-opacity="0.82" font-size="34" font-family="Arial, Helvetica, sans-serif" letter-spacing="3">Grimdark Future</text>
+  <text x="180" y="1020" fill="#d4cce0" fill-opacity="0.72" font-size="28" font-family="Arial, Helvetica, sans-serif" letter-spacing="2">Replace with licensed final hero art</text>
+</svg>
