@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ContactForm from "./ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact — YARIK 3D Prints",
+  title: "Contact — The Dexarium",
   description: "Get in touch for custom orders, preorders, or any questions.",
 };
 
@@ -84,10 +85,10 @@ export default function ContactPage() {
           <h2 className="font-heading text-lg tracking-widest mb-6" style={{ color: "var(--primary)" }}>COMMON ENQUIRIES</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { label: "Custom Prints", desc: "Got an STL? We&apos;ll quote it." },
+              { label: "Custom Prints", desc: "Got an STL? We'll quote it." },
               { label: "Preorders", desc: "Reserve upcoming releases." },
               { label: "Bulk Orders", desc: "10+ units — ask about discounts." },
-              { label: "Commission Work", desc: "Custom sculpts &amp; painted minis." },
+              { label: "Commission Work", desc: "Custom sculpts & painted minis." },
             ].map((item) => (
               <div
                 key={item.label}
@@ -97,15 +98,18 @@ export default function ContactPage() {
                 <span style={{ color: "var(--primary)" }} className="mt-0.5">→</span>
                 <div>
                   <p className="font-body text-sm font-semibold" style={{ color: "var(--text)" }}>{item.label}</p>
-                  <p
-                    className="font-body text-xs mt-0.5"
-                    style={{ color: "var(--muted)" }}
-                    dangerouslySetInnerHTML={{ __html: item.desc }}
-                  />
+                  <p className="font-body text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+                    {item.desc}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Contact Form */}
+        <div className="mb-12">
+          <ContactForm />
         </div>
 
         {/* Army Builder CTA */}

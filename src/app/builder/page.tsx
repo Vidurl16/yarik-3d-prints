@@ -1,13 +1,16 @@
 import BundleBuilder from "@/components/BundleBuilder";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getCatalogBuilderProducts } from "@/lib/data/products";
 
 export const metadata: Metadata = {
   title: "Army Builder — YARIK 3D Prints",
   description: "Build your custom army by mixing units across supported factions and adding them to your cart.",
 };
 
-export default function BuilderPage() {
+export default async function BuilderPage() {
+  const products = await getCatalogBuilderProducts();
+
   return (
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* Header */}
@@ -54,7 +57,7 @@ export default function BuilderPage() {
 
       {/* Builder */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <BundleBuilder />
+        <BundleBuilder products={products} />
       </div>
     </div>
   );

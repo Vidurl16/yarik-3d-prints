@@ -13,6 +13,7 @@ Complete manual testing checklist for the entire site. Run through every section
 | Test card | Yoco sandbox card `4111 1111 1111 1111`, exp any future, CVV `123` |
 | Browser | Chrome + Firefox (mobile viewport in DevTools for mobile checks) |
 | Base URL | Current Vercel Preview/Production URL (for example `https://yarik3d.co.za`) |
+| Database bootstrap | Run `supabase/bootstrap.sql` for a fresh Supabase project, then `supabase/verify_setup.sql` |
 
 ---
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import CartDrawer from "@/components/CartDrawer";
 import CartSyncProvider from "@/components/CartSyncProvider";
+import Link from "next/link";
 
 const cinzel = Cinzel_Decorative({
   variable: "--font-cinzel",
@@ -50,6 +51,39 @@ export default function RootLayout({
 
         {/* Page Content */}
         <main>{children}</main>
+
+        {/* Footer */}
+        <footer
+          className="mt-auto py-10 px-4"
+          style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}
+        >
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="font-heading text-xs tracking-[0.3em]" style={{ color: "var(--primary)", opacity: 0.7 }}>
+              THE DEXARIUM
+            </p>
+            <nav className="flex items-center gap-6">
+              {[
+                { href: "/shop", label: "Shop" },
+                { href: "/preorders", label: "Preorders" },
+                { href: "/contact", label: "Contact" },
+                { href: "/terms", label: "Terms" },
+                { href: "/privacy", label: "Privacy" },
+              ].map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="font-body text-[10px] tracking-[0.15em] transition-colors hover:opacity-100"
+                  style={{ color: "var(--muted)", opacity: 0.7 }}
+                >
+                  {label.toUpperCase()}
+                </Link>
+              ))}
+            </nav>
+            <p className="font-body text-[10px]" style={{ color: "var(--muted)", opacity: 0.4 }}>
+              © {new Date().getFullYear()} The Dexarium
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );

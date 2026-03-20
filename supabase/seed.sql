@@ -49,3 +49,110 @@ VALUES
 ('ter-foam-insert',        'Army Transport Foam Insert',     'gaming-accessories-terrain', 'terrain',  34000, ARRAY['Terrain','accessory','transport'],   NULL, false, true,  'May 2025')
 
 ON CONFLICT (slug) DO NOTHING;
+
+UPDATE products
+SET
+  print_type = CASE slug
+    WHEN 'gf-intercessor-squad' THEN 'RESIN'
+    WHEN 'gf-primaris-captain' THEN 'RESIN'
+    WHEN 'gf-land-raider' THEN 'MULTICOLOUR'
+    WHEN 'gf-librarian-phobos' THEN 'RESIN'
+    WHEN 'gf-drop-pod' THEN 'FDM'
+    WHEN 'gf-ork-boyz' THEN 'RESIN'
+    WHEN 'gf-warboss' THEN 'RESIN'
+    WHEN 'gf-termagant-brood' THEN 'RESIN'
+    WHEN 'af-spearmen-regiment' THEN 'RESIN'
+    WHEN 'af-archmage-dragon' THEN 'MULTICOLOUR'
+    WHEN 'af-silver-helm-cavalry' THEN 'RESIN'
+    WHEN 'af-skeleton-warriors' THEN 'RESIN'
+    WHEN 'af-lich-king' THEN 'RESIN'
+    WHEN 'af-black-knights' THEN 'RESIN'
+    WHEN 'pk-charizard-statue' THEN 'MULTICOLOUR'
+    WHEN 'pk-pikachu-figurine' THEN 'RESIN'
+    WHEN 'pk-mewtwo-bust' THEN 'RESIN'
+    WHEN 'pk-gengar-figure' THEN 'RESIN'
+    WHEN 'pk-eevee-collection' THEN 'RESIN'
+    WHEN 'pk-snorlax-display' THEN 'FDM'
+    WHEN 'bas-urban-rubble' THEN 'RESIN'
+    WHEN 'bas-cobblestone' THEN 'RESIN'
+    WHEN 'bas-lava-crater' THEN 'RESIN'
+    WHEN 'bas-dead-forest' THEN 'RESIN'
+    WHEN 'bas-scatter-rubble' THEN 'RESIN'
+    WHEN 'bas-explosion-markers' THEN 'MULTICOLOUR'
+    WHEN 'ter-gothic-building' THEN 'MULTICOLOUR'
+    WHEN 'ter-industrial-pipes' THEN 'FDM'
+    WHEN 'ter-trench-system' THEN 'FDM'
+    WHEN 'ter-dice-tray' THEN 'RESIN'
+    WHEN 'ter-token-set' THEN 'RESIN'
+    WHEN 'ter-foam-insert' THEN 'FDM'
+    ELSE print_type
+  END,
+  faction = CASE slug
+    WHEN 'gf-intercessor-squad' THEN 'space-marines'
+    WHEN 'gf-primaris-captain' THEN 'space-marines'
+    WHEN 'gf-land-raider' THEN 'space-marines'
+    WHEN 'gf-librarian-phobos' THEN 'space-marines'
+    WHEN 'gf-drop-pod' THEN 'space-marines'
+    WHEN 'gf-ork-boyz' THEN 'orks'
+    WHEN 'gf-warboss' THEN 'orks'
+    WHEN 'gf-termagant-brood' THEN 'tyranids'
+    WHEN 'af-spearmen-regiment' THEN 'high-elves'
+    WHEN 'af-archmage-dragon' THEN 'high-elves'
+    WHEN 'af-silver-helm-cavalry' THEN 'high-elves'
+    WHEN 'af-skeleton-warriors' THEN 'undead'
+    WHEN 'af-lich-king' THEN 'undead'
+    WHEN 'af-black-knights' THEN 'undead'
+    WHEN 'pk-charizard-statue' THEN 'pokemon-merch'
+    WHEN 'pk-pikachu-figurine' THEN 'pokemon-merch'
+    WHEN 'pk-mewtwo-bust' THEN 'pokemon-merch'
+    WHEN 'pk-gengar-figure' THEN 'pokemon-merch'
+    WHEN 'pk-eevee-collection' THEN 'pokemon-merch'
+    WHEN 'pk-snorlax-display' THEN 'pokemon-merch'
+    ELSE faction
+  END,
+  role = CASE slug
+    WHEN 'gf-intercessor-squad' THEN 'Battleline'
+    WHEN 'gf-primaris-captain' THEN 'HQ'
+    WHEN 'gf-land-raider' THEN 'Vehicles'
+    WHEN 'gf-librarian-phobos' THEN 'HQ'
+    WHEN 'gf-drop-pod' THEN 'Transports'
+    WHEN 'gf-ork-boyz' THEN 'Battleline'
+    WHEN 'gf-warboss' THEN 'HQ'
+    WHEN 'gf-termagant-brood' THEN 'Battleline'
+    WHEN 'af-spearmen-regiment' THEN 'Battleline'
+    WHEN 'af-archmage-dragon' THEN 'HQ'
+    WHEN 'af-silver-helm-cavalry' THEN 'Cavalry'
+    WHEN 'af-skeleton-warriors' THEN 'Battleline'
+    WHEN 'af-lich-king' THEN 'HQ'
+    WHEN 'af-black-knights' THEN 'Cavalry'
+    ELSE role
+  END
+WHERE TRUE;
+
+INSERT INTO products (
+  slug, name, brand, type, print_type, faction, role, price_cents, tags, image_url, is_new, is_preorder, preorder_date
+)
+VALUES
+('gf-chapter-banner-bearer', 'Chapter Banner Bearer', 'grimdark-future', 'character', 'RESIN', 'space-marines', 'Support', 16000, ARRAY['Character','support'], NULL, false, false, NULL),
+('gf-battlewagon', 'Battlewagon', 'grimdark-future', 'vehicle', 'MULTICOLOUR', 'orks', 'Vehicles', 65000, ARRAY['Vehicle','tank','heavy','looted'], NULL, false, false, NULL),
+('gf-weirdboy-warphead', 'Weirdboy Warphead', 'grimdark-future', 'character', 'RESIN', 'orks', 'HQ', 22000, ARRAY['Character','HQ','psyker','greenskin'], NULL, false, false, NULL),
+('gf-looted-wagon', 'Looted Wagon', 'grimdark-future', 'vehicle', 'FDM', 'orks', 'Transports', 48000, ARRAY['Vehicle','transport','looted'], NULL, false, false, NULL),
+('gf-nob-banner', 'Nob with Waaagh Banner', 'grimdark-future', 'character', 'RESIN', 'orks', 'Support', 16000, ARRAY['Character','support','greenskin'], NULL, false, false, NULL),
+('gf-hive-tyrant', 'Hive Tyrant', 'grimdark-future', 'character', 'MULTICOLOUR', 'tyranids', 'HQ', 62000, ARRAY['Character','HQ','monster','xenos'], NULL, false, false, NULL),
+('gf-tyrannofex', 'Tyrannofex', 'grimdark-future', 'vehicle', 'FDM', 'tyranids', 'Vehicles', 48000, ARRAY['Vehicle','monster','heavy','xenos'], NULL, false, false, NULL),
+('gf-broodlord', 'Broodlord', 'grimdark-future', 'character', 'RESIN', 'tyranids', 'HQ', 22000, ARRAY['Character','HQ','elite','xenos'], NULL, false, false, NULL),
+('gf-trygon-prime', 'Trygon Prime', 'grimdark-future', 'vehicle', 'RESIN', 'tyranids', 'Vehicles', 45000, ARRAY['Vehicle','monster','deepstrike','xenos'], NULL, false, false, NULL),
+('gf-venomthrope', 'Venomthrope', 'grimdark-future', 'character', 'RESIN', 'tyranids', 'Support', 16000, ARRAY['Character','support','xenos'], NULL, false, false, NULL),
+('gf-chaos-legionaries', 'Chaos Legionaries ×5', 'grimdark-future', 'infantry', 'RESIN', 'chaos-space-marines', 'Battleline', 35000, ARRAY['Infantry','Battleline','chaos','power-armour'], NULL, false, false, NULL),
+('gf-chaos-lord', 'Chaos Lord', 'grimdark-future', 'character', 'RESIN', 'chaos-space-marines', 'HQ', 18000, ARRAY['Character','HQ','leader','chaos'], NULL, false, false, NULL),
+('gf-chaos-rhino', 'Chaos Rhino', 'grimdark-future', 'vehicle', 'FDM', 'chaos-space-marines', 'Transports', 48000, ARRAY['Vehicle','transport','chaos'], NULL, false, false, NULL),
+('gf-chaos-sorcerer', 'Sorcerer in Terminator Armour', 'grimdark-future', 'character', 'RESIN', 'chaos-space-marines', 'HQ', 22000, ARRAY['Character','HQ','psyker','chaos'], NULL, false, false, NULL),
+('gf-chaos-predator', 'Chaos Predator', 'grimdark-future', 'vehicle', 'MULTICOLOUR', 'chaos-space-marines', 'Vehicles', 65000, ARRAY['Vehicle','tank','heavy','chaos'], NULL, false, false, NULL),
+('gf-dark-apostle', 'Dark Apostle', 'grimdark-future', 'character', 'RESIN', 'chaos-space-marines', 'Support', 16000, ARRAY['Character','support','chaos'], NULL, false, false, NULL),
+('af-white-lions', 'White Lions ×10', 'age-of-fantasy', 'infantry', 'RESIN', 'high-elves', 'Infantry', 38000, ARRAY['Infantry','elite','elves'], NULL, false, false, NULL),
+('af-eagle-chariot', 'Eagle Chariot', 'age-of-fantasy', 'vehicle', 'MULTICOLOUR', 'high-elves', 'Vehicles', 56000, ARRAY['Vehicle','chariot','fast'], NULL, false, false, NULL),
+('af-loremaster-hoeth', 'Loremaster of Hoeth', 'age-of-fantasy', 'character', 'RESIN', 'high-elves', 'Support', 24000, ARRAY['Character','magic','support'], NULL, false, false, NULL),
+('af-zombie-dragon', 'Zombie Dragon', 'age-of-fantasy', 'vehicle', 'MULTICOLOUR', 'undead', 'Vehicles', 72000, ARRAY['Vehicle','monster','dragon','undead'], NULL, false, false, NULL),
+('af-spirit-hosts', 'Spirit Hosts ×3', 'age-of-fantasy', 'infantry', 'RESIN', 'undead', 'Support', 18000, ARRAY['Infantry','support','spirit','undead'], NULL, false, false, NULL),
+('af-necromancer', 'Necromancer', 'age-of-fantasy', 'character', 'RESIN', 'undead', 'Support', 16000, ARRAY['Character','magic','support','undead'], NULL, false, false, NULL)
+ON CONFLICT (slug) DO NOTHING;

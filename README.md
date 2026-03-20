@@ -54,11 +54,25 @@ Required keys:
 | `RESEND_API_KEY` | Resend API key (optional — emails skipped if absent) |
 | `RESEND_FROM_EMAIL` | Override sender (default: `The Dexarium <orders@yarik3d.co.za>`) |
 
-### 3. Run the database migration
+### 3. Bootstrap the database
 
-In Supabase SQL Editor, run **both**:
-1. `supabase/schema.sql` (Phase 1 schema)
-2. `supabase/migration_phase2.sql` (Phase 2: carts, provider-agnostic orders, RLS, storage bucket)
+For a brand-new Supabase project, run this file in the Supabase SQL Editor:
+
+1. `supabase/bootstrap.sql`
+
+It applies:
+- the base schema
+- the Phase 2 payment/cart/RLS migration
+- the product-catalog enhancement migration
+- the starter product catalog seed
+
+If you are upgrading an existing database instead of bootstrapping a fresh one, run the phase files individually:
+1. `supabase/schema.sql`
+2. `supabase/migration_phase2.sql`
+3. `supabase/migration_phase3_product_catalog.sql`
+4. `supabase/seed.sql`
+
+Then run `supabase/verify_setup.sql` to confirm the core tables, columns, RLS, and seeded catalog are present.
 
 ### 4. Start the dev server
 
@@ -112,13 +126,14 @@ src/
 
 ## Manual Testing Guide
 
-> Run these steps against your deployed Vercel Preview or Production URL with the DB migration applied and Supabase Auth enabled.
+> Run these steps against your deployed Vercel Preview or Production URL with the DB setup applied and Supabase Auth enabled.
 
 ### Prerequisites
 
 Before testing, confirm:
 
-- [ ] `supabase/migration_phase2.sql` has been run in the Supabase SQL Editor
+- [ ] For a fresh Supabase project, `supabase/bootstrap.sql` has been run in the Supabase SQL Editor
+- [ ] `supabase/verify_setup.sql` confirms `products`, `orders`, `order_items`, and `carts` exist
 - [ ] The Vercel project environment variables have real values for all required secrets (not placeholder `xxx`)
 - [ ] `ADMIN_EMAIL_ALLOWLIST` contains the email you'll use to test admin
 - [ ] `RESEND_API_KEY` is set with a valid Resend key (safe to omit — emails are skipped gracefully if missing)

@@ -185,7 +185,9 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 - Orders only marked `paid` after verified webhook (not on redirect)
 
 ### DB Migration
-- Run `supabase/migration_phase2.sql` in Supabase SQL Editor
+- For a fresh Supabase project, run `supabase/bootstrap.sql` in Supabase SQL Editor
+- Or, for an existing DB, run `supabase/schema.sql`, `supabase/migration_phase2.sql`, `supabase/migration_phase3_product_catalog.sql`, and `supabase/seed.sql`
+- Run `supabase/verify_setup.sql` to confirm the core tables, payment columns, RLS, and seeded catalog are present
 - Removes `stripe_session_id`, `stripe_payment_intent_id` from orders
 - Adds `user_id`, `payment_provider`, `payment_session_id`, `payment_status`, `payment_event_ids`, `payment_metadata`, `paid_at`
 - Adds `carts` table for user cart persistence

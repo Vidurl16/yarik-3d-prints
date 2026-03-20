@@ -3,45 +3,13 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
-import { formatPrice, products, factions } from "@/lib/products";
+import { formatPrice, factions, type Product } from "@/lib/products";
 import type { CartItem } from "@/store/cartStore";
 import type { UnitRole } from "@/lib/products";
 
-interface BuilderUnit {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  role: UnitRole;
-  faction: string;
-  printType: "RESIN" | "FDM" | "MULTICOLOUR";
-  imageUrl: string;
+interface Props {
+  products: Product[];
 }
-
-// Derive builder units from static product catalogue.
-// Include only miniature factions (grimdark-future and age-of-fantasy),
-// which are products that have a role assigned.
-const BUILDER_UNITS: BuilderUnit[] = products
-  .filter(
-    (p) =>
-      p.role != null &&
-      (p.siteCategory === "grimdark-future" || p.siteCategory === "age-of-fantasy")
-  )
-  .map((p) => {
-    const factionName =
-      factions.find((f) => f.id === p.faction)?.name ?? p.faction;
-    const tagDesc = p.tags?.slice(0, 3).join(", ") ?? "";
-    return {
-      id: "b-" + p.id,
-      name: p.name,
-      price: p.price,
-      description: `${factionName} ${p.role} — ${tagDesc || p.printType.toLowerCase() + " print"}`,
-      role: p.role as UnitRole,
-      faction: factionName,
-      printType: p.printType,
-      imageUrl: p.imageUrl,
-    };
-  });
 
 const ROLE_ORDER: UnitRole[] = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
 const ROLE_LABELS: Record<UnitRole, string> = {
@@ -54,10 +22,36 @@ const ROLE_LABELS: Record<UnitRole, string> = {
   Support: "✦ Support",
 };
 
-export default function BundleBuilder() {
+export default function BundleBuilder({ products }: Props) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [activeRole, setActiveRole] = useState<UnitRole | "ALL">("ALL");
   const { addItem, openDrawer } = useCartStore();
+
+  const builderUnits = useMemo(
+    () =>
+      products
+        .filter(
+          (p) =>
+            p.role != null &&
+            (p.siteCategory === "grimdark-future" || p.siteCategory === "age-of-fantasy")
+        )
+        .map((p) => {
+          const factionName =
+            factions.find((f) => f.id === p.faction)?.name ?? p.faction;
+          const tagDesc = p.tags?.slice(0, 3).join(", ") ?? "";
+          return {
+            id: "b-" + p.id,
+            name: p.name,
+            price: p.price,
+            description: `${factionName} ${p.role} — ${tagDesc || p.printType.toLowerCase() + " print"}`,
+            role: p.role as UnitRole,
+            faction: factionName,
+            printType: p.printType,
+            imageUrl: p.imageUrl,
+          };
+        }),
+    [products]
+  );
 
   const toggleUnit = (id: string) => {
     setSelected((prev) => {
@@ -69,18 +63,18 @@ export default function BundleBuilder() {
   };
 
   const availableRoles = useMemo(() => {
-    const roles = new Set(BUILDER_UNITS.map((u) => u.role));
+    const roles = new Set(builderUnits.map((u) => u.role));
     return ROLE_ORDER.filter((r) => roles.has(r));
-  }, []);
+  }, [builderUnits]);
 
   const filteredUnits = useMemo(
-    () => activeRole === "ALL" ? BUILDER_UNITS : BUILDER_UNITS.filter((u) => u.role === activeRole),
-    [activeRole]
+    () => activeRole === "ALL" ? builderUnits : builderUnits.filter((u) => u.role === activeRole),
+    [activeRole, builderUnits]
   );
 
   const selectedUnits = useMemo(
-    () => BUILDER_UNITS.filter((u) => selected.has(u.id)),
-    [selected]
+    () => builderUnits.filter((u) => selected.has(u.id)),
+    [selected, builderUnits]
   );
 
   const subtotal = useMemo(

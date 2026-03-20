@@ -17,6 +17,21 @@ const TYPES = [
   "basing", "effect", "accessory", "other",
 ];
 
+const PRINT_TYPES = ["RESIN", "FDM", "MULTICOLOUR"];
+
+const FACTIONS = [
+  "space-marines",
+  "orks",
+  "tyranids",
+  "chaos-space-marines",
+  "high-elves",
+  "undead",
+  "pokemon-merch",
+  "custom-projects",
+];
+
+const ROLES = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
+
 interface Props {
   product?: DbProduct;
 }
@@ -30,6 +45,9 @@ export default function ProductForm({ product }: Props) {
     name: product?.name ?? "",
     brand: product?.brand ?? BRANDS[0],
     type: product?.type ?? TYPES[0],
+    print_type: product?.print_type ?? "RESIN",
+    faction: product?.faction ?? "",
+    role: product?.role ?? "",
     price_cents: product?.price_cents ? String(product.price_cents / 100) : "",
     currency: product?.currency ?? "ZAR",
     tags: (product?.tags ?? []).join(", "),
@@ -38,6 +56,7 @@ export default function ProductForm({ product }: Props) {
     is_active: product?.is_active ?? true,
     preorder_date: product?.preorder_date ?? "",
     image_url: product?.image_url ?? "",
+    stock_quantity: product?.stock_quantity != null ? String(product.stock_quantity) : "",
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -81,6 +100,7 @@ export default function ProductForm({ product }: Props) {
       const payload = {
         ...form,
         price_cents: Math.round(Number(form.price_cents) * 100),
+        stock_quantity: form.stock_quantity !== "" ? Number(form.stock_quantity) : null,
         image_url: imageUrl || null,
       };
 
@@ -143,6 +163,29 @@ export default function ProductForm({ product }: Props) {
         </div>
       </div>
 
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label className={labelClass}>Print Type</label>
+          <select name="print_type" value={form.print_type} onChange={handleChange} className={inputClass}>
+            {PRINT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>Faction</label>
+          <select name="faction" value={form.faction} onChange={handleChange} className={inputClass}>
+            <option value="">None</option>
+            {FACTIONS.map((f) => <option key={f} value={f}>{f}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>Role</label>
+          <select name="role" value={form.role} onChange={handleChange} className={inputClass}>
+            <option value="">None</option>
+            {ROLES.map((role) => <option key={role} value={role}>{role}</option>)}
+          </select>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Price (ZAR) *</label>
@@ -158,6 +201,22 @@ export default function ProductForm({ product }: Props) {
             placeholder="99.99"
           />
         </div>
+        <div>
+          <label className={labelClass}>Stock Qty (blank = unlimited)</label>
+          <input
+            name="stock_quantity"
+            type="number"
+            min="0"
+            step="1"
+            value={form.stock_quantity}
+            onChange={handleChange}
+            className={inputClass}
+            placeholder="Leave blank for unlimited"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Currency</label>
           <input name="currency" value={form.currency} onChange={handleChange} className={inputClass} />

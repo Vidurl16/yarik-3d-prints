@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { siteCategories, getNewArrivals, getPreorders, formatPrice } from "@/lib/products";
+import { siteCategories, formatPrice } from "@/lib/products";
+import { getNewArrivals, getPreorders } from "@/lib/data/products";
 import BrandIcon from "@/components/BrandIcon";
 
 // Map siteCategory IDs → top-level brand routes
@@ -12,9 +13,13 @@ const CATEGORY_ROUTE_MAP: Record<string, string> = {
   "gaming-accessories-terrain": "/gaming-accessories-terrain",
 };
 
-export default function HeroPage() {
-  const newArrivals = getNewArrivals().slice(0, 4);
-  const preorders = getPreorders().slice(0, 4);
+export default async function HeroPage() {
+  const [newArrivalsData, preordersData] = await Promise.all([
+    getNewArrivals(),
+    getPreorders(),
+  ]);
+  const newArrivals = newArrivalsData.slice(0, 4);
+  const preorders = preordersData.slice(0, 4);
 
   return (
     <div data-theme="dexarium" style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -274,7 +279,7 @@ export default function HeroPage() {
               {newArrivals.map((product) => (
                 <Link
                   key={product.id}
-                  href={CATEGORY_ROUTE_MAP[product.siteCategory] ?? `/shop/${product.siteCategory}`}
+                  href={CATEGORY_ROUTE_MAP[product.brand] ?? `/shop/${product.brand}`}
                   className="group card-bg overflow-hidden transition-all duration-300"
                   style={{ border: "1px solid var(--border)" }}
                 >
@@ -283,8 +288,8 @@ export default function HeroPage() {
                       style={{ background: "var(--surface)" }}
                     >
                       <Image
-                        src={product.imageUrl}
-                        alt={product.name}
+                      src={product.image_url ?? `https://picsum.photos/seed/${product.slug}/400/400`}
+                      alt={product.name}
                         fill
                         loading="lazy"
                         className="product-card-image opacity-90 group-hover:opacity-100"
@@ -311,7 +316,7 @@ export default function HeroPage() {
                       className="font-heading text-sm mt-1"
                       style={{ color: "var(--primary)" }}
                     >
-                      {formatPrice(product.price)}
+                      {formatPrice(product.price_cents / 100)}
                     </p>
                   </div>
                 </Link>
@@ -356,7 +361,7 @@ export default function HeroPage() {
               {preorders.map((product) => (
                 <Link
                   key={product.id}
-                  href={CATEGORY_ROUTE_MAP[product.siteCategory] ?? `/shop/${product.siteCategory}`}
+                  href={CATEGORY_ROUTE_MAP[product.brand] ?? `/shop/${product.brand}`}
                   className="group card-bg overflow-hidden transition-all duration-300"
                   style={{ border: "1px solid var(--border)" }}
                 >
@@ -365,8 +370,8 @@ export default function HeroPage() {
                       style={{ background: "var(--surface)" }}
                     >
                       <Image
-                        src={product.imageUrl}
-                        alt={product.name}
+                      src={product.image_url ?? `https://picsum.photos/seed/${product.slug}/400/400`}
+                      alt={product.name}
                         fill
                         loading="lazy"
                         className="product-card-image opacity-70 group-hover:opacity-90"
@@ -394,14 +399,14 @@ export default function HeroPage() {
                         className="font-heading text-sm"
                         style={{ color: "var(--primary)" }}
                       >
-                        {formatPrice(product.price)}
+                        {formatPrice(product.price_cents / 100)}
                       </p>
-                      {product.preorderDate && (
+                      {product.preorder_date && (
                         <p
                           className="font-body text-[10px]"
                           style={{ color: "var(--muted)" }}
                         >
-                          {product.preorderDate}
+                          {product.preorder_date}
                         </p>
                       )}
                     </div>

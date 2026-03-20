@@ -11,6 +11,7 @@ export interface CreateOrderInput {
   payment_session_id: string;
   payment_status?: PaymentStatus;
   payment_metadata?: Record<string, unknown>;
+  shipping_address?: Record<string, string> | null;
 }
 
 /**
@@ -40,6 +41,7 @@ export async function createOrder(input: CreateOrderInput): Promise<string | nul
       payment_status: input.payment_status ?? "pending",
       payment_metadata: input.payment_metadata ?? {},
       status: "pending",
+      ...(input.shipping_address ? { shipping_address: input.shipping_address } : {}),
     })
     .select("id")
     .single();

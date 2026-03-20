@@ -1,12 +1,15 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
   factions,
   siteCategories,
-  getProductsByFaction,
-  getProductsBySiteCategory,
   getFactionById,
   getSiteCategoryById,
 } from "@/lib/products";
+import {
+  getCatalogProductsByFaction,
+  getCatalogProductsBySiteCategory,
+} from "@/lib/data/products";
+import { BRAND_SLUGS } from "@/components/theme/themes";
 import Link from "next/link";
 import ProductGrid from "./ProductGrid";
 import type { Metadata } from "next";
@@ -41,6 +44,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function FactionPage({ params }: PageProps) {
   const { faction: slug } = await params;
 
+  // Brand slugs are now served by the DB-backed /(shop)/[brand] route — redirect
+  if ((BRAND_SLUGS as string[]).includes(slug)) {
+    redirect(`/${slug}`);
+  }
+
   // Try site category first, then faction
   const siteCategory = getSiteCategoryById(slug);
   const faction = getFactionById(slug);
@@ -48,8 +56,8 @@ export default async function FactionPage({ params }: PageProps) {
   if (!siteCategory && !faction) notFound();
 
   const products = siteCategory
-    ? getProductsBySiteCategory(siteCategory.id)
-    : getProductsByFaction(faction!.id);
+    ? await getCatalogProductsBySiteCategory(siteCategory.id)
+    : await getCatalogProductsByFaction(faction!.id);
 
   const displayName = siteCategory ? siteCategory.name : faction!.name;
   const displayText = siteCategory ? siteCategory.flavorText : faction!.flavorText;

@@ -245,7 +245,7 @@ export const products: Product[] = [
 
   // High Elves (Age of Fantasy)
   p("he-1", "Spearmen Regiment ×10", 320, "RESIN", "Infantry", "high-elves", "age-of-fantasy", "he-spearmen", { role: "Battleline", tags: ["infantry", "spear", "elves"], isNewArrival: true }),
-  p("he-2", "Archmage on Dragon", 780, "MULTICOLOUR", "Characters", "high-elves", "age-of-fantasy", "he-archmage", { role: "HQ", tags: ["character", "dragon", "magic"], isPreorder: true, preorderDate: "May 2025" }),
+  p("he-2", "Archmage on Dragon", 780, "MULTICOLOUR", "Characters", "high-elves", "age-of-fantasy", "he-archmage", { role: "HQ", tags: ["character", "dragon", "magic"], isPreorder: true, preorderDate: "October 2026" }),
   p("he-3", "Silver Helm Cavalry ×5", 420, "RESIN", "Infantry", "high-elves", "age-of-fantasy", "he-silverhelm", { role: "Cavalry", tags: ["cavalry", "elite", "elves"] }),
   p("he-4", "White Lions ×10", 380, "RESIN", "Infantry", "high-elves", "age-of-fantasy", "he-whitelions", { role: "Infantry", tags: ["infantry", "elite", "elves"] }),
   p("he-5", "Eagle Chariot", 560, "MULTICOLOUR", "Vehicles", "high-elves", "age-of-fantasy", "he-chariot", { role: "Vehicles", tags: ["chariot", "fast"] }),
@@ -253,7 +253,7 @@ export const products: Product[] = [
 
   // Undead Legion (Age of Fantasy)
   p("un-1", "Skeleton Warriors ×20", 280, "RESIN", "Infantry", "undead", "age-of-fantasy", "un-skeletons", { role: "Battleline", tags: ["infantry", "undead", "skeleton"] }),
-  p("un-2", "Lich King", 340, "RESIN", "Characters", "undead", "age-of-fantasy", "un-lichking", { role: "HQ", tags: ["character", "magic", "undead"], isPreorder: true, preorderDate: "June 2025" }),
+  p("un-2", "Lich King", 340, "RESIN", "Characters", "undead", "age-of-fantasy", "un-lichking", { role: "HQ", tags: ["character", "magic", "undead"], isPreorder: true, preorderDate: "November 2026" }),
   p("un-3", "Black Knights ×5", 460, "RESIN", "Infantry", "undead", "age-of-fantasy", "un-blackknights", { role: "Cavalry", tags: ["cavalry", "undead", "elite"] }),
   p("un-4", "Zombie Dragon", 720, "MULTICOLOUR", "Vehicles", "undead", "age-of-fantasy", "un-zombiedragon", { role: "Vehicles", tags: ["monster", "dragon", "undead"] }),
   p("un-5", "Spirit Hosts ×3", 180, "RESIN", "Infantry", "undead", "age-of-fantasy", "un-spirithosts", { role: "Support", tags: ["spirit", "undead", "ethereal"] }),
@@ -265,7 +265,7 @@ export const products: Product[] = [
   p("poke-3", "Mewtwo Bust", 350, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-mewtwo", { tags: ["psychic", "legendary", "bust"] }),
   p("poke-4", "Gengar Figure", 220, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-gengar", { tags: ["ghost", "fan-favourite"] }),
   p("poke-5", "Snorlax Display", 480, "FDM", "Characters", "pokemon-merch", "pokemon", "poke-snorlax", { tags: ["normal", "display"] }),
-  p("poke-6", "Eevee Collection Set", 420, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-eevee", { tags: ["normal", "collection", "set"], isPreorder: true, preorderDate: "April 2025" }),
+  p("poke-6", "Eevee Collection Set", 420, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-eevee", { tags: ["normal", "collection", "set"], isPreorder: true, preorderDate: "September 2026" }),
 
   // Basing & Battle Effects
   p("bas-1", "Urban Rubble Base Set ×5 (32mm)", 120, "RESIN", "Basing", "custom-projects", "basing-battle-effects", "bas-urban", { tags: ["base", "urban", "32mm"] }),
@@ -281,7 +281,7 @@ export const products: Product[] = [
   p("ter-3", "Trench System Modular Set", 560, "FDM", "Terrain", "custom-projects", "gaming-accessories-terrain", "ter-trench", { tags: ["terrain", "trench", "modular"] }),
   p("ter-4", "Custom Dice Tray", 220, "RESIN", "Accessories", "custom-projects", "gaming-accessories-terrain", "ter-dicetray", { tags: ["accessory", "dice", "tray"] }),
   p("ter-5", "Magnetised Token Set ×20", 160, "RESIN", "Accessories", "custom-projects", "gaming-accessories-terrain", "ter-tokens", { tags: ["accessory", "token", "magnet"] }),
-  p("ter-6", "Army Transport Foam Insert", 340, "FDM", "Accessories", "custom-projects", "gaming-accessories-terrain", "ter-foam", { tags: ["accessory", "transport", "storage"], isPreorder: true, preorderDate: "May 2025" }),
+  p("ter-6", "Army Transport Foam Insert", 340, "FDM", "Accessories", "custom-projects", "gaming-accessories-terrain", "ter-foam", { tags: ["accessory", "transport", "storage"], isPreorder: true, preorderDate: "October 2026" }),
 ];
 
 export function getProductsByFaction(factionId: string): Product[] {

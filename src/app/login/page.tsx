@@ -14,7 +14,8 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
+  const [forgotSent, setForgotSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -23,7 +24,19 @@ function LoginForm() {
 
     const supabase = getBrowserClient();
 
-    if (mode === "signup") {
+    if (mode === "forgot") {
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ??
+        window.location.origin;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${siteUrl}/auth/update-password`,
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        setForgotSent(true);
+      }
+    } else if (mode === "signup") {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
         setError(error.message);
@@ -50,7 +63,7 @@ function LoginForm() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
           <h1 className="font-heading text-2xl tracking-[0.15em] mb-2" style={{ color: "var(--primary)" }}>
-            {mode === "login" ? "SIGN IN" : "CREATE ACCOUNT"}
+            {mode === "login" ? "SIGN IN" : mode === "signup" ? "CREATE ACCOUNT" : "RESET PASSWORD"}
           </h1>
           <p className="font-body text-xs tracking-wider" style={{ color: "var(--muted)" }}>
             THE DEXARIUM
@@ -58,6 +71,13 @@ function LoginForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {forgotSent ? (
+            <div className="font-body text-xs text-center px-4 py-6" style={{ color: "var(--muted)" }}>
+              <p className="mb-2" style={{ color: "var(--primary)" }}>Check your inbox!</p>
+              <p>A reset link has been sent to <strong>{email}</strong>.</p>
+            </div>
+          ) : (
+            <>
           <div>
             <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Email
@@ -73,6 +93,7 @@ function LoginForm() {
             />
           </div>
 
+          {mode !== "forgot" && (
           <div>
             <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Password
@@ -88,6 +109,7 @@ function LoginForm() {
               placeholder="••••••••"
             />
           </div>
+          )}
 
           {error && (
             <p className="font-body text-xs text-red-400 bg-red-900/20 border border-red-900/30 px-4 py-3">
@@ -101,18 +123,42 @@ function LoginForm() {
             className="w-full disabled:opacity-50 font-body text-xs tracking-[0.2em] py-3.5 transition-colors duration-200 uppercase"
             style={{ background: "var(--accent)", color: "var(--bg)" }}
           >
-            {loading ? "..." : mode === "login" ? "Sign In" : "Create Account"}
+            {loading ? "..." : mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send Reset Link"}
           </button>
+          </>
+          )}
         </form>
 
         <div className="mt-6 text-center space-y-3">
           <button
-            onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); }}
+            onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); setForgotSent(false); }}
             className="font-body text-xs tracking-wider transition-colors"
             style={{ color: "var(--muted)" }}
           >
             {mode === "login" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </button>
+          {mode === "login" && (
+            <div>
+              <button
+                onClick={() => { setMode("forgot"); setError(null); setForgotSent(false); }}
+                className="font-body text-xs tracking-wider transition-colors"
+                style={{ color: "var(--muted)", opacity: 0.7 }}
+              >
+                Forgot password?
+              </button>
+            </div>
+          )}
+          {mode === "forgot" && (
+            <div>
+              <button
+                onClick={() => { setMode("login"); setError(null); setForgotSent(false); }}
+                className="font-body text-xs tracking-wider transition-colors"
+                style={{ color: "var(--muted)", opacity: 0.7 }}
+              >
+                ← Back to sign in
+              </button>
+            </div>
+          )}
           <div>
             <Link href="/" className="font-body text-xs tracking-wider transition-colors" style={{ color: "var(--muted)", opacity: 0.6 }}>
               ← Back to Dexarium

@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS products (
   name            text not null,
   brand           text not null,
   type            text not null,
+  print_type      text,
+  faction         text,
+  role            text,
   price_cents     integer not null,
   currency        text default 'ZAR',
   tags            text[] default '{}',
@@ -22,6 +25,8 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE INDEX IF NOT EXISTS products_brand_idx       ON products(brand);
+CREATE INDEX IF NOT EXISTS products_faction_idx     ON products(faction);
+CREATE INDEX IF NOT EXISTS products_role_idx        ON products(role);
 CREATE INDEX IF NOT EXISTS products_is_new_idx      ON products(is_new);
 CREATE INDEX IF NOT EXISTS products_is_preorder_idx ON products(is_preorder);
 

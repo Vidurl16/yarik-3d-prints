@@ -1,8 +1,8 @@
 import { ARMY_BUILDER_BRANDS, BRAND_THEME_MAP, THEMES } from "@/components/theme/themes";
-import { products } from "@/lib/products";
 import ArmyBuilderClient from "@/components/ArmyBuilderClient";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getCatalogProductsByBrand } from "@/lib/data/products";
 
 interface Props {
   params: Promise<{ brand: string }>;
@@ -30,15 +30,23 @@ export default async function ArmyBuilderPage({ params }: Props) {
   const themeId = BRAND_THEME_MAP[brand] ?? "dexarium";
   const theme = THEMES[themeId];
 
-  // Filter main products for this brand
-  const siteCategory = brand;
-  const mainProducts = products.filter((p) => p.siteCategory === siteCategory);
+  const [mainProducts, basingProducts] = await Promise.all([
+    getCatalogProductsByBrand(brand),
+    getCatalogProductsByBrand("basing-battle-effects"),
+  ]);
 
-  // Pick brand-appropriate basing upsell (urban rubble for grimdark, dead forest for fantasy)
-  const basingSuggestionId =
-    brand === "grimdark-future" ? "bas-1" : "bas-4";
-  const basingSuggestion = products.find((p) => p.id === basingSuggestionId)!;
-  const battleEffectsSuggestion = products.find((p) => p.id === "bas-6")!;
+  const basingSuggestion =
+    basingProducts.find((product) =>
+      brand === "grimdark-future"
+        ? product.tags?.includes("urban")
+        : product.tags?.includes("nature")
+    ) ?? basingProducts[0];
+  const battleEffectsSuggestion =
+    basingProducts.find((product) => product.tags?.includes("explosion")) ?? basingProducts[0];
+
+  if (!basingSuggestion || !battleEffectsSuggestion) {
+    notFound();
+  }
 
   return (
     <ArmyBuilderClient

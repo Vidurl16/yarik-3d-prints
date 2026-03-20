@@ -2,6 +2,7 @@ import { getPreorders } from "@/lib/data/products";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import PreorderReserveButton from "@/components/PreorderReserveButton";
 
 export const revalidate = 60;
 
@@ -84,12 +85,7 @@ export default async function PreordersPage() {
                   </h3>
                   <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(139,0,0,0.15)" }}>
                     <span className="font-heading" style={{ color: "var(--primary)" }}>R {(product.price_cents / 100).toLocaleString("en-ZA", { minimumFractionDigits: 0 })}</span>
-                    <Link
-                      href="/contact"
-                      className="font-body text-[10px] tracking-widest px-3 py-1.5 bg-[rgba(139,0,0,0.2)] hover:bg-[rgba(139,0,0,0.4)] text-[#ff6060] border border-[rgba(139,0,0,0.4)] transition-all duration-200"
-                    >
-                      RESERVE
-                    </Link>
+                    <PreorderReserveButton productId={product.id} productName={product.name} />
                   </div>
                 </div>
               </div>

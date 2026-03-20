@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getPaymentProvider } from "@/lib/payments";
 import { createOrder, insertOrderItems } from "@/lib/data/orders";
 import { getSession } from "@/lib/auth/getSession";
+import { normalizeEmail } from "@/lib/utils/normalizeEmail";
 
 interface CartLineItem {
   product_id?: string;
@@ -10,11 +11,14 @@ interface CartLineItem {
   quantity: number;
 }
 
-function normalizeEmail(value: unknown): string | null {
-  if (typeof value !== "string") return null;
-  const normalized = value.trim().toLowerCase();
-  if (!normalized) return null;
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) ? normalized : null;
+interface ShippingAddress {
+  name: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  province: string;
+  postal_code: string;
+  country: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -22,7 +26,8 @@ export async function POST(req: NextRequest) {
     const {
       items,
       customerEmail,
-    }: { items: CartLineItem[]; customerEmail?: string } = await req.json();
+      shippingAddress,
+    }: { items: CartLineItem[]; customerEmail?: string; shippingAddress?: ShippingAddress } = await req.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
@@ -64,6 +69,7 @@ export async function POST(req: NextRequest) {
       payment_provider: provider.name,
       payment_session_id: placeholderSessionId,
       payment_status: "pending",
+      shipping_address: shippingAddress ? (shippingAddress as unknown as Record<string, string>) : null,
     });
 
     if (!orderId) {

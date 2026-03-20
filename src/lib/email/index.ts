@@ -116,6 +116,25 @@ function buildOrderConfirmationHtml(
 </html>`;
 }
 
+/** Generic transactional email — skips silently if RESEND_API_KEY is not set. */
+export async function sendEmail({
+  to,
+  subject,
+  html,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+}): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("[Email] RESEND_API_KEY not set — skipping email to", to);
+    return;
+  }
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
+  if (error) console.error("[Email] Failed to send to", to, error);
+}
+
 export async function sendOrderConfirmationEmail(
   order: DbOrder,
   items: DbOrderItem[]

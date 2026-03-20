@@ -4,6 +4,9 @@ export interface DbProduct {
   name: string;
   brand: string;
   type: string;
+  print_type?: string | null;
+  faction?: string | null;
+  role?: string | null;
   price_cents: number;
   currency: string;
   tags: string[];
@@ -12,6 +15,7 @@ export interface DbProduct {
   is_new: boolean;
   is_active: boolean;
   preorder_date: string | null;
+  stock_quantity?: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -32,6 +36,7 @@ export interface DbOrder {
   payment_event_ids: string[];
   payment_metadata: Record<string, unknown>;
   paid_at: string | null;
+  shipping_address?: Record<string, string> | null;
   created_at: string;
 }
 

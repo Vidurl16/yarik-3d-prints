@@ -27,7 +27,7 @@ export default async function AdminProductsPage() {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-[rgba(196,160,69,0.15)]">
-              {["Name", "Brand", "Price", "Status", "Tags", "Actions"].map((h) => (
+              {["Name", "Brand", "Faction / Role", "Price", "Status", "Tags", "Actions"].map((h) => (
                 <th key={h} className="text-left font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] pb-3 pr-4 uppercase">
                   {h}
                 </th>
@@ -45,6 +45,9 @@ export default async function AdminProductsPage() {
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.5)]">
                   {product.brand}
+                </td>
+                <td className="py-3 pr-4 font-body text-[10px] text-[rgba(240,232,216,0.45)]">
+                  {[product.faction, product.role].filter(Boolean).join(" / ") || "—"}
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.7)]">
                   R{(product.price_cents / 100).toFixed(2)}

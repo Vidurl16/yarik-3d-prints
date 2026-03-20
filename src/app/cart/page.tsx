@@ -17,6 +17,10 @@ function CartContent() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
+  const [address, setAddress] = useState({
+    name: "", line1: "", line2: "", city: "", province: "", postal_code: "", country: "ZA",
+  });
+  const [showAddress, setShowAddress] = useState(false);
 
   async function copyOrderId() {
     if (!orderId) return;
@@ -33,11 +37,16 @@ function CartContent() {
     setError(null);
 
     try {
+      const shippingAddress = showAddress && address.name && address.line1 && address.city
+        ? { ...address, country: address.country || "ZA" }
+        : undefined;
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customerEmail: guestEmail.trim() || undefined,
+          shippingAddress,
           items: items.map((item) => ({
             product_id: item.id.startsWith("b-") ? undefined : item.id,
             name: item.name,
@@ -117,13 +126,24 @@ function CartContent() {
             <Link href="/contact" style={{ color: "var(--primary)" }} className="hover:underline">contact support</Link>{" "}
             with your order reference.
           </p>
-          <Link
-            href="/shop"
-            className="font-body text-xs tracking-[0.2em] px-8 py-3 transition-all duration-200 inline-block"
-            style={{ background: "var(--accent)", color: "var(--bg)" }}
-          >
-            CONTINUE SHOPPING
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {orderId && (
+              <Link
+                href={`/order-status?order=${encodeURIComponent(orderId)}`}
+                className="font-body text-xs tracking-[0.2em] px-8 py-3 transition-all duration-200 inline-block"
+                style={{ border: "1px solid var(--border)", color: "var(--primary)" }}
+              >
+                CHECK ORDER STATUS
+              </Link>
+            )}
+            <Link
+              href="/shop"
+              className="font-body text-xs tracking-[0.2em] px-8 py-3 transition-all duration-200 inline-block"
+              style={{ background: "var(--accent)", color: "var(--bg)" }}
+            >
+              CONTINUE SHOPPING
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -351,6 +371,46 @@ function CartContent() {
                   >
                     Required for guest checkout. Logged-in customers can leave this blank.
                   </p>
+                </div>
+
+                {/* Shipping Address */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowAddress(!showAddress)}
+                    className="flex items-center gap-2 font-body text-[10px] tracking-[0.2em] mb-2 transition-colors"
+                    style={{ color: showAddress ? "var(--primary)" : "var(--muted)" }}
+                  >
+                    <span>{showAddress ? "▾" : "▸"}</span>
+                    ADD SHIPPING ADDRESS
+                  </button>
+
+                  {showAddress && (
+                    <div className="space-y-2">
+                      {[
+                        { key: "name", label: "Full name", placeholder: "Recipient name" },
+                        { key: "line1", label: "Address line 1", placeholder: "Street address" },
+                        { key: "line2", label: "Address line 2 (optional)", placeholder: "Apt, unit, etc." },
+                        { key: "city", label: "City", placeholder: "Cape Town" },
+                        { key: "province", label: "Province", placeholder: "Western Cape" },
+                        { key: "postal_code", label: "Postal code", placeholder: "8001" },
+                      ].map(({ key, label, placeholder }) => (
+                        <div key={key}>
+                          <label className="block font-body text-[9px] tracking-[0.15em] mb-1" style={{ color: "var(--muted)" }}>
+                            {label.toUpperCase()}
+                          </label>
+                          <input
+                            type="text"
+                            value={address[key as keyof typeof address]}
+                            onChange={(e) => setAddress((a) => ({ ...a, [key]: e.target.value }))}
+                            placeholder={placeholder}
+                            className="w-full px-3 py-2 font-body text-xs"
+                            style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between mb-6">
