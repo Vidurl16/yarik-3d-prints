@@ -14,8 +14,9 @@ export class YocoProvider implements PaymentProvider {
   private secretKey: string;
   private webhookSecret?: string;
 
-  constructor() {
+  constructor(secretKeyOverride?: string) {
     const secretKey =
+      secretKeyOverride ??
       process.env.PAYMENT_SECRET_KEY ??
       process.env.YOCO_SECRET_KEY;
     const webhookSecret =

@@ -30,12 +30,19 @@ export async function POST(req: NextRequest) {
     }
 
     // Return success if already reserved by same email (idempotent)
-    const { data: existing } = await supabase
+    const { data: existing, error: dupCheckError } = await supabase
       .from("preorder_reservations")
       .select("id")
       .eq("product_id", product_id)
       .eq("email", email.trim().toLowerCase())
       .maybeSingle();
+
+    if (dupCheckError?.message?.includes("does not exist")) {
+      return NextResponse.json(
+        { error: "Reservations table not set up — run supabase/migrations/001_create_preorder_reservations.sql in the Supabase dashboard." },
+        { status: 503 }
+      );
+    }
 
     if (existing) {
       return NextResponse.json({ success: true, duplicate: true });
@@ -52,6 +59,13 @@ export async function POST(req: NextRequest) {
 
     if (insertError) {
       console.error("[Preorder/reserve] Insert error:", insertError.message);
+      // Surface a helpful message if the migration hasn't been run yet
+      if (insertError.message?.includes("does not exist")) {
+        return NextResponse.json(
+          { error: "Reservations table not set up — run supabase/migrations/001_create_preorder_reservations.sql in the Supabase dashboard." },
+          { status: 503 }
+        );
+      }
       return NextResponse.json({ error: "Failed to save reservation" }, { status: 500 });
     }
 

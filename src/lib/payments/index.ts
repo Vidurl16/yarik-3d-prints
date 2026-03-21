@@ -1,20 +1,16 @@
 import { YocoProvider } from "./yoco";
 import type { PaymentProvider } from "./types";
 
-let _provider: PaymentProvider | null = null;
-
 /**
- * Returns the active payment provider adapter based on PAYMENT_PROVIDER env var.
- * Lazily initialized and memoized for the server process lifetime.
+ * Returns the active payment provider adapter.
+ * Accepts an optional secretKey override (used for local dev with test key).
+ * Not memoized — safe to call per-request.
  */
-export function getPaymentProvider(): PaymentProvider {
-  if (_provider) return _provider;
-
+export function getPaymentProvider(secretKeyOverride?: string): PaymentProvider {
   const providerName = (process.env.PAYMENT_PROVIDER ?? "yoco").toLowerCase();
 
   if (providerName === "yoco") {
-    _provider = new YocoProvider();
-    return _provider;
+    return new YocoProvider(secretKeyOverride);
   }
 
   throw new Error(`Unsupported payment provider: "${providerName}". Set PAYMENT_PROVIDER=yoco.`);

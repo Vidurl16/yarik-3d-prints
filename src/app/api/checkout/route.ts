@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       return configured ?? "http://localhost:3002";
     })();
 
-    // Use test key on HTTP (local dev) if provided, otherwise use configured key
+    // Use test key on HTTP (local dev) if provided, otherwise use live key
     const isHttp = baseUrl.startsWith("http://");
     if (isHttp && !process.env.PAYMENT_TEST_SECRET_KEY) {
       return NextResponse.json(
@@ -55,10 +55,7 @@ export async function POST(req: NextRequest) {
         { status: 503 }
       );
     }
-    if (isHttp) {
-      // Override the payment key to the test key for local HTTP dev
-      process.env.PAYMENT_SECRET_KEY = process.env.PAYMENT_TEST_SECRET_KEY!;
-    }
+    const secretKeyOverride = isHttp ? process.env.PAYMENT_TEST_SECRET_KEY : undefined;
 
     // Get session user (optional — guest checkout allowed)
     const user = await getSession();
@@ -76,7 +73,7 @@ export async function POST(req: NextRequest) {
       0
     );
 
-    const provider = getPaymentProvider();
+    const provider = getPaymentProvider(secretKeyOverride);
 
     // Create a placeholder order in DB with status=pending
     const placeholderSessionId = `pending_${Date.now()}_${Math.random().toString(36).slice(2)}`;
