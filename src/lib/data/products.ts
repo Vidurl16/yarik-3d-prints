@@ -101,6 +101,7 @@ export function toCatalogProduct(prod: DbProduct): Product {
   const faction = inferFaction(prod);
   return {
     id: prod.id,
+    slug: prod.slug,
     name: prod.name,
     price: Math.round(prod.price_cents / 100),
     printType: mapPrintType(prod),

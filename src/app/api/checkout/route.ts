@@ -33,12 +33,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
-    const baseUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ??
-      process.env.NEXT_PUBLIC_BASE_URL ??
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000");
+    const baseUrl = (() => {
+      const configured =
+        process.env.NEXT_PUBLIC_SITE_URL ??
+        process.env.NEXT_PUBLIC_BASE_URL ??
+        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+      // Yoco live keys require HTTPS — fall back to localhost for success/cancel
+      // URLs which are only used after redirect, so localhost is fine for testing
+      // with a Yoco TEST key (PAYMENT_TEST_SECRET_KEY).
+      return configured ?? "http://localhost:3002";
+    })();
+
+    // Use test key on HTTP (local dev) if provided, otherwise use configured key
+    const isHttp = baseUrl.startsWith("http://");
+    if (isHttp && !process.env.PAYMENT_TEST_SECRET_KEY) {
+      return NextResponse.json(
+        {
+          error:
+            "Checkout unavailable on HTTP. Add PAYMENT_TEST_SECRET_KEY (Yoco test key) to .env.local for local testing.",
+        },
+        { status: 503 }
+      );
+    }
+    if (isHttp) {
+      // Override the payment key to the test key for local HTTP dev
+      process.env.PAYMENT_SECRET_KEY = process.env.PAYMENT_TEST_SECRET_KEY!;
+    }
 
     // Get session user (optional — guest checkout allowed)
     const user = await getSession();
@@ -111,8 +131,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ redirectUrl: checkout.redirectUrl });
   } catch (err) {
     console.error("[Checkout] Error:", err);
+    const message = err instanceof Error ? err.message : "Failed to create checkout session";
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      { error: message },
       { status: 500 }
     );
   }

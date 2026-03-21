@@ -10,6 +10,7 @@ export type SiteCategoryId =
 
 export interface Product {
   id: string;
+  slug: string;
   name: string;
   price: number;
   printType: PrintType;
@@ -199,6 +200,7 @@ function p(
 ): Product {
   return {
     id,
+    slug: id,
     name,
     price,
     printType,

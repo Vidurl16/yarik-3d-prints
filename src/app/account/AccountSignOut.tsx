@@ -16,7 +16,21 @@ export default function AccountSignOut() {
   return (
     <button
       onClick={handleSignOut}
-      className="font-body text-xs tracking-[0.2em] px-4 py-2 border border-[rgba(196,160,69,0.2)] text-[rgba(240,232,216,0.5)] hover:text-[#f0e8d8] hover:border-[rgba(196,160,69,0.5)] transition-colors"
+      className="font-body text-xs tracking-[0.2em] px-4 py-2 transition-colors"
+      style={{
+        border: "1px solid var(--border)",
+        color: "var(--muted)",
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget;
+        el.style.color = "var(--text)";
+        el.style.borderColor = "var(--primary)";
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget;
+        el.style.color = "var(--muted)";
+        el.style.borderColor = "var(--border)";
+      }}
     >
       SIGN OUT
     </button>

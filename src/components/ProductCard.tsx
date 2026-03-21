@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product } from "@/lib/products";
 import { useState } from "react";
@@ -19,7 +20,10 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { addItem, openDrawer } = useCartStore();
   const [adding, setAdding] = useState(false);
 
-  function handleAddToCart() {
+  const detailHref = `/shop/${product.faction}/${product.slug}`;
+
+  function handleAddToCart(e: React.MouseEvent) {
+    e.preventDefault();
     addItem({
       id: product.id,
       name: product.name,
@@ -34,25 +38,24 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="group card-bg flex flex-col overflow-hidden transition-all duration-300 hover:border-[rgba(201,168,76,0.35)]">
-      {/* Image */}
-      <div className="product-card-frame bg-[#111]">
-        <Image
-          src={product.imageUrl}
-          alt={product.name}
-          fill
-          className="product-card-image opacity-80 group-hover:opacity-100"
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />
-
-        {/* Print type badge */}
-        <span
-          className={`absolute top-3 left-3 font-body text-xs tracking-[0.1em] px-2 py-0.5 ${badgeClass[product.printType]}`}
-        >
-          {product.printType}
-        </span>
-      </div>
+      {/* Image — links to detail page */}
+      <Link href={detailHref} className="block relative">
+        <div className="product-card-frame bg-[#111]">
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            className="product-card-image opacity-80 group-hover:opacity-100"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />
+          <span
+            className={`absolute top-3 left-3 font-body text-xs tracking-[0.1em] px-2 py-0.5 ${badgeClass[product.printType]}`}
+          >
+            {product.printType}
+          </span>
+        </div>
+      </Link>
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-4 gap-2">
@@ -60,9 +63,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.category}
         </span>
 
-        <h3 className="font-body text-sm font-semibold text-[#e8e0d0] leading-snug flex-1">
-          {product.name}
-        </h3>
+        <Link href={detailHref} className="flex-1">
+          <h3 className="font-body text-sm font-semibold text-[#e8e0d0] leading-snug hover:text-[#c9a84c] transition-colors">
+            {product.name}
+          </h3>
+        </Link>
 
         <div className="flex items-center justify-between mt-auto pt-2 border-t border-[rgba(201,168,76,0.08)]">
           <span className="font-heading text-[#c9a84c] text-base">
