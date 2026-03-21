@@ -76,7 +76,7 @@ export default function Nav() {
               <span className="font-heading text-base tracking-[0.12em] text-[#c4a045] group-hover:text-[#ddb95a] transition-colors">
                 THE DEXARIUM
               </span>
-              <span className="hidden sm:block font-body text-[9px] tracking-[0.25em] text-[rgba(196,160,69,0.45)] uppercase">
+              <span className="hidden sm:block font-body text-[11px] tracking-[0.12em] text-[rgba(196,160,69,0.7)] uppercase">
                 From Spark to Legend
               </span>
             </div>
@@ -121,7 +121,7 @@ export default function Nav() {
                         <p className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.85)] group-hover:text-[#c4a045] transition-colors">
                           {cat.name}
                         </p>
-                        <p className="font-body text-[10px] text-[#6b5e48] leading-tight mt-0.5">
+                        <p className="font-body text-[11px] text-[rgba(240,232,216,0.55)] leading-tight mt-0.5">
                           {cat.flavorText}
                         </p>
                       </div>
@@ -131,7 +131,7 @@ export default function Nav() {
                     <Link
                       href="/shop"
                       onClick={() => setShopOpen(false)}
-                      className="block px-4 py-2 font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.6)] hover:text-[#c4a045] transition-colors"
+                      className="block px-4 py-2 font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.8)] hover:text-[#c4a045] transition-colors"
                     >
                       VIEW ALL →
                     </Link>
@@ -190,7 +190,7 @@ export default function Nav() {
           className="lg:hidden border-t border-[rgba(196,160,69,0.1)] py-4 px-4"
           style={{ background: "rgba(12,9,2,0.99)" }}
         >
-          <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(196,160,69,0.4)] mb-3 uppercase px-2">
+          <p className="font-body text-xs tracking-[0.15em] text-[rgba(196,160,69,0.7)] mb-3 uppercase px-2">
             Shop by Category
           </p>
           {siteCategories.map((cat) => (

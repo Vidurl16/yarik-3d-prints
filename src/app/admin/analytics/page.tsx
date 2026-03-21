@@ -55,11 +55,11 @@ export default function AdminAnalyticsPage() {
       {/* Date range controls */}
       <div className="flex flex-wrap items-end gap-4 mb-8 p-4 border border-[rgba(196,160,69,0.1)] bg-[#110d05]">
         <div>
-          <label className="block font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] mb-1.5 uppercase">From</label>
+          <label className="block font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.7)] mb-1.5 uppercase">From</label>
           <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={inputClass} />
         </div>
         <div>
-          <label className="block font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] mb-1.5 uppercase">To</label>
+          <label className="block font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.7)] mb-1.5 uppercase">To</label>
           <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={inputClass} />
         </div>
         <button
@@ -84,7 +84,7 @@ export default function AdminAnalyticsPage() {
                 key={kpi.label}
                 className="border border-[rgba(196,160,69,0.15)] bg-[#110d05] p-5"
               >
-                <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] uppercase mb-2">
+                <p className="font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.7)] uppercase mb-2">
                   {kpi.label}
                 </p>
                 <p className="font-heading text-xl text-[#c4a045]">{kpi.value}</p>
@@ -122,7 +122,7 @@ function ProductTable({
 }) {
   return (
     <div className="border border-[rgba(196,160,69,0.1)] bg-[#110d05] p-4">
-      <h2 className="font-heading text-xs tracking-[0.2em] text-[rgba(196,160,69,0.6)] mb-4 uppercase">
+      <h2 className="font-body text-xs tracking-[0.15em] text-[rgba(196,160,69,0.8)] mb-4 uppercase">
         {title}
       </h2>
       {rows.length === 0 ? (
@@ -131,8 +131,8 @@ function ProductTable({
         <table className="w-full">
           <thead>
             <tr className="border-b border-[rgba(196,160,69,0.1)]">
-              <th className="text-left font-body text-[10px] tracking-wider text-[rgba(196,160,69,0.3)] pb-2 pr-4">Product</th>
-              <th className="text-right font-body text-[10px] tracking-wider text-[rgba(196,160,69,0.3)] pb-2">Value</th>
+              <th className="text-left font-body text-xs tracking-wider text-[rgba(196,160,69,0.6)] pb-2 pr-4">Product</th>
+              <th className="text-right font-body text-xs tracking-wider text-[rgba(196,160,69,0.6)] pb-2">Value</th>
             </tr>
           </thead>
           <tbody>

@@ -17,7 +17,7 @@ export default function NotFound() {
           style={{ background: "var(--primary)", opacity: 0.5 }}
         />
 
-        <p className="font-body text-[10px] tracking-[0.4em] mb-4 uppercase" style={{ color: "var(--primary)", opacity: 0.6 }}>
+        <p className="font-body text-xs tracking-[0.15em] mb-4 uppercase" style={{ color: "var(--primary)", opacity: 0.8 }}>
           Error 404
         </p>
 

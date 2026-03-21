@@ -75,10 +75,10 @@ export default function CartDrawer() {
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-                  <p className="font-heading text-sm tracking-widest text-[rgba(201,168,76,0.4)]">
+                  <p className="font-heading text-base tracking-widest text-[rgba(201,168,76,0.75)]">
                     YOUR CART IS EMPTY
                   </p>
-                  <p className="font-body text-[#6b6b6b] text-sm">
+                  <p className="font-body text-sm text-[rgba(240,232,216,0.55)]">
                     Add some miniatures to begin your warband.
                   </p>
                   <Link
@@ -158,7 +158,7 @@ export default function CartDrawer() {
             {items.length > 0 && (
               <div className="px-6 py-4 border-t border-[rgba(201,168,76,0.15)] space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-body text-sm text-[#6b6b6b] tracking-wider">
+                  <span className="font-body text-sm text-[rgba(240,232,216,0.55)] tracking-wider">
                     SUBTOTAL
                   </span>
                   <span className="font-heading text-lg text-[#c9a84c]">

@@ -37,7 +37,7 @@ export default function ProductGrid({ products, siteCategory }: ProductGridProps
         <div className="flex flex-wrap gap-2 mb-8">
           <button
             onClick={() => setActiveFilter("All")}
-            className={`font-body text-[10px] tracking-[0.2em] px-4 py-2 transition-all duration-200 ${
+            className={`font-body text-xs tracking-[0.1em] px-4 py-2 transition-all duration-200 ${
               activeFilter === "All"
                 ? "bg-[#8b0000] text-[#e8e0d0] border border-[#8b0000]"
                 : "text-[rgba(232,224,208,0.5)] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.4)] hover:text-[#e8e0d0]"
@@ -49,7 +49,7 @@ export default function ProductGrid({ products, siteCategory }: ProductGridProps
             <button
               key={f.label}
               onClick={() => setActiveFilter(f.label)}
-              className={`font-body text-[10px] tracking-[0.2em] px-4 py-2 transition-all duration-200 ${
+              className={`font-body text-xs tracking-[0.1em] px-4 py-2 transition-all duration-200 ${
                 activeFilter === f.label
                   ? "bg-[#8b0000] text-[#e8e0d0] border border-[#8b0000]"
                   : "text-[rgba(232,224,208,0.5)] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.4)] hover:text-[#e8e0d0]"
@@ -64,7 +64,7 @@ export default function ProductGrid({ products, siteCategory }: ProductGridProps
       {/* Grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-16">
-          <p className="font-heading text-sm tracking-widest text-[rgba(201,168,76,0.4)]">
+          <p className="font-body text-base tracking-widest text-[rgba(201,168,76,0.75)]">
             NO MODELS IN THIS CATEGORY
           </p>
         </div>

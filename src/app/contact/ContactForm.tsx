@@ -53,7 +53,7 @@ export default function ContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="font-body text-[10px] tracking-[0.2em] uppercase" style={{ color: "var(--muted)" }}>
+          <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
             Name <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
@@ -72,7 +72,7 @@ export default function ContactForm() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="font-body text-[10px] tracking-[0.2em] uppercase" style={{ color: "var(--muted)" }}>
+          <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
             Email <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
@@ -92,7 +92,7 @@ export default function ContactForm() {
       </div>
 
       <div className="space-y-1.5">
-        <label className="font-body text-[10px] tracking-[0.2em] uppercase" style={{ color: "var(--muted)" }}>
+        <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
           Enquiry Type
         </label>
         <select
@@ -112,7 +112,7 @@ export default function ContactForm() {
       </div>
 
       <div className="space-y-1.5">
-        <label className="font-body text-[10px] tracking-[0.2em] uppercase" style={{ color: "var(--muted)" }}>
+        <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
           Message <span style={{ color: "var(--accent)" }}>*</span>
         </label>
         <textarea

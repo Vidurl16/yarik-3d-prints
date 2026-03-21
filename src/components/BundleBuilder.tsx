@@ -105,7 +105,7 @@ export default function BundleBuilder({ products }: Props) {
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveRole("ALL")}
-            className={`font-body text-[10px] tracking-[0.15em] px-3 py-2 transition-all duration-200 ${
+            className={`font-body text-xs tracking-[0.1em] px-3 py-2 transition-all duration-200 ${
               activeRole === "ALL"
                 ? "text-[var(--bg)]"
                 : "hover:opacity-100"
@@ -123,7 +123,7 @@ export default function BundleBuilder({ products }: Props) {
             <button
               key={role}
               onClick={() => setActiveRole(role)}
-              className="font-body text-[10px] tracking-[0.15em] px-3 py-2 transition-all duration-200 hover:opacity-100"
+              className="font-body text-xs tracking-[0.1em] px-3 py-2 transition-all duration-200 hover:opacity-100"
               style={{
                 background: activeRole === role ? "var(--primary)" : "var(--surface)",
                 border: "1px solid var(--border)",
@@ -184,7 +184,7 @@ export default function BundleBuilder({ products }: Props) {
                         </h3>
                         <div className="flex flex-wrap items-center gap-2 mt-2">
                           <span
-                            className="font-body text-[10px] tracking-[0.18em] uppercase px-2 py-1"
+                            className="font-body text-xs tracking-[0.1em] uppercase px-2 py-1"
                             style={{
                               background: "color-mix(in srgb, var(--primary) 10%, transparent)",
                               border: "1px solid var(--border)",
@@ -194,7 +194,7 @@ export default function BundleBuilder({ products }: Props) {
                             {ROLE_LABELS[unit.role]}
                           </span>
                           <span
-                            className="font-body text-[10px] tracking-[0.18em] uppercase"
+                            className="font-body text-xs tracking-[0.1em] uppercase"
                             style={{ color: "var(--muted)" }}
                           >
                             {unit.faction}
@@ -218,7 +218,7 @@ export default function BundleBuilder({ products }: Props) {
 
                     <div className="flex items-center gap-2 mt-3">
                       <span
-                        className="font-body text-[10px] tracking-[0.18em] uppercase px-2 py-1"
+                        className="font-body text-xs tracking-[0.1em] uppercase px-2 py-1"
                         style={{
                           border: "1px solid var(--border)",
                           color: "var(--muted)",
@@ -232,7 +232,7 @@ export default function BundleBuilder({ products }: Props) {
 
                 <div className="sm:ml-auto flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0">
                   <span
-                    className="font-body text-[10px] tracking-[0.18em] uppercase"
+                    className="font-body text-xs tracking-[0.1em] uppercase"
                     style={{ color: isSelected ? "var(--primary)" : "var(--muted)" }}
                   >
                     {isSelected ? "Selected" : "Click to add"}
@@ -282,10 +282,10 @@ export default function BundleBuilder({ products }: Props) {
                 const units = selectedUnits.filter((u) => u.role === role);
                 return (
                   <div key={role} className="flex items-center justify-between">
-                    <span className="font-body text-[10px] tracking-wider" style={{ color: "var(--muted)" }}>
+                    <span className="font-body text-xs tracking-wide" style={{ color: "var(--muted)" }}>
                       {ROLE_LABELS[role]} ×{units.length}
                     </span>
-                    <span className="font-body text-[10px]" style={{ color: "var(--muted)" }}>
+                    <span className="font-body text-xs" style={{ color: "var(--muted)" }}>
                       {formatPrice(units.reduce((s, u) => s + u.price, 0))}
                     </span>
                   </div>
@@ -321,7 +321,7 @@ export default function BundleBuilder({ products }: Props) {
             </div>
 
             <div className="flex items-center justify-between pt-2" style={{ borderTop: "1px solid var(--border)" }}>
-              <span className="font-heading text-xs tracking-[0.15em]" style={{ color: "var(--text)" }}>TOTAL</span>
+              <span className="font-body text-xs tracking-[0.15em]" style={{ color: "var(--text)" }}>TOTAL</span>
               <span className="font-heading text-xl" style={{ color: "var(--primary)" }}>{formatPrice(subtotal)}</span>
             </div>
           </div>
@@ -349,7 +349,7 @@ export default function BundleBuilder({ products }: Props) {
           </button>
 
           {selectedUnits.length > 0 && (
-            <p className="font-body text-[10px] text-center" style={{ color: "var(--muted)" }}>
+            <p className="font-body text-xs text-center" style={{ color: "var(--muted)" }}>
               {selectedUnits.length} unit{selectedUnits.length !== 1 ? "s" : ""} selected
             </p>
           )}

@@ -24,13 +24,13 @@ export default async function BuilderPage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-6" style={{ color: "var(--muted)" }}>
+          <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-6" style={{ color: "var(--muted)" }}>
             <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }}>HOME</Link>
             <span style={{ color: "var(--border)" }}>›</span>
-            <span style={{ color: "var(--text)", opacity: 0.5 }}>BUILD</span>
+            <span style={{ color: "var(--text)" }}>BUILD</span>
           </div>
 
-          <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--primary)", opacity: 0.7 }}>
+          <p className="font-body text-xs tracking-[0.15em] mb-3 uppercase" style={{ color: "var(--primary)" }}>
             Multi-Faction Builder
           </p>
           <h1 className="font-heading text-3xl sm:text-5xl mb-3" style={{ color: "var(--text)" }}>

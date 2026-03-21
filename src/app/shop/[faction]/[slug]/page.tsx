@@ -42,12 +42,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-10" style={{ color: "var(--muted)" }}>
+        <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-10" style={{ color: "var(--muted)" }}>
           <Link href="/" style={{ color: "var(--muted)" }}>HOME</Link>
           <span style={{ color: "var(--border)" }}>›</span>
           <Link href={`/shop/${faction}`} style={{ color: "var(--muted)" }}>{faction.replace(/-/g, " ").toUpperCase()}</Link>
           <span style={{ color: "var(--border)" }}>›</span>
-          <span style={{ color: "var(--text)", opacity: 0.5 }}>{product.name.toUpperCase()}</span>
+          <span style={{ color: "var(--text)" }}>{product.name.toUpperCase()}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -69,20 +69,20 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {/* Badges */}
             <div className="absolute top-4 left-4 flex flex-col gap-2">
               {product.is_new && (
-                <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,94,20,0.9)] text-[#f0e8d8]">NEW</span>
+                <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.9)] text-[#f0e8d8]">NEW</span>
               )}
               {product.is_preorder && (
-                <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,0,0,0.8)] text-[#ff9090]">PREORDER</span>
+                <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,0,0,0.8)] text-[#ff9090]">PREORDER</span>
               )}
               {isOutOfStock && (
-                <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(30,30,30,0.95)] text-[#888]">SOLD OUT</span>
+                <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(30,30,30,0.95)] text-[#888]">SOLD OUT</span>
               )}
             </div>
           </div>
 
           {/* Product Info */}
           <div className="flex flex-col justify-center">
-            <span className="font-body text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: "var(--muted)" }}>
+            <span className="font-body text-xs tracking-[0.15em] uppercase mb-2" style={{ color: "var(--muted)" }}>
               {product.type}
             </span>
             <h1 className="font-heading text-3xl sm:text-4xl mb-4 leading-tight" style={{ color: "var(--text)" }}>
@@ -92,7 +92,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {/* Print type badge */}
             <div className="mb-6">
               <span
-                className={`font-body text-[9px] tracking-[0.15em] px-3 py-1 ${
+                className={`font-body text-xs tracking-[0.1em] px-3 py-1 ${
                   printType === "RESIN"
                     ? "print-badge-resin"
                     : printType === "FDM"
@@ -127,7 +127,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 {product.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="font-body text-[9px] tracking-widest px-2 py-0.5"
+                    className="font-body text-xs tracking-wider px-2 py-0.5"
                     style={{ border: "1px solid var(--border)", color: "var(--muted)" }}
                   >
                     {tag.toUpperCase()}

@@ -72,7 +72,7 @@ export default async function HeroPage() {
           </div>
 
           <p
-            className="font-body text-[10px] sm:text-xs tracking-[0.35em] mb-4 uppercase animate-fade-in-up"
+            className="font-body text-xs tracking-[0.15em] mb-4 uppercase animate-fade-in-up"
             style={{ color: "var(--muted)" }}
           >
             🇿🇦 South African · Unique Pokémon &amp; Tabletop Merchandise
@@ -127,7 +127,7 @@ export default async function HeroPage() {
 
           <div className="mt-16 flex flex-col items-center gap-2" style={{ opacity: 0.35 }}>
             <span
-              className="font-body text-[9px] tracking-[0.3em]"
+              className="font-body text-xs tracking-[0.15em]"
               style={{ color: "var(--primary)" }}
             >
               SCROLL
@@ -161,13 +161,13 @@ export default async function HeroPage() {
                 }}
               >
                 <p
-                  className="font-heading text-[8px] sm:text-[10px] tracking-[0.2em]"
+                  className="font-heading text-[11px] tracking-[0.15em]"
                   style={{ color: "var(--primary)" }}
                 >
                   {label}
                 </p>
                 <p
-                  className="font-body text-[9px] sm:text-xs mt-0.5 hidden sm:block"
+                  className="font-body text-xs mt-0.5 hidden sm:block"
                   style={{ color: "var(--muted)" }}
                 >
                   {sub}
@@ -182,7 +182,7 @@ export default async function HeroPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <p
-            className="font-body text-[10px] tracking-[0.35em] mb-3 uppercase"
+            className="font-body text-xs tracking-[0.15em] mb-3 uppercase"
             style={{ color: "var(--muted)" }}
           >
             Collections
@@ -233,7 +233,7 @@ export default async function HeroPage() {
                   {cat.flavorText}
                 </p>
                 <span
-                  className="mt-4 inline-block font-body text-[10px] tracking-[0.2em] transition-colors"
+                  className="mt-4 inline-block font-body text-xs tracking-[0.1em] transition-colors"
                   style={{ color: "var(--primary)" }}
                 >
                   EXPLORE →
@@ -254,7 +254,7 @@ export default async function HeroPage() {
             <div className="flex items-center justify-between mb-10 pt-16">
               <div>
                 <p
-                  className="font-body text-[10px] tracking-[0.35em] mb-2 uppercase"
+                  className="font-body text-xs tracking-[0.15em] mb-2 uppercase"
                   style={{ color: "var(--muted)" }}
                 >
                   Just Landed
@@ -296,7 +296,7 @@ export default async function HeroPage() {
                         sizes="(max-width: 640px) 50vw, 25vw"
                       />
                     <span
-                      className="absolute top-2 left-2 font-body text-[9px] tracking-[0.15em] px-2 py-0.5"
+                      className="absolute top-2 left-2 font-body text-xs tracking-[0.1em] px-2 py-0.5"
                       style={{
                         background: "var(--primary)",
                         color: "var(--bg)",
@@ -336,7 +336,7 @@ export default async function HeroPage() {
             <div className="flex items-center justify-between mb-10 pt-16">
               <div>
                 <p
-                  className="font-body text-[10px] tracking-[0.35em] mb-2 uppercase"
+                  className="font-body text-xs tracking-[0.15em] mb-2 uppercase"
                   style={{ color: "var(--muted)" }}
                 >
                   Coming Soon
@@ -378,7 +378,7 @@ export default async function HeroPage() {
                         sizes="(max-width: 640px) 50vw, 25vw"
                       />
                     <span
-                      className="absolute top-2 left-2 font-body text-[9px] tracking-[0.15em] px-2 py-0.5"
+                      className="absolute top-2 left-2 font-body text-xs tracking-[0.1em] px-2 py-0.5"
                       style={{
                         background: "var(--accent)",
                         color: "var(--bg)",
@@ -403,7 +403,7 @@ export default async function HeroPage() {
                       </p>
                       {product.preorder_date && (
                         <p
-                          className="font-body text-[10px]"
+                          className="font-body text-xs"
                           style={{ color: "var(--muted)" }}
                         >
                           {product.preorder_date}

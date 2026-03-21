@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="bg-[#110d05] border-b border-[rgba(196,160,69,0.1)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <span className="font-heading text-xs text-[rgba(196,160,69,0.4)] tracking-widest">
+            <span className="font-body text-xs text-[rgba(196,160,69,0.7)] tracking-wider">
               ADMIN
             </span>
             <div className="flex items-center gap-4">
@@ -40,7 +40,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="font-body text-[10px] text-[rgba(240,232,216,0.3)]">{user.email}</span>
+            <span className="font-body text-xs text-[rgba(240,232,216,0.55)]">{user.email}</span>
             <AdminSignOut />
           </div>
         </div>

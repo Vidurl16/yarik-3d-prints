@@ -28,7 +28,7 @@ export default async function AdminProductsPage() {
           <thead>
             <tr className="border-b border-[rgba(196,160,69,0.15)]">
               {["Name", "Brand", "Faction / Role", "Price", "Status", "Tags", "Actions"].map((h) => (
-                <th key={h} className="text-left font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] pb-3 pr-4 uppercase">
+                <th key={h} className="text-left font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.65)] pb-3 pr-4 uppercase">
                   {h}
                 </th>
               ))}
@@ -40,20 +40,20 @@ export default async function AdminProductsPage() {
                 <td className="py-3 pr-4">
                   <div>
                     <p className="font-body text-sm text-[#f0e8d8]">{product.name}</p>
-                    <p className="font-body text-[10px] text-[rgba(240,232,216,0.3)]">{product.slug}</p>
+                    <p className="font-body text-xs text-[rgba(240,232,216,0.55)]">{product.slug}</p>
                   </div>
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.5)]">
                   {product.brand}
                 </td>
-                <td className="py-3 pr-4 font-body text-[10px] text-[rgba(240,232,216,0.45)]">
+                <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.65)]">
                   {[product.faction, product.role].filter(Boolean).join(" / ") || "—"}
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.7)]">
                   R{(product.price_cents / 100).toFixed(2)}
                 </td>
                 <td className="py-3 pr-4">
-                  <span className={`font-body text-[10px] px-2 py-0.5 ${
+                  <span className={`font-body text-xs px-2 py-0.5 ${
                     product.is_active
                       ? "bg-green-900/30 text-green-400 border border-green-800/40"
                       : "bg-red-900/30 text-red-400 border border-red-800/40"
@@ -61,14 +61,14 @@ export default async function AdminProductsPage() {
                     {product.is_active ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="py-3 pr-4 font-body text-[10px] text-[rgba(240,232,216,0.3)] max-w-[120px] truncate">
+                <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.55)] max-w-[120px] truncate">
                   {(product.tags ?? []).join(", ")}
                 </td>
                 <td className="py-3">
                   <div className="flex items-center gap-3">
                     <Link
                       href={`/admin/products/${product.id}/edit`}
-                      className="font-body text-[10px] tracking-wider text-[#c4a045] hover:underline"
+                      className="font-body text-xs tracking-wider text-[#c4a045] hover:underline"
                     >
                       Edit
                     </Link>

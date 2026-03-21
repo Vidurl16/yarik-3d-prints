@@ -133,7 +133,7 @@ export default function ProductForm({ product }: Props) {
   const inputClass =
     "w-full bg-[#140e06] border border-[rgba(196,160,69,0.2)] px-3 py-2.5 font-body text-sm text-[#f0e8d8] focus:outline-none focus:border-[rgba(196,160,69,0.5)] transition-colors";
   const labelClass =
-    "block font-body text-[10px] tracking-[0.2em] text-[rgba(240,232,216,0.4)] mb-1.5 uppercase";
+    "block font-body text-xs tracking-[0.1em] text-[rgba(240,232,216,0.7)] mb-1.5 uppercase";
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
@@ -241,7 +241,7 @@ export default function ProductForm({ product }: Props) {
           onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
           className="font-body text-xs text-[rgba(240,232,216,0.6)] file:mr-3 file:px-3 file:py-1.5 file:bg-[#1c1508] file:border file:border-[rgba(196,160,69,0.2)] file:text-[#c4a045] file:text-xs file:cursor-pointer"
         />
-        {uploading && <p className="font-body text-[10px] text-[#c4a045] mt-1">Uploading...</p>}
+        {uploading && <p className="font-body text-xs text-[#c4a045] mt-1">Uploading...</p>}
       </div>
 
       <div className="flex items-center gap-6">
@@ -287,7 +287,7 @@ export default function ProductForm({ product }: Props) {
         <button
           type="button"
           onClick={() => router.push("/admin/products")}
-          className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.4)] hover:text-[rgba(240,232,216,0.8)] transition-colors"
+          className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.65)] hover:text-[rgba(240,232,216,0.9)] transition-colors"
         >
           Cancel
         </button>

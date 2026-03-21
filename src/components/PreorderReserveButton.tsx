@@ -43,7 +43,7 @@ export default function PreorderReserveButton({ productId, productName }: Preord
 
   if (step === "success") {
     return (
-      <div className="font-body text-[10px] tracking-widest px-3 py-1.5 bg-[rgba(139,0,0,0.2)] text-[#ff6060] border border-[rgba(139,0,0,0.4)] text-center">
+      <div className="font-body text-xs tracking-wider px-3 py-1.5 bg-[rgba(139,0,0,0.2)] text-[#ff6060] border border-[rgba(139,0,0,0.4)] text-center">
         ✓ RESERVED
       </div>
     );
@@ -53,7 +53,7 @@ export default function PreorderReserveButton({ productId, productName }: Preord
     return (
       <button
         onClick={() => setStep("form")}
-        className="font-body text-[10px] tracking-widest px-3 py-1.5 bg-[rgba(139,0,0,0.2)] hover:bg-[rgba(139,0,0,0.4)] text-[#ff6060] border border-[rgba(139,0,0,0.4)] transition-all duration-200"
+        className="font-body text-xs tracking-wider px-3 py-1.5 bg-[rgba(139,0,0,0.2)] hover:bg-[rgba(139,0,0,0.4)] text-[#ff6060] border border-[rgba(139,0,0,0.4)] transition-all duration-200"
       >
         RESERVE
       </button>
@@ -65,7 +65,7 @@ export default function PreorderReserveButton({ productId, productName }: Preord
       className="mt-3 p-4"
       style={{ background: "rgba(139,0,0,0.08)", border: "1px solid rgba(139,0,0,0.25)" }}
     >
-      <p className="font-body text-[10px] tracking-widest mb-3 text-[#ff6060]">
+      <p className="font-body text-xs tracking-wider mb-3 text-[#ff6060]">
         RESERVE: {productName}
       </p>
 
@@ -98,21 +98,21 @@ export default function PreorderReserveButton({ productId, productName }: Preord
         />
 
         {(step === "error" && errorMsg) && (
-          <p className="font-body text-[10px] text-red-400">{errorMsg}</p>
+          <p className="font-body text-xs text-red-400">{errorMsg}</p>
         )}
 
         <div className="flex gap-2 pt-1">
           <button
             type="submit"
             disabled={step === "loading"}
-            className="flex-1 font-body text-[10px] tracking-widest py-2 bg-[rgba(139,0,0,0.6)] hover:bg-[rgba(139,0,0,0.8)] text-[#ff6060] border border-[rgba(139,0,0,0.5)] transition-all duration-200 disabled:opacity-50"
+            className="flex-1 font-body text-xs tracking-wider py-2 bg-[rgba(139,0,0,0.6)] hover:bg-[rgba(139,0,0,0.8)] text-[#ff6060] border border-[rgba(139,0,0,0.5)] transition-all duration-200 disabled:opacity-50"
           >
             {step === "loading" ? "..." : "CONFIRM"}
           </button>
           <button
             type="button"
             onClick={() => { setStep("idle"); setErrorMsg(null); }}
-            className="font-body text-[10px] tracking-widest px-3 py-2 transition-colors"
+            className="font-body text-xs tracking-wider px-3 py-2 transition-colors"
             style={{ color: "var(--muted)" }}
           >
             CANCEL

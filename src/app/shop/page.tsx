@@ -12,10 +12,10 @@ export default function ShopPage() {
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
+        <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-8" style={{ color: "var(--muted)" }}>
           <HoverLink href="/" className="transition-colors" defaultColor="var(--muted)" hoverColor="var(--primary)">HOME</HoverLink>
           <span style={{ color: "var(--border)" }}>›</span>
-          <span style={{ color: "var(--text)", opacity: 0.5 }}>SHOP</span>
+          <span style={{ color: "var(--text)" }}>SHOP</span>
         </div>
 
         <div
@@ -28,7 +28,7 @@ export default function ShopPage() {
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--primary)", opacity: 0.7 }}>
+            <p className="font-body text-xs tracking-[0.15em] mb-3 uppercase" style={{ color: "var(--primary)" }}>
               Browse Collections
             </p>
             <h1 className="font-heading text-3xl sm:text-4xl" style={{ color: "var(--text)" }}>SHOP</h1>

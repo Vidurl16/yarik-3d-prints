@@ -36,7 +36,7 @@ export default async function AccountPage() {
         </div>
 
         <section>
-          <h2 className="font-heading text-sm tracking-[0.2em] mb-4 uppercase pb-2" style={{ color: "var(--primary)", opacity: 0.7, borderBottom: "1px solid var(--border)" }}>
+          <h2 className="font-heading text-sm tracking-[0.2em] mb-4 uppercase pb-2" style={{ color: "var(--primary)", opacity: 0.9, borderBottom: "1px solid var(--border)" }}>
             Order History
           </h2>
 
@@ -60,7 +60,7 @@ export default async function AccountPage() {
                       <p className="font-body text-xs mb-1" style={{ color: "var(--muted)" }}>
                         {formatDate(order.created_at)}
                       </p>
-                      <p className="font-body text-xs font-mono truncate max-w-[180px]" style={{ color: "var(--primary)", opacity: 0.5 }}>
+                      <p className="font-body text-xs font-mono truncate max-w-[180px]" style={{ color: "var(--primary)", opacity: 0.8 }}>
                         #{order.id.slice(0, 8).toUpperCase()}
                       </p>
                     </div>
@@ -69,7 +69,7 @@ export default async function AccountPage() {
                         {formatPrice(order.total_amount_cents ?? 0, order.currency ?? "ZAR")}
                       </p>
                       <span
-                        className={`inline-block font-body text-[10px] tracking-wider px-2 py-0.5 mt-1 ${
+                        className={`inline-block font-body text-xs tracking-wider px-2 py-0.5 mt-1 ${
                           order.payment_status === "paid"
                             ? "bg-green-900/30 text-green-400 border border-green-800/40"
                             : order.payment_status === "pending"

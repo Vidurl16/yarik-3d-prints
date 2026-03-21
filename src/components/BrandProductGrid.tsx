@@ -30,8 +30,7 @@ export default function BrandProductGrid({ products, brandSlug }: BrandProductGr
         style={{ background: "var(--surface)", borderColor: "var(--border)" }}
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-4 overflow-x-auto">
-          <span
-            className="font-body text-[10px] tracking-[0.3em] uppercase flex-shrink-0"
+          <span className="font-body text-xs tracking-[0.1em] uppercase flex-shrink-0"
             style={{ color: "var(--muted)" }}
           >
             Filter
@@ -39,7 +38,7 @@ export default function BrandProductGrid({ products, brandSlug }: BrandProductGr
           <button
             key="All"
             onClick={() => setActiveFilter("All")}
-            className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all duration-150"
+            className="font-body text-xs tracking-[0.1em] px-4 py-1.5 flex-shrink-0 transition-all duration-150"
             style={{
               border: "1px solid var(--border)",
               color: activeFilter === "All" ? "var(--bg)" : "var(--muted)",
@@ -52,7 +51,7 @@ export default function BrandProductGrid({ products, brandSlug }: BrandProductGr
             <button
               key={f.label}
               onClick={() => setActiveFilter(f.label)}
-              className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all duration-150"
+              className="font-body text-xs tracking-[0.1em] px-4 py-1.5 flex-shrink-0 transition-all duration-150"
               style={{
                 border: "1px solid var(--border)",
                 color: activeFilter === f.label ? "var(--bg)" : "var(--muted)",
@@ -64,7 +63,7 @@ export default function BrandProductGrid({ products, brandSlug }: BrandProductGr
           ))}
           {products.length > 0 && (
             <span
-              className="ml-auto font-body text-[10px] tracking-wider flex-shrink-0"
+              className="font-body text-xs tracking-wider flex-shrink-0"
               style={{ color: "var(--muted)" }}
             >
               {filtered.length} product{filtered.length !== 1 ? "s" : ""}
@@ -97,7 +96,7 @@ export default function BrandProductGrid({ products, brandSlug }: BrandProductGr
             }}
           >
             <p
-              className="font-heading text-sm tracking-widest"
+              className="font-body text-base tracking-widest"
               style={{ color: "var(--muted)" }}
             >
               PRODUCTS COMING SOON
@@ -113,7 +112,7 @@ export default function BrandProductGrid({ products, brandSlug }: BrandProductGr
             </p>
             <button
               onClick={() => setActiveFilter("All")}
-              className="font-body text-xs tracking-[0.2em] px-6 py-2"
+              className="font-body text-xs tracking-[0.1em] px-6 py-2"
               style={{
                 border: "1px solid var(--border)",
                 color: "var(--primary)",

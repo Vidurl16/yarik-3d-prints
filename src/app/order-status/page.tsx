@@ -52,10 +52,10 @@ export default async function OrderStatusPage({ searchParams }: Props) {
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-6" style={{ color: "var(--muted)" }}>
+          <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-6" style={{ color: "var(--muted)" }}>
             <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }}>HOME</Link>
             <span style={{ color: "var(--border)" }}>›</span>
-            <span style={{ color: "var(--text)", opacity: 0.5 }}>ORDER STATUS</span>
+            <span style={{ color: "var(--text)" }}>ORDER STATUS</span>
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl mb-3" style={{ color: "var(--text)" }}>
             CHECK ORDER STATUS
@@ -77,7 +77,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
               <div>
                 <label
                   htmlFor="order"
-                  className="block font-body text-[10px] tracking-[0.2em] mb-2"
+                  className="block font-body text-xs tracking-[0.1em] mb-2"
                   style={{ color: "var(--muted)" }}
                 >
                   ORDER REFERENCE
@@ -99,7 +99,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
               <div>
                 <label
                   htmlFor="email"
-                  className="block font-body text-[10px] tracking-[0.2em] mb-2"
+                  className="block font-body text-xs tracking-[0.1em] mb-2"
                   style={{ color: "var(--muted)" }}
                 >
                   CHECKOUT EMAIL
@@ -128,7 +128,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
               </button>
             </form>
 
-            <p className="font-body text-[10px] leading-relaxed" style={{ color: "var(--muted)" }}>
+            <p className="font-body text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
               We only show the order that matches both the reference and email, so you do not need an account for guest checkout follow-up.
             </p>
           </section>
@@ -139,7 +139,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
           >
             {!hasAttemptedLookup ? (
               <div className="text-center py-12">
-                <p className="font-heading text-sm tracking-widest mb-3" style={{ color: "var(--primary)", opacity: 0.7 }}>
+                <p className="font-heading text-sm tracking-widest mb-3" style={{ color: "var(--primary)", opacity: 0.85 }}>
                   ENTER YOUR DETAILS
                 </p>
                 <p className="font-body text-sm" style={{ color: "var(--muted)" }}>
@@ -148,7 +148,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
               </div>
             ) : !canLookup ? (
               <div className="text-center py-12">
-                <p className="font-heading text-sm tracking-widest mb-3" style={{ color: "var(--primary)", opacity: 0.7 }}>
+                <p className="font-heading text-sm tracking-widest mb-3" style={{ color: "var(--primary)", opacity: 0.85 }}>
                   CHECK THE DETAILS
                 </p>
                 <p className="font-body text-sm" style={{ color: "var(--muted)" }}>
@@ -157,7 +157,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
               </div>
             ) : !result ? (
               <div className="text-center py-12">
-                <p className="font-heading text-sm tracking-widest mb-3" style={{ color: "var(--primary)", opacity: 0.7 }}>
+                <p className="font-heading text-sm tracking-widest mb-3" style={{ color: "var(--primary)", opacity: 0.85 }}>
                   ORDER NOT FOUND
                 </p>
                 <p className="font-body text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
@@ -172,21 +172,21 @@ export default async function OrderStatusPage({ searchParams }: Props) {
               <div className="space-y-6">
                 <div className="flex items-start justify-between gap-4 flex-wrap">
                   <div>
-                    <p className="font-body text-[10px] tracking-[0.2em] mb-2" style={{ color: "var(--muted)" }}>
+                    <p className="font-body text-xs tracking-[0.1em] mb-2" style={{ color: "var(--muted)" }}>
                       ORDER REFERENCE
                     </p>
                     <p className="font-body text-sm break-all" style={{ color: "var(--primary)", fontFamily: "monospace" }}>
                       {result.order.id}
                     </p>
                   </div>
-                  <span className={`inline-block font-body text-[10px] tracking-wider px-2 py-0.5 ${getStatusStyles(result.order.payment_status)}`}>
+                  <span className={`inline-block font-body text-xs tracking-wider px-2 py-0.5 ${getStatusStyles(result.order.payment_status)}`}>
                     {result.order.payment_status.toUpperCase()}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <p className="font-body text-[10px] tracking-[0.2em] mb-2" style={{ color: "var(--muted)" }}>
+                    <p className="font-body text-xs tracking-[0.1em] mb-2" style={{ color: "var(--muted)" }}>
                       PLACED
                     </p>
                     <p className="font-body text-sm" style={{ color: "var(--text)" }}>
@@ -194,7 +194,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
                     </p>
                   </div>
                   <div>
-                    <p className="font-body text-[10px] tracking-[0.2em] mb-2" style={{ color: "var(--muted)" }}>
+                    <p className="font-body text-xs tracking-[0.1em] mb-2" style={{ color: "var(--muted)" }}>
                       PAID
                     </p>
                     <p className="font-body text-sm" style={{ color: "var(--text)" }}>
@@ -202,7 +202,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
                     </p>
                   </div>
                   <div>
-                    <p className="font-body text-[10px] tracking-[0.2em] mb-2" style={{ color: "var(--muted)" }}>
+                    <p className="font-body text-xs tracking-[0.1em] mb-2" style={{ color: "var(--muted)" }}>
                       TOTAL
                     </p>
                     <p className="font-heading text-lg" style={{ color: "var(--primary)" }}>
@@ -225,7 +225,7 @@ export default async function OrderStatusPage({ searchParams }: Props) {
                           <p className="font-body text-sm" style={{ color: "var(--text)" }}>
                             {item.name_snapshot ?? "Custom item"}
                           </p>
-                          <p className="font-body text-[10px] tracking-[0.18em]" style={{ color: "var(--muted)" }}>
+                          <p className="font-body text-xs tracking-[0.1em]" style={{ color: "var(--muted)" }}>
                             QTY {item.quantity}
                           </p>
                         </div>

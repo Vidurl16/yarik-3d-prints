@@ -36,14 +36,14 @@ export default function AdminProductActions({ productId, isActive }: Props) {
       <button
         onClick={toggleActive}
         disabled={loading}
-        className="font-body text-[10px] tracking-wider text-[rgba(196,160,69,0.5)] hover:text-[#c4a045] transition-colors disabled:opacity-40"
+        className="font-body text-xs tracking-wider text-[rgba(196,160,69,0.75)] hover:text-[#c4a045] transition-colors disabled:opacity-40"
       >
         {isActive ? "Deactivate" : "Activate"}
       </button>
       <button
         onClick={handleDelete}
         disabled={loading}
-        className="font-body text-[10px] tracking-wider text-red-600 hover:text-red-400 transition-colors disabled:opacity-40"
+        className="font-body text-xs tracking-wider text-red-600 hover:text-red-400 transition-colors disabled:opacity-40"
       >
         Delete
       </button>

@@ -57,15 +57,15 @@ export default function AdminOrdersPage() {
       {/* Filters */}
       <div className="flex flex-wrap items-end gap-4 mb-6 p-4 border border-[rgba(196,160,69,0.1)] bg-[#110d05]">
         <div>
-          <label className="block font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] mb-1.5 uppercase">From</label>
+          <label className="block font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.65)] mb-1.5 uppercase">From</label>
           <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={inputClass} />
         </div>
         <div>
-          <label className="block font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] mb-1.5 uppercase">To</label>
+          <label className="block font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.65)] mb-1.5 uppercase">To</label>
           <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={inputClass} />
         </div>
         <div>
-          <label className="block font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] mb-1.5 uppercase">Status</label>
+          <label className="block font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.65)] mb-1.5 uppercase">Status</label>
           <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClass}>
             {STATUS_OPTIONS.map((s) => (
               <option key={s} value={s}>{s || "All"}</option>
@@ -87,7 +87,7 @@ export default function AdminOrdersPage() {
           <thead>
             <tr className="border-b border-[rgba(196,160,69,0.15)]">
               {["Date", "Order ID", "Email", "Provider", "Total", "Status"].map((h) => (
-                <th key={h} className="text-left font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.4)] pb-3 pr-4 uppercase">
+                <th key={h} className="text-left font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.65)] pb-3 pr-4 uppercase">
                   {h}
                 </th>
               ))}
@@ -99,20 +99,20 @@ export default function AdminOrdersPage() {
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.5)] whitespace-nowrap">
                   {formatDate(order.created_at)}
                 </td>
-                <td className="py-3 pr-4 font-mono text-[10px] text-[rgba(196,160,69,0.4)]">
+                <td className="py-3 pr-4 font-mono text-xs text-[rgba(196,160,69,0.7)]">
                   #{order.id.slice(0, 8).toUpperCase()}
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.7)]">
                   {order.email ?? "—"}
                 </td>
-                <td className="py-3 pr-4 font-body text-[10px] text-[rgba(240,232,216,0.4)]">
+                <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.7)]">
                   {order.payment_provider ?? "—"}
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[#f0e8d8]">
                   {formatPrice(order.total_amount_cents ?? 0, order.currency ?? "ZAR")}
                 </td>
                 <td className="py-3">
-                  <span className={`font-body text-[10px] px-2 py-0.5 ${
+                  <span className={`font-body text-xs px-2 py-0.5 ${
                     order.payment_status === "paid"
                       ? "bg-green-900/30 text-green-400 border border-green-800/40"
                       : order.payment_status === "pending"
@@ -134,7 +134,7 @@ export default function AdminOrdersPage() {
         )}
       </div>
 
-      <p className="font-body text-[10px] text-[rgba(240,232,216,0.2)] mt-4">
+      <p className="font-body text-xs text-[rgba(240,232,216,0.45)] mt-4">
         Showing {orders.length} order{orders.length !== 1 ? "s" : ""}
       </p>
     </div>

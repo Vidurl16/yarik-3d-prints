@@ -84,7 +84,7 @@ export default async function FactionPage({ params }: PageProps) {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-[10px] tracking-widest text-[#6b6b6b] font-body mb-6">
+          <div className="flex items-center gap-2 text-xs tracking-wider text-[rgba(240,232,216,0.55)] font-body mb-6">
             <Link href="/" className="hover:text-[#c9a84c] transition-colors">HOME</Link>
             <span className="text-[rgba(201,168,76,0.3)]">›</span>
             <Link href="/shop" className="hover:text-[#c9a84c] transition-colors">SHOP</Link>
@@ -92,7 +92,7 @@ export default async function FactionPage({ params }: PageProps) {
             <span className="text-[rgba(232,224,208,0.5)] uppercase">{displayName}</span>
           </div>
 
-          <p className="font-body text-[10px] tracking-[0.3em] text-[rgba(201,168,76,0.5)] mb-3 uppercase">
+          <p className="font-body text-xs tracking-[0.15em] text-[rgba(201,168,76,0.8)] mb-3 uppercase">
             {products.length} Models Available
           </p>
           <h1 className="font-heading text-3xl sm:text-5xl text-[#e8e0d0] mb-3">
@@ -110,7 +110,7 @@ export default async function FactionPage({ params }: PageProps) {
                 .map((f) => (
                   <span
                     key={f.id}
-                    className="font-body text-[10px] tracking-widest px-3 py-1 border border-[rgba(201,168,76,0.15)] text-[rgba(232,224,208,0.5)]"
+                    className="font-body text-xs tracking-wider px-3 py-1 border border-[rgba(201,168,76,0.15)] text-[rgba(232,224,208,0.65)]"
                   >
                     {f.name.toUpperCase()}
                   </span>

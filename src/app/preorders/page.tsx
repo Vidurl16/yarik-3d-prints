@@ -18,10 +18,10 @@ export default async function PreordersPage() {
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
+        <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-8" style={{ color: "var(--muted)" }}>
           <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }}>HOME</Link>
           <span style={{ color: "var(--border)" }}>›</span>
-          <span style={{ color: "var(--text)", opacity: 0.5 }}>PREORDERS</span>
+          <span style={{ color: "var(--text)" }}>PREORDERS</span>
         </div>
 
         <div
@@ -29,7 +29,7 @@ export default async function PreordersPage() {
           style={{ background: "linear-gradient(90deg, transparent, rgba(139,0,0,0.5), transparent)" }}
         />
 
-        <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--accent)", opacity: 0.8 }}>
+        <p className="font-body text-xs tracking-[0.15em] mb-3 uppercase" style={{ color: "var(--accent)", opacity: 0.8 }}>
           Coming Soon
         </p>
         <h1 className="font-heading text-3xl sm:text-4xl mb-2" style={{ color: "var(--text)" }}>PREORDERS</h1>
@@ -62,22 +62,22 @@ export default async function PreordersPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="font-heading text-xs tracking-[0.3em] text-[rgba(139,0,0,0.8)]">
+                    <span className="font-body text-xs tracking-[0.15em] text-[#ff9090]">
                       COMING SOON
                     </span>
                   </div>
-                  <span className="absolute top-3 left-3 font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,0,0,0.25)] text-[#ff6060] border border-[rgba(139,0,0,0.5)]">
+                  <span className="absolute top-3 left-3 font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,0,0,0.25)] text-[#ff6060] border border-[rgba(139,0,0,0.5)]">
                     PREORDER
                   </span>
                   {product.preorder_date && (
-                    <span className="absolute bottom-3 right-3 font-body text-[10px] tracking-widest" style={{ color: "var(--muted)" }}>
+                    <span className="absolute bottom-3 right-3 font-body text-xs tracking-wider" style={{ color: "var(--muted)" }}>
                       {product.preorder_date}
                     </span>
                   )}
                 </div>
 
                 <div className="p-5 flex flex-col flex-1">
-                  <span className="font-body text-[9px] tracking-widest uppercase mb-1" style={{ color: "var(--muted)" }}>
+                  <span className="font-body text-xs tracking-wider uppercase mb-1" style={{ color: "var(--muted)" }}>
                     {product.type}
                   </span>
                   <h3 className="font-body text-sm font-semibold leading-snug flex-1 mb-3" style={{ color: "var(--text)" }}>
@@ -93,7 +93,7 @@ export default async function PreordersPage() {
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="font-heading text-sm tracking-widest mb-4" style={{ color: "var(--accent)", opacity: 0.6 }}>
+            <p className="font-heading text-sm tracking-widest mb-4" style={{ color: "var(--accent)", opacity: 0.85 }}>
               NO PREORDERS AVAILABLE
             </p>
             <Link

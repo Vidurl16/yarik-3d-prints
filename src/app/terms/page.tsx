@@ -10,10 +10,10 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
+        <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-8" style={{ color: "var(--muted)" }}>
           <Link href="/" style={{ color: "var(--muted)" }}>HOME</Link>
           <span style={{ color: "var(--border)" }}>›</span>
-          <span style={{ color: "var(--text)", opacity: 0.5 }}>TERMS OF SERVICE</span>
+          <span style={{ color: "var(--text)" }}>TERMS OF SERVICE</span>
         </div>
 
         <h1 className="font-heading text-3xl mb-2" style={{ color: "var(--text)" }}>TERMS OF SERVICE</h1>

@@ -63,29 +63,29 @@ export default function DbProductCard({ product }: DbProductCardProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />
 
-          <span className="absolute bottom-3 left-3 font-body text-[9px] tracking-[0.15em] px-2 py-0.5 print-badge-resin">
+          <span className="absolute bottom-3 left-3 font-body text-[11px] tracking-[0.1em] px-2 py-0.5 print-badge-resin">
             {printType}
           </span>
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">
             {product.is_new && (
-              <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,94,20,0.8)] text-[#f0e8d8]">
+              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.8)] text-[#f0e8d8]">
                 NEW
               </span>
             )}
             {product.is_preorder && (
-              <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,0,0,0.7)] text-[#ff9090]">
+              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,0,0,0.7)] text-[#ff9090]">
                 PREORDER
               </span>
             )}
             {isOutOfStock && (
-              <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(30,30,30,0.9)] text-[#888]">
+              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(30,30,30,0.9)] text-[#aaa]">
                 SOLD OUT
               </span>
             )}
             {isLowStock && (
-              <span className="font-body text-[9px] tracking-[0.15em] px-2 py-0.5 bg-[rgba(139,94,20,0.7)] text-[#f0e8d8]">
+              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.7)] text-[#f0e8d8]">
                 {product.stock_quantity} LEFT
               </span>
             )}
@@ -96,7 +96,7 @@ export default function DbProductCard({ product }: DbProductCardProps) {
       {/* Content */}
       <div className="flex flex-col flex-1 p-4 gap-2">
         <span
-          className="font-body text-[10px] tracking-widest uppercase"
+          className="font-body text-xs tracking-wider uppercase"
           style={{ color: "var(--muted, #6b6b6b)" }}
         >
           {product.type}
@@ -112,7 +112,7 @@ export default function DbProductCard({ product }: DbProductCardProps) {
         </Link>
 
         {product.is_preorder && product.preorder_date && (
-          <p className="font-body text-[10px] text-[rgba(139,0,0,0.7)] tracking-wider">
+          <p className="font-body text-xs text-[#ff9090] tracking-wide">
             Available: {product.preorder_date}
           </p>
         )}
@@ -129,14 +129,14 @@ export default function DbProductCard({ product }: DbProductCardProps) {
           </span>
 
           {isOutOfStock ? (
-            <span className="font-body text-[10px] tracking-widest px-3 py-1.5" style={{ color: "var(--muted)", opacity: 0.5 }}>
+            <span className="font-body text-xs tracking-wider px-3 py-1.5" style={{ color: "var(--muted)" }}>
               SOLD OUT
             </span>
           ) : (
             <button
               onClick={handleAddToCart}
               disabled={adding}
-              className={`font-body text-[10px] tracking-widest px-3 py-1.5 transition-all duration-200 ${
+              className={`font-body text-xs tracking-wider px-3 py-1.5 transition-all duration-200 ${
                 adding
                   ? "bg-[rgba(201,168,76,0.2)] text-[#c9a84c] border border-[rgba(201,168,76,0.5)]"
                   : "bg-[#8b0000] hover:bg-[#b50000] text-[#e8e0d0] border border-transparent"

@@ -101,7 +101,7 @@ function CartContent() {
               className="mb-6 text-left"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", padding: "12px 16px" }}
             >
-              <p className="font-body text-[10px] tracking-[0.2em] mb-2" style={{ color: "var(--muted)" }}>
+              <p className="font-body text-xs tracking-[0.1em] mb-2" style={{ color: "var(--muted)" }}>
                 ORDER REFERENCE
               </p>
               <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ function CartContent() {
                 </code>
                 <button
                   onClick={copyOrderId}
-                  className="font-body text-[10px] tracking-widest px-3 py-1.5 flex-shrink-0 transition-all duration-200"
+                  className="font-body text-xs tracking-wider px-3 py-1.5 flex-shrink-0 transition-all duration-200"
                   style={{
                     border: "1px solid var(--border)",
                     color: copied ? "var(--accent)" : "var(--muted)",
@@ -121,7 +121,7 @@ function CartContent() {
               </div>
             </div>
           )}
-          <p className="font-body text-xs leading-relaxed mb-8" style={{ color: "var(--muted)", opacity: 0.7 }}>
+          <p className="font-body text-xs leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
             If payment succeeded but your order is not confirmed within a few minutes,{" "}
             <Link href="/contact" style={{ color: "var(--primary)" }} className="hover:underline">contact support</Link>{" "}
             with your order reference.
@@ -162,7 +162,7 @@ function CartContent() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
             </svg>
           </div>
-          <h1 className="font-heading text-xl mb-3 tracking-widest" style={{ color: "var(--primary)", opacity: 0.6 }}>
+          <h1 className="font-heading text-xl mb-3 tracking-widest" style={{ color: "var(--primary)", opacity: 1.0 }}>
             YOUR WARBAND AWAITS
           </h1>
           <p className="font-body text-sm mb-2" style={{ color: "var(--muted)" }}>
@@ -219,10 +219,10 @@ function CartContent() {
 
           {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-6" style={{ color: "var(--muted)" }}>
+          <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-6" style={{ color: "var(--muted)" }}>
             <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }}>HOME</Link>
             <span style={{ color: "var(--border)" }}>›</span>
-            <span style={{ color: "var(--text)", opacity: 0.5 }}>CART</span>
+            <span style={{ color: "var(--text)" }}>CART</span>
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl" style={{ color: "var(--text)" }}>
             YOUR WARBAND
@@ -256,7 +256,7 @@ function CartContent() {
                     {item.name}
                   </h3>
                   <span
-                    className={`font-body text-[9px] tracking-[0.12em] px-2 py-0.5 ${
+                    className={`font-body text-xs tracking-[0.1em] px-2 py-0.5 ${
                       item.printType === "RESIN"
                         ? "print-badge-resin"
                         : item.printType === "FDM"
@@ -312,7 +312,7 @@ function CartContent() {
             {/* Clear cart */}
             <button
               onClick={clearCart}
-              className="font-body text-[10px] tracking-widest transition-colors mt-2"
+              className="font-body text-xs tracking-wider transition-colors mt-2"
               style={{ color: "var(--muted)" }}
             >
               CLEAR CART
@@ -347,7 +347,7 @@ function CartContent() {
                 <div className="mb-4">
                   <label
                     htmlFor="guest-email"
-                    className="block font-body text-[10px] tracking-[0.2em] mb-2"
+                    className="block font-body text-xs tracking-[0.1em] mb-2"
                     style={{ color: "var(--muted)" }}
                   >
                     EMAIL FOR ORDER UPDATES
@@ -366,7 +366,7 @@ function CartContent() {
                     }}
                   />
                   <p
-                    className="font-body text-[10px] mt-2 leading-relaxed"
+                    className="font-body text-xs mt-2 leading-relaxed"
                     style={{ color: "var(--muted)", opacity: 0.8 }}
                   >
                     Required for guest checkout. Logged-in customers can leave this blank.
@@ -378,7 +378,7 @@ function CartContent() {
                   <button
                     type="button"
                     onClick={() => setShowAddress(!showAddress)}
-                    className="flex items-center gap-2 font-body text-[10px] tracking-[0.2em] mb-2 transition-colors"
+                    className="flex items-center gap-2 font-body text-xs tracking-[0.1em] mb-2 transition-colors"
                     style={{ color: showAddress ? "var(--primary)" : "var(--muted)" }}
                   >
                     <span>{showAddress ? "▾" : "▸"}</span>
@@ -396,7 +396,7 @@ function CartContent() {
                         { key: "postal_code", label: "Postal code", placeholder: "8001" },
                       ].map(({ key, label, placeholder }) => (
                         <div key={key}>
-                          <label className="block font-body text-[9px] tracking-[0.15em] mb-1" style={{ color: "var(--muted)" }}>
+                          <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
                             {label.toUpperCase()}
                           </label>
                           <input
@@ -414,7 +414,7 @@ function CartContent() {
                 </div>
 
                 <div className="flex items-center justify-between mb-6">
-                  <span className="font-heading text-xs tracking-[0.15em]" style={{ color: "var(--text)" }}>
+                  <span className="font-body text-xs tracking-[0.15em]" style={{ color: "var(--text)" }}>
                     TOTAL
                   </span>
                   <span className="font-heading text-2xl" style={{ color: "var(--primary)" }}>
@@ -437,7 +437,7 @@ function CartContent() {
                 </button>
 
                 {error && (
-                  <p className="font-body text-[10px] text-[#ff6060] mt-2 text-center">
+                  <p className="font-body text-xs text-[#ff6060] mt-2 text-center">
                     {error}
                   </p>
                 )}
@@ -455,7 +455,7 @@ export default function CartPage() {
     <Suspense
       fallback={
         <div className="min-h-screen pt-24 flex items-center justify-center" style={{ background: "var(--bg)" }}>
-          <p className="font-heading text-sm tracking-widest" style={{ color: "var(--primary)", opacity: 0.5 }}>
+          <p className="font-heading text-sm tracking-widest" style={{ color: "var(--primary)", opacity: 0.8 }}>
             LOADING…
           </p>
         </div>

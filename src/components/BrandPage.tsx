@@ -85,7 +85,7 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
         {/* Hero content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-16 pt-32">
           <p
-            className="font-body text-xs tracking-[0.3em] uppercase mb-3"
+            className="font-body text-xs tracking-[0.15em] uppercase mb-3"
             style={{ color: "var(--primary)", opacity: 0.7 }}
           >
             The Dexarium
@@ -152,7 +152,7 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
       >
         <div className="max-w-7xl mx-auto px-6 py-16">
           <p
-            className="font-body text-[10px] tracking-[0.35em] uppercase mb-3"
+            className="font-body text-xs tracking-[0.15em] uppercase mb-3"
             style={{ color: "var(--primary)", opacity: 0.7 }}
           >
             Complete Your Build

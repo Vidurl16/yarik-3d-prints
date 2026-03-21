@@ -19,6 +19,7 @@ import fs from "fs";
 import os from "os";
 
 const SUPABASE_URL = "https://zdwqssqppdbwqigxxgje.supabase.co";
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL ?? "";
 const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD ?? "";
@@ -27,6 +28,30 @@ const HAS_ADMIN_CREDS = !!ADMIN_EMAIL && !!ADMIN_PASSWORD;
 // Unique slug so concurrent/repeated runs don't collide
 const TEST_SLUG = `playwright-test-product-${Date.now()}`;
 const TEST_NAME = "Playwright Test Product";
+
+/**
+ * Failsafe DB cleanup — deletes any leftover playwright test products via the
+ * Supabase REST API using the service-role key. Runs after ALL tests in this
+ * file, so orphaned rows don't accumulate if the delete UI test is skipped.
+ */
+async function cleanupTestProducts() {
+  if (!SUPABASE_SERVICE_ROLE_KEY) return;
+  await fetch(
+    `${SUPABASE_URL}/rest/v1/products?slug=like.*playwright*`,
+    {
+      method: "DELETE",
+      headers: {
+        apikey: SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+        Prefer: "return=minimal",
+      },
+    }
+  );
+}
+
+test.afterAll(async () => {
+  await cleanupTestProducts();
+});
 
 // ─── Helper: sign in via the login form ───────────────────────────────────────
 

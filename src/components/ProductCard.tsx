@@ -48,7 +48,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Print type badge */}
         <span
-          className={`absolute top-3 left-3 font-body text-[9px] tracking-[0.15em] px-2 py-0.5 ${badgeClass[product.printType]}`}
+          className={`absolute top-3 left-3 font-body text-xs tracking-[0.1em] px-2 py-0.5 ${badgeClass[product.printType]}`}
         >
           {product.printType}
         </span>
@@ -56,7 +56,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-4 gap-2">
-        <span className="font-body text-[10px] tracking-widest text-[#6b6b6b] uppercase">
+        <span className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.55)] uppercase">
           {product.category}
         </span>
 
@@ -72,7 +72,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={handleAddToCart}
             disabled={adding}
-            className={`font-body text-[10px] tracking-widest px-3 py-1.5 transition-all duration-200 ${
+            className={`font-body text-xs tracking-wider px-3 py-1.5 transition-all duration-200 ${
               adding
                 ? "bg-[rgba(201,168,76,0.2)] text-[#c9a84c] border border-[rgba(201,168,76,0.5)]"
                 : "bg-[#8b0000] hover:bg-[#b50000] text-[#e8e0d0] border border-transparent"

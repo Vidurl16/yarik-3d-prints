@@ -58,7 +58,7 @@ export default function RootLayout({
           style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}
         >
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="font-heading text-xs tracking-[0.3em]" style={{ color: "var(--primary)", opacity: 0.7 }}>
+            <p className="font-heading text-xs tracking-[0.2em]" style={{ color: "var(--primary)" }}>
               THE DEXARIUM
             </p>
             <nav className="flex items-center gap-6">
@@ -72,14 +72,14 @@ export default function RootLayout({
                 <Link
                   key={href}
                   href={href}
-                  className="font-body text-[10px] tracking-[0.15em] transition-colors hover:opacity-100"
-                  style={{ color: "var(--muted)", opacity: 0.7 }}
+                  className="font-body text-xs tracking-[0.1em] transition-colors hover:opacity-100"
+                  style={{ color: "var(--muted)" }}
                 >
                   {label.toUpperCase()}
                 </Link>
               ))}
             </nav>
-            <p className="font-body text-[10px]" style={{ color: "var(--muted)", opacity: 0.4 }}>
+            <p className="font-body text-[11px]" style={{ color: "var(--muted)" }}>
               © {new Date().getFullYear()} The Dexarium
             </p>
           </div>

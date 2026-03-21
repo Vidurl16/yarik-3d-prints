@@ -100,7 +100,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
         />
         {product.isPreorder && (
           <span
-            className="absolute top-2 left-2 font-body text-[8px] tracking-[0.15em] px-1.5 py-0.5"
+            className="absolute top-2 left-2 font-body text-[11px] tracking-[0.1em] px-1.5 py-0.5"
             style={{
               background: "rgba(139,0,0,0.8)",
               color: "#ff9090",
@@ -135,7 +135,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
       {/* Content */}
       <div className="p-3 flex flex-col gap-1.5">
         <p
-          className="font-body text-[9px] tracking-[0.15em] uppercase truncate"
+          className="font-body text-xs tracking-[0.1em] uppercase truncate"
           style={{ color: "var(--muted)" }}
         >
           {product.faction.replace(/-/g, " ")}
@@ -147,7 +147,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
           {product.name}
         </h4>
         <div className="flex items-center gap-1.5">
-          <span className={`font-body text-[8px] tracking-wider ${printBadgeClass}`}>
+          <span className={`font-body text-[11px] tracking-wide ${printBadgeClass}`}>
             {product.printType}
           </span>
         </div>
@@ -199,7 +199,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
             ) : (
               <button
                 onClick={() => onQtyChange(1)}
-                className="font-body text-[9px] tracking-wider px-2.5 py-1 transition-all duration-150"
+                className="font-body text-xs tracking-wider px-2.5 py-1 transition-all duration-150"
                 style={{
                   background: "var(--primary)",
                   color: "var(--bg)",
@@ -427,7 +427,7 @@ export default function ArmyBuilderClient({
       >
         <div className="max-w-7xl mx-auto px-6">
           <p
-            className="font-body text-[10px] tracking-[0.35em] uppercase mb-2"
+            className="font-body text-xs tracking-[0.15em] uppercase mb-2"
             style={{ color: "var(--primary)", opacity: 0.7 }}
           >
             {theme.icon} {theme.label}
@@ -600,7 +600,7 @@ export default function ArmyBuilderClient({
                           {product.name}
                         </p>
                         <p
-                          className="font-body text-[9px] tracking-wider"
+                          className="font-body text-xs tracking-wider"
                           style={{ color: "var(--muted)" }}
                         >
                           ×{qty}
@@ -671,13 +671,13 @@ export default function ArmyBuilderClient({
               {ROLE_SECTIONS.map((section) => (
                 <div key={section.id} className="flex items-center justify-between">
                   <span
-                    className="font-body text-[10px] tracking-wider flex items-center gap-1.5"
+                    className="font-body text-xs tracking-wider flex items-center gap-1.5"
                     style={{ color: "var(--muted)" }}
                   >
                     {section.icon} {section.label}
                   </span>
                   <span
-                    className="font-body text-[10px]"
+                    className="font-body text-xs"
                     style={{
                       color:
                         roleCountMap[section.id] > 0
@@ -740,7 +740,7 @@ export default function ArmyBuilderClient({
 
             {!hasSelection && (
               <p
-                className="font-body text-[10px] text-center mt-3"
+                className="font-body text-xs text-center mt-3"
                 style={{ color: "var(--muted)" }}
               >
                 Select at least one unit to continue
@@ -749,7 +749,7 @@ export default function ArmyBuilderClient({
 
             {addedToCart && (
               <p
-                className="font-body text-[10px] text-center mt-3"
+                className="font-body text-xs text-center mt-3"
                 style={{ color: "var(--primary)" }}
               >
                 Your warband has been added to cart.

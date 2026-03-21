@@ -12,10 +12,10 @@ export default function ContactPage() {
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       {/* Header */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest font-body mb-8" style={{ color: "var(--muted)" }}>
+        <div className="flex items-center gap-2 text-xs tracking-wider font-body mb-8" style={{ color: "var(--muted)" }}>
           <Link href="/" className="transition-colors" style={{ color: "var(--muted)" }}>HOME</Link>
           <span style={{ color: "var(--border)" }}>›</span>
-          <span style={{ color: "var(--text)", opacity: 0.5 }}>CONTACT</span>
+          <span style={{ color: "var(--text)" }}>CONTACT</span>
         </div>
 
         <div
@@ -23,7 +23,7 @@ export default function ContactPage() {
           style={{ background: "linear-gradient(90deg, transparent, var(--primary), transparent)", opacity: 0.4 }}
         />
 
-        <p className="font-body text-[10px] tracking-[0.3em] mb-3 uppercase" style={{ color: "var(--primary)", opacity: 0.7 }}>
+        <p className="font-body text-xs tracking-[0.15em] mb-3 uppercase" style={{ color: "var(--primary)" }}>
           Get in Touch
         </p>
         <h1 className="font-heading text-3xl sm:text-4xl mb-4" style={{ color: "var(--text)" }}>CONTACT</h1>
@@ -64,7 +64,7 @@ export default function ContactPage() {
             >
               <span className="text-3xl flex-shrink-0">{item.icon}</span>
               <div>
-                <p className="font-body text-[10px] tracking-[0.3em] mb-1" style={{ color: "var(--primary)", opacity: 0.7 }}>{item.label}</p>
+                <p className="font-body text-xs tracking-[0.15em] mb-1" style={{ color: "var(--primary)" }}>{item.label}</p>
                 <p className="font-heading text-base transition-colors" style={{ color: "var(--text)" }}>
                   {item.value}
                 </p>

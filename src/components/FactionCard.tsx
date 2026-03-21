@@ -41,7 +41,7 @@ export default function FactionCard({ faction }: FactionCardProps) {
         {/* Product count badge */}
         <div className="flex items-start justify-between mb-4">
           <span
-            className="font-body text-[10px] tracking-[0.2em] px-2 py-1 uppercase"
+            className="font-body text-xs tracking-[0.1em] px-2 py-1 uppercase"
             style={{
               border: `1px solid ${faction.borderColor}`,
               color: faction.accentColor === "#2a2a2a" ? "#888" : faction.borderColor.replace("0.3", "0.9").replace("0.35", "0.9").replace("0.4", "0.9").replace("0.5", "0.9"),

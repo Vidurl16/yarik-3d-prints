@@ -52,7 +52,7 @@ export default function UpdatePasswordPage() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 pt-16" style={{ background: "var(--bg)", color: "var(--text)" }}>
         <div className="text-center max-w-sm">
-          <p className="font-heading text-sm tracking-widest mb-4" style={{ color: "var(--primary)", opacity: 0.6 }}>
+          <p className="font-heading text-sm tracking-widest mb-4" style={{ color: "var(--primary)", opacity: 0.85 }}>
             VERIFYING RESET LINK…
           </p>
           <p className="font-body text-xs" style={{ color: "var(--muted)" }}>
@@ -76,7 +76,7 @@ export default function UpdatePasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
+            <label className="block font-body text-xs tracking-[0.1em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               New Password
             </label>
             <input
@@ -91,7 +91,7 @@ export default function UpdatePasswordPage() {
             />
           </div>
           <div>
-            <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
+            <label className="block font-body text-xs tracking-[0.1em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Confirm Password
             </label>
             <input
