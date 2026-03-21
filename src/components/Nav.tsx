@@ -215,6 +215,9 @@ export default function Nav() {
                 {label}
               </Link>
             ))}
+            <div className="border-t border-[rgba(196,160,69,0.08)] mt-2 pt-2" onClick={() => setMobileOpen(false)}>
+              <NavAuthLinks mobile />
+            </div>
           </div>
         </div>
       )}

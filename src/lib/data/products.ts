@@ -79,6 +79,10 @@ function inferFaction(prod: DbProduct): string {
     return "high-elves";
   }
   if (prod.brand === "pokemon") return "pokemon-merch";
+  // Basing and terrain products don't belong to any faction — return brand so
+  // they show only on brand pages, not on faction listing pages.
+  if (prod.brand === "basing-battle-effects") return "basing-battle-effects";
+  if (prod.brand === "gaming-accessories-terrain") return "gaming-accessories-terrain";
   return "custom-projects";
 }
 
