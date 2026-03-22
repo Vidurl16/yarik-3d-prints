@@ -36,6 +36,8 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const supabase = getServiceClient();
 
+  // NOTE: stock_quantity is intentionally excluded — the column does not yet exist
+  // in the products table. Add it via a DB migration before re-enabling here.
   const insertData = {
     slug: body.slug,
     name: body.name,
@@ -52,7 +54,6 @@ export async function POST(req: NextRequest) {
     is_new: Boolean(body.is_new),
     is_active: body.is_active !== false,
     preorder_date: body.preorder_date ?? null,
-    stock_quantity: body.stock_quantity != null ? Number(body.stock_quantity) : null,
   };
 
   const { data, error } = await supabase

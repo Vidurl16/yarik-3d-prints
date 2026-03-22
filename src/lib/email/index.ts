@@ -116,6 +116,9 @@ function buildOrderConfirmationHtml(
 </html>`;
 }
 
+const RESEND_KEY = process.env.RESEND_API_KEY ?? "";
+const RESEND_KEY_IS_PLACEHOLDER = !RESEND_KEY || RESEND_KEY.startsWith("re_your_");
+
 /** Generic transactional email — skips silently if RESEND_API_KEY is not set. */
 export async function sendEmail({
   to,
@@ -126,11 +129,15 @@ export async function sendEmail({
   subject: string;
   html: string;
 }): Promise<void> {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[Email] RESEND_API_KEY not set — skipping email to", to);
+  if (RESEND_KEY_IS_PLACEHOLDER) {
+    console.warn(
+      "[Email] RESEND_API_KEY is missing or still the placeholder value — skipping email to",
+      to,
+      "(set a real key from https://resend.com/api-keys)"
+    );
     return;
   }
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(RESEND_KEY);
   const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
   if (error) console.error("[Email] Failed to send to", to, error);
 }
@@ -145,12 +152,16 @@ export async function sendOrderConfirmationEmail(
     return;
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[Email] RESEND_API_KEY not set — skipping confirmation email");
+  if (RESEND_KEY_IS_PLACEHOLDER) {
+    console.warn(
+      "[Email] RESEND_API_KEY is missing or still the placeholder value — order confirmation NOT sent for order",
+      order.id,
+      "(set a real key from https://resend.com/api-keys)"
+    );
     return;
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(RESEND_KEY);
 
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,

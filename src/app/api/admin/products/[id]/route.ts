@@ -26,9 +26,10 @@ export async function PATCH(
   const supabase = getServiceClient();
 
   const updateData: Record<string, unknown> = {};
+  // NOTE: stock_quantity excluded — column does not exist in DB yet. Add via migration to re-enable.
   const allowedFields = [
     "slug", "name", "brand", "type", "print_type", "faction", "role", "price_cents", "currency",
-    "tags", "image_url", "is_preorder", "is_new", "is_active", "preorder_date", "stock_quantity",
+    "tags", "image_url", "is_preorder", "is_new", "is_active", "preorder_date",
   ];
 
   for (const field of allowedFields) {
@@ -37,8 +38,6 @@ export async function PATCH(
         updateData.tags = (body.tags ?? "").split(",").map((t: string) => t.trim()).filter(Boolean);
       } else if (field === "price_cents") {
         updateData.price_cents = Number(body.price_cents);
-      } else if (field === "stock_quantity") {
-        updateData.stock_quantity = body.stock_quantity != null ? Number(body.stock_quantity) : null;
       } else {
         updateData[field] = body[field];
       }
