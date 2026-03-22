@@ -3,7 +3,8 @@ import { getSession } from "@/lib/auth/getSession";
 import { isAdmin } from "@/lib/auth/isAdmin";
 import { getServiceClient } from "@/lib/supabase/server";
 
-const VALID_STATUSES = ["pending", "paid", "processing", "dispatched", "fulfilled", "failed", "refunded", "cancelled"];
+const VALID_STATUSES = ["pending", "processing", "dispatched", "fulfilled", "failed", "refunded", "cancelled"];
+const VALID_PAYMENT_STATUSES = ["pending", "paid", "failed", "refunded"];
 
 export async function PATCH(
   req: NextRequest,
@@ -16,14 +17,21 @@ export async function PATCH(
 
   const { id } = await params;
   const body = await req.json();
-  const { status, notes } = body as { status?: string; notes?: string };
+  const { status, payment_status, notes } = body as { status?: string; payment_status?: string; notes?: string };
 
   if (status && !VALID_STATUSES.includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
+  if (payment_status && !VALID_PAYMENT_STATUSES.includes(payment_status)) {
+    return NextResponse.json({ error: "Invalid payment_status" }, { status: 400 });
+  }
 
   const update: Record<string, unknown> = {};
   if (status) update.status = status;
+  if (payment_status) {
+    update.payment_status = payment_status;
+    if (payment_status === "paid") update.paid_at = new Date().toISOString();
+  }
   if (notes !== undefined) update.admin_notes = notes;
 
   if (Object.keys(update).length === 0) {
@@ -35,7 +43,7 @@ export async function PATCH(
     .from("orders")
     .update(update)
     .eq("id", id)
-    .select("id, status, payment_status")
+    .select("id, status, payment_status, paid_at")
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

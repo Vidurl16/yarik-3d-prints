@@ -46,26 +46,37 @@ function ShippingDetail({ metadata }: { metadata: Record<string, unknown> | null
   );
 }
 
-function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string, status: string) => void }) {
+function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string, changes: Partial<DbOrder>) => void }) {
   const [expanded, setExpanded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [localStatus, setLocalStatus] = useState(order.status ?? "pending");
+  const [localPaymentStatus, setLocalPaymentStatus] = useState(order.payment_status ?? "pending");
   const [saved, setSaved] = useState(false);
 
-  async function updateStatus(newStatus: string) {
-    setLocalStatus(newStatus);
+  async function patchOrder(body: Record<string, string>) {
     setSaving(true);
     const res = await fetch(`/api/admin/orders/${order.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify(body),
     });
     setSaving(false);
     if (res.ok) {
+      const { order: updated } = await res.json();
       setSaved(true);
-      onUpdated(order.id, newStatus);
+      onUpdated(order.id, updated);
       setTimeout(() => setSaved(false), 2000);
     }
+  }
+
+  async function updateStatus(newStatus: string) {
+    setLocalStatus(newStatus);
+    await patchOrder({ status: newStatus });
+  }
+
+  async function markAsPaid() {
+    setLocalPaymentStatus("paid");
+    await patchOrder({ payment_status: "paid" });
   }
 
   const meta = order.payment_metadata as Record<string, unknown> | null;
@@ -90,9 +101,20 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
           {formatPrice(order.total_amount_cents ?? 0, order.currency ?? "ZAR")}
         </td>
         <td className="py-3 pr-3">
-          <span className={`font-body text-xs px-2 py-0.5 ${STATUS_COLORS[order.payment_status] ?? STATUS_COLORS.pending}`}>
-            {order.payment_status?.toUpperCase()}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={`font-body text-xs px-2 py-0.5 ${STATUS_COLORS[localPaymentStatus] ?? STATUS_COLORS.pending}`}>
+              {localPaymentStatus.toUpperCase()}
+            </span>
+            {localPaymentStatus === "pending" && (
+              <button
+                onClick={(e) => { e.stopPropagation(); markAsPaid(); }}
+                disabled={saving}
+                className="font-body text-xs px-2 py-0.5 bg-green-900/40 text-green-400 border border-green-800/50 hover:bg-green-900/60 disabled:opacity-50 transition-colors"
+              >
+                Mark Paid
+              </button>
+            )}
+          </div>
         </td>
         <td className="py-3" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center gap-2">
@@ -153,8 +175,8 @@ export default function AdminOrdersPage() {
     setLoading(false);
   }
 
-  function handleUpdated(id: string, newStatus: string) {
-    setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status: newStatus } : o));
+  function handleUpdated(id: string, changes: Partial<DbOrder>) {
+    setOrders((prev) => prev.map((o) => o.id === id ? { ...o, ...changes } : o));
   }
 
   useEffect(() => { fetchOrders(); }, []); // eslint-disable-line
