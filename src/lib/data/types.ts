@@ -37,6 +37,7 @@ export interface DbOrder {
   payment_metadata: Record<string, unknown>;
   paid_at: string | null;
   shipping_address?: Record<string, string> | null;
+  admin_notes?: string | null;
   created_at: string;
 }
 
