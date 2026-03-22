@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { SiteCategoryId } from "@/lib/products";
 
 interface BrandIconProps {
@@ -83,15 +82,13 @@ export default function BrandIcon({ id, className = "", style }: BrandIconProps)
 
     /* ── Pokémon — Poké Ball photo ───────────────────────────────────────── */
     case "pokemon":
+      // eslint-disable-next-line @next/next/no-img-element
       return (
-        <Image
+        <img
           src="/brand-icons/pokemon.webp"
           alt="Pokémon"
-          width={512}
-          height={512}
           className={className}
-          style={style}
-          unoptimized
+          style={{ ...style, background: "transparent" }}
         />
       );
 
