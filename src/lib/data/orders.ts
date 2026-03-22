@@ -39,9 +39,12 @@ export async function createOrder(input: CreateOrderInput): Promise<string | nul
       payment_provider: input.payment_provider,
       payment_session_id: input.payment_session_id,
       payment_status: input.payment_status ?? "pending",
-      payment_metadata: input.payment_metadata ?? {},
+      payment_metadata: {
+        ...(input.payment_metadata ?? {}),
+        // shipping_address stored here until DB column migration is applied
+        ...(input.shipping_address ? { shipping_address: input.shipping_address } : {}),
+      },
       status: "pending",
-      ...(input.shipping_address ? { shipping_address: input.shipping_address } : {}),
     })
     .select("id")
     .single();
