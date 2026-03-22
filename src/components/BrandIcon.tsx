@@ -88,7 +88,7 @@ export default function BrandIcon({ id, className = "", style }: BrandIconProps)
           src="/brand-icons/pokemon.webp"
           alt="Pokémon"
           className={className}
-          style={{ ...style, background: "transparent" }}
+          style={{ ...style, background: "transparent", mixBlendMode: "multiply" }}
         />
       );
 
