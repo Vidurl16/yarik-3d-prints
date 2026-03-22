@@ -14,15 +14,28 @@ function formatDate(iso: string) {
   });
 }
 
-export default async function AccountPage() {
+interface PageProps {
+  searchParams: Promise<{ updated?: string }>;
+}
+
+export default async function AccountPage({ searchParams }: PageProps) {
   const user = await getSession();
   if (!user) redirect("/login?next=/account");
 
-  const orders = await getOrdersByUser(user.id);
+  const [orders, params] = await Promise.all([
+    getOrdersByUser(user.id),
+    searchParams,
+  ]);
+  const passwordUpdated = params.updated === "true";
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="max-w-3xl mx-auto">
+        {passwordUpdated && (
+          <div className="mb-6 px-4 py-3 font-body text-xs tracking-wider" style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.25)", color: "#4ade80" }}>
+            ✓ Your password has been updated successfully.
+          </div>
+        )}
         <div className="mb-10 flex items-start justify-between">
           <div>
             <h1 className="font-heading text-2xl tracking-[0.15em] mb-1" style={{ color: "var(--primary)" }}>

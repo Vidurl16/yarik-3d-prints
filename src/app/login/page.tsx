@@ -9,11 +9,16 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/account";
+  const callbackError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    callbackError === "auth_callback_failed"
+      ? "Your confirmation link has expired or is invalid. Please try again."
+      : null
+  );
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [forgotSent, setForgotSent] = useState(false);
   const [signupSent, setSignupSent] = useState(false);
