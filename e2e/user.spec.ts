@@ -91,7 +91,18 @@ test.describe("Account page (/account) — authenticated", () => {
   test("sign-out button is visible", async ({ page }) => {
     await page.goto("/account");
     await expect(
-      page.getByRole("button", { name: /sign out|log out/i }).first()
+      page.getByRole("link", { name: /sign out/i }).or(page.getByRole("button", { name: /sign out|log out/i })).first()
     ).toBeVisible();
+  });
+
+  test("clicking sign-out redirects to home and clears session", async ({ page }) => {
+    await page.goto("/account");
+    // Click the SIGN OUT link (server-side route)
+    await page.getByRole("link", { name: /sign out/i }).click();
+    // Server route clears cookies and redirects to "/"
+    await page.waitForURL(/^http:\/\/localhost:3002\/?$/, { timeout: 15_000 });
+    // Session is cleared — /account should now redirect back to /login
+    await page.goto("/account");
+    await expect(page).toHaveURL(/\/login/);
   });
 });

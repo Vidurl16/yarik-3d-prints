@@ -1,23 +1,15 @@
 "use client";
 
-import { getBrowserClient } from "@/lib/supabase/browser";
-
+/**
+ * Navigates to the server-side sign-out route which clears auth cookies
+ * and redirects to home. Using a server route avoids the client-side
+ * supabase.auth.signOut() call that can hang on slow connections.
+ */
 export default function AccountSignOut() {
-  async function handleSignOut() {
-    try {
-      const supabase = getBrowserClient();
-      await supabase.auth.signOut();
-    } catch {
-      // If Supabase isn't configured, still redirect away
-    }
-    // Hard redirect so server session cache is fully cleared
-    window.location.href = "/";
-  }
-
   return (
-    <button
-      onClick={handleSignOut}
-      className="font-body text-xs tracking-[0.2em] px-4 py-2 transition-colors"
+    <a
+      href="/api/auth/signout"
+      className="font-body text-xs tracking-[0.2em] px-4 py-2 transition-colors inline-block"
       style={{
         border: "1px solid var(--border)",
         color: "var(--muted)",
@@ -34,6 +26,6 @@ export default function AccountSignOut() {
       }}
     >
       SIGN OUT
-    </button>
+    </a>
   );
 }
