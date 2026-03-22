@@ -5,6 +5,7 @@ import Nav from "@/components/Nav";
 import CartDrawer from "@/components/CartDrawer";
 import CartSyncProvider from "@/components/CartSyncProvider";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 
 const cinzel = Cinzel_Decorative({
   variable: "--font-cinzel",
@@ -51,6 +52,8 @@ export default function RootLayout({
 
         {/* Page Content */}
         <main>{children}</main>
+
+        <Analytics />
 
         {/* Footer */}
         <footer
