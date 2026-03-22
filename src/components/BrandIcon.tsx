@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { SiteCategoryId } from "@/lib/products";
 
 interface BrandIconProps {
@@ -80,24 +81,18 @@ export default function BrandIcon({ id, className = "", style }: BrandIconProps)
         </svg>
       );
 
-    /* ── Pokémon — stylised Poké Ball ────────────────────────────────────── */
+    /* ── Pokémon — Poké Ball photo ───────────────────────────────────────── */
     case "pokemon":
       return (
-        <svg {...shared}>
-          {/* Full circle */}
-          <circle cx="256" cy="256" r="228" fill="currentColor" />
-          {/* Bottom-half tone (lighter) */}
-          <path d="M 28,256 A 228,228 0 0,0 484,256 Z" fill="currentColor" opacity="0.28" />
-          {/* White band (centre strip) */}
-          <rect x="28" y="240" width="456" height="32" fill="currentColor" opacity="0.20" />
-          {/* Band arc borders */}
-          <path d="M 28,240 A 228,228 0 0,1 484,240" fill="none" stroke="currentColor" strokeWidth="4" opacity="0.45" />
-          <path d="M 28,272 A 228,228 0 0,0 484,272" fill="none" stroke="currentColor" strokeWidth="4" opacity="0.45" />
-          {/* Center button (outer ring) */}
-          <circle cx="256" cy="256" r="52" fill="currentColor" />
-          {/* Center button (inner cut) */}
-          <circle cx="256" cy="256" r="32" fill="currentColor" opacity="0.12" />
-        </svg>
+        <Image
+          src="/brand-icons/pokemon.webp"
+          alt="Pokémon"
+          width={512}
+          height={512}
+          className={className}
+          style={style}
+          unoptimized
+        />
       );
 
     /* ── Basing & Battle Effects — miniature base with terrain rocks ─────── */
