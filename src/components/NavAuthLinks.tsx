@@ -18,15 +18,24 @@ export default function NavAuthLinks({ mobile = false }: { mobile?: boolean }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       setUser(session?.user ?? null);
+      setReady(true);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  if (!ready) return null;
-
   const linkClass = mobile
     ? "block px-2 py-2.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors"
     : "font-body text-xs tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group";
+
+  // While loading, always show LOGIN so the nav link is never invisible
+  if (!ready) {
+    return (
+      <Link href="/login" className={linkClass} style={{ opacity: 0.5 }}>
+        LOGIN
+        {!mobile && <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />}
+      </Link>
+    );
+  }
 
   return user ? (
     <Link href="/account" className={linkClass}>

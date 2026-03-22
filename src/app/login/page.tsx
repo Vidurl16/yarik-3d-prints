@@ -16,6 +16,7 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [forgotSent, setForgotSent] = useState(false);
+  const [signupSent, setSignupSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,8 +43,7 @@ function LoginForm() {
         setError(error.message);
       } else {
         setError(null);
-        setMode("login");
-        alert("Check your email for a confirmation link, then log in.");
+        setSignupSent(true);
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -75,6 +75,18 @@ function LoginForm() {
             <div className="font-body text-xs text-center px-4 py-6" style={{ color: "var(--muted)" }}>
               <p className="mb-2" style={{ color: "var(--primary)" }}>Check your inbox!</p>
               <p>A reset link has been sent to <strong>{email}</strong>.</p>
+            </div>
+          ) : signupSent ? (
+            <div className="font-body text-xs text-center px-4 py-6" style={{ color: "var(--muted)" }}>
+              <p className="mb-2 text-base" style={{ color: "var(--primary)" }}>✓ Account created!</p>
+              <p className="mb-4">Check <strong>{email}</strong> for a confirmation link, then come back to sign in.</p>
+              <button
+                onClick={() => { setMode("login"); setSignupSent(false); setError(null); }}
+                className="font-body text-xs tracking-[0.2em] px-6 py-2.5 uppercase transition-colors"
+                style={{ background: "var(--accent)", color: "var(--bg)" }}
+              >
+                Go to Sign In
+              </button>
             </div>
           ) : (
             <>
