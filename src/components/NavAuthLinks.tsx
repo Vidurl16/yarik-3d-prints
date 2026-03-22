@@ -10,11 +10,19 @@ export default function NavAuthLinks({ mobile = false }: { mobile?: boolean }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const supabase = getBrowserClient();
+    let supabase: ReturnType<typeof getBrowserClient> | null = null;
+    try {
+      supabase = getBrowserClient();
+    } catch {
+      // Supabase env vars not configured — show LOGIN link only
+      setReady(true);
+      return;
+    }
+
     supabase.auth.getUser().then(({ data }: { data: { user: User | null } }) => {
       setUser(data.user);
       setReady(true);
-    });
+    }).catch(() => setReady(true));
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       setUser(session?.user ?? null);
