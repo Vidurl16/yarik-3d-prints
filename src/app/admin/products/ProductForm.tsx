@@ -56,6 +56,7 @@ export default function ProductForm({ product }: Props) {
     is_active: product?.is_active ?? true,
     preorder_date: product?.preorder_date ?? "",
     image_url: product?.image_url ?? "",
+    stock_quantity: product?.stock_quantity != null ? String(product.stock_quantity) : "",
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -99,6 +100,7 @@ export default function ProductForm({ product }: Props) {
       const payload = {
         ...form,
         price_cents: Math.round(Number(form.price_cents) * 100),
+        stock_quantity: form.stock_quantity !== "" ? Number(form.stock_quantity) : null,
         image_url: imageUrl || null,
       };
 
@@ -197,6 +199,19 @@ export default function ProductForm({ product }: Props) {
             required
             className={inputClass}
             placeholder="99.99"
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Stock Qty <span style={{ opacity: 0.5 }}>(blank = unlimited)</span></label>
+          <input
+            name="stock_quantity"
+            type="number"
+            min="0"
+            step="1"
+            value={form.stock_quantity}
+            onChange={handleChange}
+            className={inputClass}
+            placeholder="Leave blank for unlimited"
           />
         </div>
       </div>

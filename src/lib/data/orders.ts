@@ -256,3 +256,53 @@ export async function getOrdersByUser(userId: string): Promise<DbOrder[]> {
   if (error) console.error("[DB] getOrdersByUser:", error.message);
   return (data as DbOrder[]) ?? [];
 }
+
+/**
+ * Decrement stock_quantity for each item in a paid order.
+ * Items with NULL stock_quantity (unlimited) are skipped.
+ * If decrement would go below 0, it is clamped to 0 and a warning is logged.
+ */
+export async function decrementStockForOrder(orderId: string): Promise<void> {
+  const supabase = getServiceClient();
+
+  const { data: items, error } = await supabase
+    .from("order_items")
+    .select("product_id, quantity")
+    .eq("order_id", orderId);
+
+  if (error || !items?.length) {
+    if (error) console.error("[DB] decrementStockForOrder fetch items:", error.message);
+    return;
+  }
+
+  for (const item of items) {
+    if (!item.product_id) continue;
+
+    const { data: product, error: fetchErr } = await supabase
+      .from("products")
+      .select("stock_quantity")
+      .eq("id", item.product_id)
+      .maybeSingle();
+
+    if (fetchErr || !product) continue;
+    if (product.stock_quantity == null) continue; // null = unlimited
+
+    const newQty = Math.max(0, product.stock_quantity - item.quantity);
+    if (product.stock_quantity < item.quantity) {
+      console.warn(
+        `[Stock] Oversell on product ${item.product_id}: had ${product.stock_quantity}, sold ${item.quantity}. Clamping to 0.`
+      );
+    }
+
+    const { error: updateErr } = await supabase
+      .from("products")
+      .update({ stock_quantity: newQty, updated_at: new Date().toISOString() })
+      .eq("id", item.product_id);
+
+    if (updateErr) {
+      console.error("[DB] decrementStockForOrder update:", updateErr.message);
+    } else {
+      console.log(`[Stock] product ${item.product_id}: ${product.stock_quantity} → ${newQty}`);
+    }
+  }
+}

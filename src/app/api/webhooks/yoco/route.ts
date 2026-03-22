@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPaymentProvider } from "@/lib/payments";
-import { updateOrderPaymentStatus, getOrderWithItemsBySessionId } from "@/lib/data/orders";
+import { updateOrderPaymentStatus, getOrderWithItemsBySessionId, decrementStockForOrder } from "@/lib/data/orders";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
@@ -53,10 +53,11 @@ export async function POST(req: NextRequest) {
     console.warn("[Webhook/yoco] Order not found for session:", event.providerSessionId);
   }
 
-  // Send order confirmation email after a successful payment
   if (updated && paymentStatus === "paid") {
     const orderWithItems = await getOrderWithItemsBySessionId(event.providerSessionId);
     if (orderWithItems) {
+      // Decrement stock before sending confirmation email
+      await decrementStockForOrder(orderWithItems.order.id);
       await sendOrderConfirmationEmail(orderWithItems.order, orderWithItems.items);
     }
   }

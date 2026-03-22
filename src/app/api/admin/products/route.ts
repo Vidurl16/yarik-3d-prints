@@ -54,6 +54,9 @@ export async function POST(req: NextRequest) {
     is_new: Boolean(body.is_new),
     is_active: body.is_active !== false,
     preorder_date: body.preorder_date ?? null,
+    ...(body.stock_quantity != null && body.stock_quantity !== ""
+      ? { stock_quantity: Number(body.stock_quantity) }
+      : {}),
   };
 
   const { data, error } = await supabase

@@ -27,7 +27,7 @@ export default async function AdminProductsPage() {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-[rgba(196,160,69,0.15)]">
-              {["Name", "Brand", "Faction / Role", "Price", "Status", "Tags", "Actions"].map((h) => (
+              {["Name", "Brand", "Faction / Role", "Price", "Stock", "Status", "Tags", "Actions"].map((h) => (
                 <th key={h} className="text-left font-body text-xs tracking-[0.1em] text-[rgba(196,160,69,0.65)] pb-3 pr-4 uppercase">
                   {h}
                 </th>
@@ -51,6 +51,17 @@ export default async function AdminProductsPage() {
                 </td>
                 <td className="py-3 pr-4 font-body text-xs text-[rgba(240,232,216,0.7)]">
                   R{(product.price_cents / 100).toFixed(2)}
+                </td>
+                <td className="py-3 pr-4">
+                  {product.stock_quantity == null ? (
+                    <span className="font-body text-xs text-[rgba(240,232,216,0.35)]">∞</span>
+                  ) : product.stock_quantity === 0 ? (
+                    <span className="font-body text-xs px-2 py-0.5 bg-red-900/30 text-red-400 border border-red-800/40">OUT</span>
+                  ) : product.stock_quantity <= 5 ? (
+                    <span className="font-body text-xs px-2 py-0.5 bg-amber-900/30 text-amber-400 border border-amber-800/40">{product.stock_quantity} left</span>
+                  ) : (
+                    <span className="font-body text-xs text-[rgba(240,232,216,0.6)]">{product.stock_quantity}</span>
+                  )}
                 </td>
                 <td className="py-3 pr-4">
                   <span className={`font-body text-xs px-2 py-0.5 ${
