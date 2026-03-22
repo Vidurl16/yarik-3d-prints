@@ -22,6 +22,10 @@ export async function POST(req: NextRequest) {
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const path = `${productId}/${Date.now()}.${ext}`;
 
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: "Storage not configured" }, { status: 503 });
+  }
+
   const supabase = getServiceClient();
   const buffer = Buffer.from(await file.arrayBuffer());
 
