@@ -1,16 +1,17 @@
 "use client";
 
 import { getBrowserClient } from "@/lib/supabase/browser";
-import { useRouter } from "next/navigation";
 
 export default function AccountSignOut() {
-  const router = useRouter();
-
   async function handleSignOut() {
-    const supabase = getBrowserClient();
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
+    try {
+      const supabase = getBrowserClient();
+      await supabase.auth.signOut();
+    } catch {
+      // If Supabase isn't configured, still redirect away
+    }
+    // Hard redirect so server session cache is fully cleared
+    window.location.href = "/";
   }
 
   return (

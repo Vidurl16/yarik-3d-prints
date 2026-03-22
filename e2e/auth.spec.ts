@@ -165,16 +165,9 @@ test.describe("Login flow — failure (mocked Supabase)", () => {
 // ─── Signup flow ──────────────────────────────────────────────────────────────
 
 test.describe("Signup flow (mocked Supabase)", () => {
-  test("successful signup shows confirmation alert and returns to login mode", async ({
+  test("successful signup shows confirmation message and returns to login mode", async ({
     page,
   }) => {
-    // Intercept the window.alert to capture it
-    let alertMessage = "";
-    page.on("dialog", async (dialog) => {
-      alertMessage = dialog.message();
-      await dialog.accept();
-    });
-
     await mockSignUpSuccess(page);
     await page.goto("/login");
     await page.getByRole("button", { name: /don.t have an account.*sign up/i }).click();
@@ -182,10 +175,10 @@ test.describe("Signup flow (mocked Supabase)", () => {
     await page.locator("input[type='password']").fill("password123");
     await page.getByRole("button", { name: /create account/i }).click();
 
-    // Wait for dialog to be handled
-    await page.waitForTimeout(2_000);
-    expect(alertMessage).toMatch(/email|confirm|check/i);
-    // After signup the mode should switch back to login
+    // New behaviour: inline confirmation replaces alert()
+    await expect(page.getByText(/account created|check.*email|confirmation link/i)).toBeVisible({ timeout: 5_000 });
+    // "Go to Sign In" button is shown
+    await page.getByRole("button", { name: /go to sign in/i }).click();
     await expect(page.locator("h1")).toContainText(/sign in/i);
   });
 });
