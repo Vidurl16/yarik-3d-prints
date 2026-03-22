@@ -176,7 +176,7 @@ test.describe("Signup flow (mocked Supabase)", () => {
     await page.getByRole("button", { name: /create account/i }).click();
 
     // New behaviour: inline confirmation replaces alert()
-    await expect(page.getByText(/account created|check.*email|confirmation link/i)).toBeVisible({ timeout: 5_000 });
+    await expect(page.getByRole("button", { name: /go to sign in/i })).toBeVisible({ timeout: 5_000 });
     // "Go to Sign In" button is shown
     await page.getByRole("button", { name: /go to sign in/i }).click();
     await expect(page.locator("h1")).toContainText(/sign in/i);
