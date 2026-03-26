@@ -1,6 +1,7 @@
 import type { ThemeId } from "./theme/themes";
 import { THEMES, ARMY_BUILDER_BRANDS } from "./theme/themes";
 import Link from "next/link";
+import Image from "next/image";
 import BrandIcon from "@/components/BrandIcon";
 import type { DbProduct } from "@/lib/data/types";
 import BrandProductGrid from "./BrandProductGrid";
@@ -45,14 +46,20 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="relative min-h-[60vh] flex items-end overflow-hidden"
-        style={{
-          backgroundImage: `url('${theme.heroImage}')`,
-          backgroundSize: theme.heroFit ?? "cover",
-          backgroundPosition: theme.heroPosition ?? "center top",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="relative min-h-[70vh] flex items-end overflow-hidden"
       >
+        {/* Full-bleed background image */}
+        <Image
+          src={theme.heroImage}
+          alt={theme.label}
+          fill
+          priority
+          style={{
+            objectFit: "cover",
+            objectPosition: theme.heroPosition ?? "center center",
+          }}
+        />
+
         {/* Texture overlay (noise) */}
         <div
           className="absolute inset-0 pointer-events-none"
