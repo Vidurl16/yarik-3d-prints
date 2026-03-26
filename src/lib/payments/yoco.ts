@@ -13,6 +13,7 @@ export class YocoProvider implements PaymentProvider {
   readonly name = "yoco";
   private secretKey: string;
   private webhookSecret?: string;
+  private webhookSecretTest?: string;
 
   constructor(secretKeyOverride?: string) {
     const secretKey =
@@ -22,11 +23,15 @@ export class YocoProvider implements PaymentProvider {
     const webhookSecret =
       process.env.PAYMENT_WEBHOOK_SECRET ??
       process.env.YOCO_WEBHOOK_SECRET;
+    const webhookSecretTest =
+      process.env.PAYMENT_WEBHOOK_SECRET_TEST ??
+      process.env.YOCO_WEBHOOK_SECRET_TEST;
 
     if (!secretKey) throw new Error("Yoco secret key not configured (PAYMENT_SECRET_KEY)");
 
     this.secretKey = secretKey;
     this.webhookSecret = webhookSecret;
+    this.webhookSecretTest = webhookSecretTest;
   }
 
   async createCheckout(input: CreateCheckoutInput): Promise<CreateCheckoutOutput> {
@@ -70,7 +75,7 @@ export class YocoProvider implements PaymentProvider {
     headers: Record<string, string>,
     rawBody: string
   ): Promise<WebhookEvent> {
-    if (!this.webhookSecret) {
+    if (!this.webhookSecret && !this.webhookSecretTest) {
       throw new Error("Yoco webhook secret not configured (PAYMENT_WEBHOOK_SECRET)");
     }
 
@@ -91,19 +96,22 @@ export class YocoProvider implements PaymentProvider {
 
     // Compute expected signature: HMAC-SHA256(secret, "{webhookId}.{webhookTimestamp}.{rawBody}")
     const signedContent = `${webhookId}.${webhookTimestamp}.${rawBody}`;
-    const expectedSig = crypto
-      .createHmac("sha256", this.webhookSecret)
-      .update(signedContent, "utf8")
-      .digest("base64");
-
-    // Webhook-Signature header may contain multiple "v1,<base64sig>" entries separated by space
     const signatures = webhookSignature
       .split(" ")
       .map((s) => s.replace(/^v\d+,/, "").trim());
 
-    const valid = signatures.some((sig) =>
-      timingSafeEqual(sig, expectedSig)
-    );
+    const isValidForSecret = (secret: string) => {
+      // Yoco secrets are base64-encoded after the "whsec_" prefix
+      const secretBytes = Buffer.from(secret.split("_")[1], "base64");
+      const expectedSig = crypto
+        .createHmac("sha256", secretBytes)
+        .update(signedContent, "utf8")
+        .digest("base64");
+      return signatures.some((sig) => timingSafeEqual(sig, expectedSig));
+    };
+
+    const secrets = [this.webhookSecret, this.webhookSecretTest].filter(Boolean) as string[];
+    const valid = secrets.some(isValidForSecret);
 
     if (!valid) {
       throw new Error("Yoco webhook signature mismatch");
@@ -128,7 +136,10 @@ export class YocoProvider implements PaymentProvider {
     else if (eventType === "refund.succeeded") status = "refunded";
 
     // Extract the checkout/payment id used as providerSessionId
+    // Per Yoco docs: checkoutId lives inside payload.metadata
+    const metadata = (eventData.metadata ?? {}) as Record<string, unknown>;
     const providerSessionId =
+      (metadata.checkoutId as string) ??
       (eventData.checkoutId as string) ??
       (eventData.id as string) ??
       (payload.checkoutId as string) ??
@@ -140,8 +151,6 @@ export class YocoProvider implements PaymentProvider {
       typeof eventData.currency === "string"
         ? (eventData.currency as string).toUpperCase()
         : null;
-
-    const metadata = (eventData.metadata ?? {}) as Record<string, unknown>;
 
     return {
       providerEventId: eventId,

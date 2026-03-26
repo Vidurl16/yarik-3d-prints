@@ -35,18 +35,20 @@ export async function POST(req: NextRequest) {
 
     const baseUrl = (() => {
       const configured =
-        process.env.NEXT_PUBLIC_SITE_URL ??
-        process.env.NEXT_PUBLIC_BASE_URL ??
-        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+        process.env.NEXT_PUBLIC_SITE_URL?.trim() ??
+        process.env.NEXT_PUBLIC_BASE_URL?.trim() ??
+        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL.trim()}` : null);
       // Yoco live keys require HTTPS — fall back to localhost for success/cancel
       // URLs which are only used after redirect, so localhost is fine for testing
       // with a Yoco TEST key (PAYMENT_TEST_SECRET_KEY).
       return configured ?? "http://localhost:3002";
     })();
 
-    // Use test key on HTTP (local dev) if provided, otherwise use live key
+    // Use test key on HTTP (local dev) or when PAYMENT_FORCE_TEST_MODE is set
     const isHttp = baseUrl.startsWith("http://");
-    if (isHttp && !process.env.PAYMENT_TEST_SECRET_KEY) {
+    const forceTestMode = process.env.PAYMENT_FORCE_TEST_MODE === "true";
+    const useTestKey = isHttp || forceTestMode;
+    if (useTestKey && !process.env.PAYMENT_TEST_SECRET_KEY) {
       return NextResponse.json(
         {
           error:
@@ -55,7 +57,7 @@ export async function POST(req: NextRequest) {
         { status: 503 }
       );
     }
-    const secretKeyOverride = isHttp ? process.env.PAYMENT_TEST_SECRET_KEY : undefined;
+    const secretKeyOverride = useTestKey ? process.env.PAYMENT_TEST_SECRET_KEY : undefined;
 
     // Get session user (optional — guest checkout allowed)
     const user = await getSession();
