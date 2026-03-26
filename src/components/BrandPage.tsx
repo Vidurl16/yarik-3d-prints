@@ -42,7 +42,8 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
   const addons = BRAND_ADDONS[brandSlug] ?? [];
 
   return (
-    <div style={{ background: "var(--bg)", color: "var(--text)" }}>
+    // data-theme drives all CSS var(--bg/text/primary/…) for this brand
+    <div data-theme={themeId} style={{ background: "var(--bg)", color: "var(--text)" }}>
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
@@ -54,29 +55,24 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
           alt={theme.label}
           fill
           priority
+          sizes="100vw"
           style={{
-            objectFit: "cover",
+            objectFit: theme.heroFit ?? "cover",
             objectPosition: theme.heroPosition ?? "center center",
           }}
         />
 
-        {/* Texture overlay (noise) */}
+        {/* Dark base scrim so text is legible over any image */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-            backgroundRepeat: "repeat",
-            backgroundSize: "256px 256px",
-            opacity: 0.04,
-          }}
+          style={{ background: "rgba(0,0,0,0.35)" }}
           aria-hidden="true"
         />
-        {/* Gradient fade to page bg */}
+        {/* Gradient fade — top transparent, bottom fades into page bg */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: `linear-gradient(to bottom, transparent 0%, var(--bg) 100%)`,
+            background: `linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.5) 60%, var(--bg) 100%)`,
           }}
           aria-hidden="true"
         />
