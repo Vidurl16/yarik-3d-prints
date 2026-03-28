@@ -13,18 +13,19 @@ function buildOrderConfirmationHtml(
   items: DbOrderItem[]
 ): string {
   const total = order.total_amount_cents ?? 0;
+  const orderDate = new Date().toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" });
 
   const itemRows = items
     .map(
       (item) => `
     <tr>
-      <td style="padding:10px 16px;border-bottom:1px solid #1a1a1a;color:#d4d4d4;font-family:Arial,sans-serif;font-size:14px;">
+      <td style="padding:14px 20px;border-bottom:1px solid #1e1a14;color:#e8dcc8;font-family:Georgia,serif;font-size:15px;line-height:1.4;">
         ${item.name_snapshot ?? "Product"}
       </td>
-      <td style="padding:10px 16px;border-bottom:1px solid #1a1a1a;color:#d4d4d4;font-family:Arial,sans-serif;font-size:14px;text-align:center;">
-        ${item.quantity}
+      <td style="padding:14px 20px;border-bottom:1px solid #1e1a14;color:#9e8e78;font-family:Georgia,serif;font-size:14px;text-align:center;">
+        ×${item.quantity}
       </td>
-      <td style="padding:10px 16px;border-bottom:1px solid #1a1a1a;color:#c9a84c;font-family:Arial,sans-serif;font-size:14px;text-align:right;">
+      <td style="padding:14px 20px;border-bottom:1px solid #1e1a14;color:#c9a84c;font-family:Georgia,serif;font-size:15px;text-align:right;font-weight:bold;">
         ${formatZAR(item.unit_amount_cents * item.quantity)}
       </td>
     </tr>`
@@ -33,76 +34,138 @@ function buildOrderConfirmationHtml(
 
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Order Confirmed</title></head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:Arial,sans-serif;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Order Confirmed — The Dexarium</title>
+</head>
+<body style="margin:0;padding:0;background:#0c0902;font-family:Georgia,serif;">
 
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:40px 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0c0902;padding:48px 20px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#111111;border:1px solid #1a1a1a;border-radius:4px;overflow:hidden;">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#110d05;border:1px solid rgba(196,160,69,0.15);overflow:hidden;">
+
+          <!-- Blood-red accent line -->
+          <tr><td style="background:linear-gradient(90deg,#8b0000,#6b0000);height:3px;padding:0;font-size:0;line-height:0;">&nbsp;</td></tr>
 
           <!-- Header -->
           <tr>
-            <td style="background:#0a0a0a;border-bottom:2px solid #8b0000;padding:32px 40px;text-align:center;">
-              <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:11px;letter-spacing:4px;color:#8b0000;text-transform:uppercase;">The Dexarium</p>
-              <h1 style="margin:0;font-family:Georgia,serif;font-size:28px;color:#c9a84c;letter-spacing:2px;text-transform:uppercase;">Order Confirmed</h1>
+            <td style="background:#0c0902;padding:36px 40px 28px;text-align:center;border-bottom:1px solid rgba(196,160,69,0.1);">
+              <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:10px;letter-spacing:5px;color:#8b0000;text-transform:uppercase;font-weight:normal;">
+                THE DEXARIUM
+              </p>
+              <h1 style="margin:0 0 6px;font-family:Georgia,serif;font-size:32px;color:#c9a84c;letter-spacing:3px;text-transform:uppercase;font-weight:bold;">
+                Order Confirmed
+              </h1>
+              <p style="margin:0;font-family:Georgia,serif;font-size:12px;color:rgba(196,160,69,0.5);letter-spacing:2px;">
+                ${orderDate}
+              </p>
             </td>
           </tr>
 
-          <!-- Body -->
+          <!-- Intro copy -->
           <tr>
-            <td style="padding:40px;">
-
-              <p style="margin:0 0 24px;color:#a3a3a3;font-size:15px;line-height:1.6;">
-                Thank you for your order. Your miniatures are now in the print queue — we'll be in touch when they're ready to ship.
+            <td style="padding:32px 40px 0;">
+              <p style="margin:0 0 8px;color:#c9a84c;font-family:Georgia,serif;font-size:17px;font-weight:bold;letter-spacing:0.5px;">
+                Your warband is being forged.
               </p>
+              <p style="margin:0;color:#9e8e78;font-family:Georgia,serif;font-size:15px;line-height:1.7;">
+                Thank you for your order. Your prints have entered the queue — medical-grade resin and multicolour FDM, built to battlefield standard. We'll send you a shipping notification the moment your order is on its way.
+              </p>
+            </td>
+          </tr>
 
-              <!-- Order ID -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:3px;margin-bottom:32px;">
+          <!-- Order ID block -->
+          <tr>
+            <td style="padding:24px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#0c0902;border:1px solid rgba(139,0,0,0.4);">
                 <tr>
                   <td style="padding:16px 20px;">
-                    <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;color:#8b0000;text-transform:uppercase;">Order Reference</p>
-                    <p style="margin:0;font-size:13px;color:#737373;font-family:'Courier New',monospace;">${order.id}</p>
+                    <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#8b0000;text-transform:uppercase;">
+                      Order Reference
+                    </p>
+                    <p style="margin:0;font-size:13px;color:#c9a84c;font-family:'Courier New',Courier,monospace;word-break:break-all;">
+                      ${order.id}
+                    </p>
                   </td>
                 </tr>
               </table>
+            </td>
+          </tr>
 
-              <!-- Items Table -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #1a1a1a;border-radius:3px;overflow:hidden;margin-bottom:24px;">
+          <!-- Items Table -->
+          <tr>
+            <td style="padding:28px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid rgba(196,160,69,0.12);overflow:hidden;">
                 <thead>
-                  <tr style="background:#0a0a0a;">
-                    <th style="padding:10px 16px;text-align:left;font-size:11px;letter-spacing:2px;color:#737373;text-transform:uppercase;font-weight:normal;">Item</th>
-                    <th style="padding:10px 16px;text-align:center;font-size:11px;letter-spacing:2px;color:#737373;text-transform:uppercase;font-weight:normal;">Qty</th>
-                    <th style="padding:10px 16px;text-align:right;font-size:11px;letter-spacing:2px;color:#737373;text-transform:uppercase;font-weight:normal;">Total</th>
+                  <tr style="background:#0c0902;">
+                    <th style="padding:12px 20px;text-align:left;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:rgba(196,160,69,0.6);text-transform:uppercase;font-weight:normal;border-bottom:1px solid rgba(196,160,69,0.12);">Item</th>
+                    <th style="padding:12px 20px;text-align:center;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:rgba(196,160,69,0.6);text-transform:uppercase;font-weight:normal;border-bottom:1px solid rgba(196,160,69,0.12);">Qty</th>
+                    <th style="padding:12px 20px;text-align:right;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:rgba(196,160,69,0.6);text-transform:uppercase;font-weight:normal;border-bottom:1px solid rgba(196,160,69,0.12);">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   ${itemRows}
                 </tbody>
               </table>
+            </td>
+          </tr>
 
-              <!-- Total -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+          <!-- Total -->
+          <tr>
+            <td style="padding:0 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-left:1px solid rgba(196,160,69,0.12);border-right:1px solid rgba(196,160,69,0.12);border-bottom:1px solid rgba(196,160,69,0.12);">
                 <tr>
-                  <td style="text-align:right;padding:8px 0;">
-                    <span style="font-size:13px;color:#737373;margin-right:16px;letter-spacing:1px;text-transform:uppercase;">Total Paid</span>
-                    <span style="font-size:20px;color:#c9a84c;font-weight:bold;">${formatZAR(total)}</span>
+                  <td style="padding:16px 20px;text-align:right;">
+                    <span style="font-family:Georgia,serif;font-size:11px;letter-spacing:2px;color:#9e8e78;text-transform:uppercase;margin-right:20px;">Total Paid</span>
+                    <span style="font-family:Georgia,serif;font-size:22px;color:#c9a84c;font-weight:bold;">${formatZAR(total)}</span>
                   </td>
                 </tr>
               </table>
+            </td>
+          </tr>
 
-              <p style="margin:0 0 8px;color:#a3a3a3;font-size:14px;line-height:1.6;">
-                Questions? Contact us at <a href="mailto:hello@yarik3d.co.za" style="color:#c9a84c;text-decoration:none;">hello@yarik3d.co.za</a> or WhatsApp us — just reply to this email with your order reference.
+          <!-- What next -->
+          <tr>
+            <td style="padding:28px 40px 0;">
+              <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:rgba(196,160,69,0.6);text-transform:uppercase;">What happens next</p>
+              <p style="margin:8px 0 0;color:#9e8e78;font-family:Georgia,serif;font-size:14px;line-height:1.7;">
+                1. Your order enters the print queue within 24 hours.<br>
+                2. We'll email you when printing is complete and your order is dispatched.<br>
+                3. Delivery via your selected courier to your door or locker.
               </p>
+            </td>
+          </tr>
 
+          <!-- Contact / WhatsApp CTA -->
+          <tr>
+            <td style="padding:24px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(139,0,0,0.08);border:1px solid rgba(139,0,0,0.25);">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:13px;color:#e8dcc8;">Questions about your order?</p>
+                    <p style="margin:0;font-family:Georgia,serif;font-size:13px;color:#9e8e78;line-height:1.6;">
+                      Email: <a href="mailto:hello@yarik3d.co.za" style="color:#c9a84c;text-decoration:none;">hello@yarik3d.co.za</a>
+                      &nbsp;&middot;&nbsp;
+                      WhatsApp: <a href="https://wa.me/27000000000" style="color:#c9a84c;text-decoration:none;">+27 XX XXX XXXX</a><br>
+                      Include your order reference in any message.
+                    </p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="background:#0a0a0a;border-top:1px solid #1a1a1a;padding:24px 40px;text-align:center;">
-              <p style="margin:0;font-size:12px;color:#404040;">
-                &copy; ${new Date().getFullYear()} The Dexarium &mdash; Medical-grade resin &amp; multicolour FDM printing, built to battlefield standard.
+            <td style="background:#0c0902;border-top:1px solid rgba(196,160,69,0.08);padding:28px 40px;text-align:center;margin-top:32px;">
+              <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:10px;letter-spacing:4px;color:#8b0000;text-transform:uppercase;">
+                THE DEXARIUM
+              </p>
+              <p style="margin:0;font-family:Georgia,serif;font-size:12px;color:rgba(196,160,69,0.35);line-height:1.5;">
+                Medical-grade resin &amp; multicolour FDM printing, built to battlefield standard.<br>
+                &copy; ${new Date().getFullYear()} The Dexarium &mdash; South Africa
               </p>
             </td>
           </tr>
@@ -166,7 +229,7 @@ export async function sendOrderConfirmationEmail(
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
     to: toEmail,
-    subject: "Your Dexarium order is confirmed",
+    subject: `Your Dexarium order is confirmed — ${order.id.slice(0, 8).toUpperCase()}`,
     html: buildOrderConfirmationHtml(order, items),
   });
 

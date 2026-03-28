@@ -159,6 +159,31 @@ export async function getCatalogPreorders(): Promise<Product[]> {
   return (await getPreorders()).map(toCatalogProduct);
 }
 
+/** Fetch DB products for a specific brand+faction (or Pokémon sub-type) */
+export async function getCatalogProductsByFactionInBrand(
+  brand: string,
+  factionId: string
+): Promise<Product[]> {
+  const allBrandProducts = await getProductsByBrand(brand);
+  const mapped = allBrandProducts.map(toCatalogProduct);
+
+  // For Pokémon, "factionId" maps to a product sub-type identified by tag
+  if (brand === "pokemon") {
+    const tagMap: Record<string, string> = {
+      "pokeballs": "pokeball",
+      "themed-pokeballs": "themed-pokeball",
+      "3d-cards": "3d-card",
+      "figurines": "figurine",
+    };
+    const tag = tagMap[factionId];
+    if (tag) {
+      return mapped.filter((p) => (p.tags ?? []).includes(tag));
+    }
+  }
+
+  return mapped.filter((p) => p.faction === factionId);
+}
+
 export async function getCatalogBuilderProducts(): Promise<Product[]> {
   const brands: SiteCategoryId[] = ["grimdark-future", "age-of-fantasy"];
   const products = await Promise.all(brands.map((brand) => getCatalogProductsByBrand(brand)));

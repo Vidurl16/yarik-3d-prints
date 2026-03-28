@@ -7,6 +7,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 
+const SHIPPING_METHODS = [
+  { id: "postnet", label: "PostNet to PostNet", sub: "Drop off & collect at any PostNet branch", priceCents: 8900 },
+  { id: "courier-door", label: "The Courier Guy — to the door", sub: "Delivered to your address (1–3 business days)", priceCents: 14900 },
+  { id: "courier-pudo", label: "The Courier Guy — PUDO locker", sub: "Collect at your nearest PUDO locker", priceCents: 9900 },
+] as const;
+
+type ShippingMethodId = (typeof SHIPPING_METHODS)[number]["id"];
+
 function CartContent() {
   const { items, removeItem, updateQuantity, clearCart, getTotal } = useCartStore();
   const searchParams = useSearchParams();
@@ -21,6 +29,7 @@ function CartContent() {
     name: "", line1: "", line2: "", city: "", province: "", postal_code: "", country: "ZA",
   });
   const [showAddress, setShowAddress] = useState(false);
+  const [selectedShipping, setSelectedShipping] = useState<ShippingMethodId>("postnet");
 
   async function copyOrderId() {
     if (!orderId) return;
@@ -29,7 +38,9 @@ function CartContent() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  const total = getTotal();
+  const subtotal = getTotal();
+  const shippingMethod = SHIPPING_METHODS.find((m) => m.id === selectedShipping)!;
+  const total = subtotal + shippingMethod.priceCents / 100;
 
   async function handleCheckout() {
     if (items.length === 0) return;
@@ -47,6 +58,11 @@ function CartContent() {
         body: JSON.stringify({
           customerEmail: guestEmail.trim() || undefined,
           shippingAddress,
+          shippingMethod: {
+            id: shippingMethod.id,
+            label: shippingMethod.label,
+            priceCents: shippingMethod.priceCents,
+          },
           items: items.map((item) => ({
             product_id: item.id.startsWith("b-") ? undefined : item.id,
             name: item.name,
@@ -338,8 +354,74 @@ function CartContent() {
                     SUBTOTAL
                   </span>
                   <span className="font-body text-sm" style={{ color: "var(--text)" }}>
-                    {formatPrice(total)}
+                    {formatPrice(subtotal)}
                   </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-body text-xs tracking-wider" style={{ color: "var(--muted)" }}>
+                    SHIPPING
+                  </span>
+                  <span className="font-body text-sm" style={{ color: "var(--text)" }}>
+                    {formatPrice(shippingMethod.priceCents / 100)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Shipping method selector */}
+              <div className="pt-4" style={{ borderTop: "1px solid var(--border)" }}>
+                <p className="font-body text-xs tracking-[0.1em] mb-3" style={{ color: "var(--muted)" }}>
+                  SHIPPING METHOD
+                </p>
+                <div className="space-y-2">
+                  {SHIPPING_METHODS.map((method) => (
+                    <label
+                      key={method.id}
+                      className="flex items-start gap-3 p-3 cursor-pointer transition-all duration-150"
+                      style={{
+                        border: selectedShipping === method.id
+                          ? "1px solid var(--primary)"
+                          : "1px solid var(--border)",
+                        background: selectedShipping === method.id
+                          ? "color-mix(in srgb, var(--primary) 8%, var(--surface))"
+                          : "var(--surface)",
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="shipping"
+                        value={method.id}
+                        checked={selectedShipping === method.id}
+                        onChange={() => setSelectedShipping(method.id as ShippingMethodId)}
+                        className="sr-only"
+                      />
+                      <div
+                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 transition-all"
+                        style={{
+                          border: `1px solid ${selectedShipping === method.id ? "var(--primary)" : "var(--muted)"}`,
+                        }}
+                      >
+                        {selectedShipping === method.id && (
+                          <div
+                            className="w-2 h-2 rounded-full"
+                            style={{ background: "var(--primary)" }}
+                          />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="font-body text-xs font-semibold tracking-wider" style={{ color: "var(--text)" }}>
+                            {method.label}
+                          </p>
+                          <span className="font-body text-xs flex-shrink-0 font-semibold" style={{ color: "var(--primary)" }}>
+                            {formatPrice(method.priceCents / 100)}
+                          </span>
+                        </div>
+                        <p className="font-body text-xs mt-0.5 leading-snug" style={{ color: "var(--muted)" }}>
+                          {method.sub}
+                        </p>
+                      </div>
+                    </label>
+                  ))}
                 </div>
               </div>
 

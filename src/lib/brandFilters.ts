@@ -26,10 +26,10 @@ export const staticBrandFilters: Record<string, StaticFilterDef[]> = {
     { label: "Monsters & Mounts",match: (p) => p.category === "Vehicles" },
   ],
   "pokemon": [
-    { label: "Statues",     match: (p) => (p.tags ?? []).includes("statue") },
-    { label: "Figurines",   match: (p) => (p.tags ?? []).some((t) => ["starter", "fan-favourite"].includes(t)) || p.name.toLowerCase().includes("figurine") || p.name.toLowerCase().includes("figure") },
-    { label: "Busts",       match: (p) => (p.tags ?? []).includes("bust") },
-    { label: "Collections", match: (p) => (p.tags ?? []).some((t) => ["collection", "set", "display"].includes(t)) },
+    { label: "Pokéballs",         match: (p) => (p.tags ?? []).includes("pokeball") && !(p.tags ?? []).includes("themed-pokeball") },
+    { label: "Themed Pokéballs",  match: (p) => (p.tags ?? []).includes("themed-pokeball") },
+    { label: "3D Cards",          match: (p) => (p.tags ?? []).includes("3d-card") },
+    { label: "Figurines",         match: (p) => (p.tags ?? []).includes("figurine") || (p.tags ?? []).includes("bust") || (p.tags ?? []).includes("statue") },
   ],
   "basing-battle-effects": [
     { label: "Bases",            match: (p) => (p.tags ?? []).includes("base") },
@@ -82,10 +82,10 @@ export const dbBrandFilters: Record<string, DbFilterDef[]> = {
     },
   ],
   "pokemon": [
-    { label: "Statues",     match: (p) => p.type === "statue"   || tags(p).includes("statue") },
-    { label: "Figurines",   match: (p) => p.type === "figurine" || tags(p).some((t) => ["figurine", "figure", "starter", "fan-favourite"].includes(t)) },
-    { label: "Busts",       match: (p) => p.type === "bust"     || tags(p).includes("bust") },
-    { label: "Collections", match: (p) => p.type === "set"      || tags(p).some((t) => ["set", "collection", "display"].includes(t)) },
+    { label: "Pokéballs",        match: (p) => tags(p).includes("pokeball") && !tags(p).includes("themed-pokeball") },
+    { label: "Themed Pokéballs", match: (p) => tags(p).includes("themed-pokeball") },
+    { label: "3D Cards",         match: (p) => tags(p).includes("3d-card") },
+    { label: "Figurines",        match: (p) => p.type === "figurine" || p.type === "statue" || p.type === "bust" || tags(p).some((t) => ["figurine", "bust", "statue"].includes(t)) },
   ],
   "basing-battle-effects": [
     { label: "Bases",            match: (p) => p.type === "base"    || tags(p).includes("base") },

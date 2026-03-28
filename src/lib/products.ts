@@ -49,6 +49,89 @@ export interface SiteCategory {
   theme: "grimdark" | "fantasy" | "cosy" | "neutral";
 }
 
+/** A faction or product-type group within a brand */
+export interface BrandFaction {
+  id: string;
+  name: string;
+  flavorText: string;
+  accentColor: string;
+  glowColor: string;
+  borderColor: string;
+  brand: SiteCategoryId;
+  /** Product type categories available within this faction */
+  productTypes?: string[];
+}
+
+/** Brand → faction/category groupings for the new navigation structure */
+export const brandFactions: Partial<Record<SiteCategoryId, BrandFaction[]>> = {
+  "grimdark-future": [
+    {
+      id: "space-marines", name: "Space Marines",
+      flavorText: "The Emperor's finest. Unyielding. Eternal.",
+      accentColor: "#1a3a6e", glowColor: "rgba(26,58,110,0.7)", borderColor: "rgba(201,168,76,0.4)",
+      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
+    },
+    {
+      id: "orks", name: "Orks",
+      flavorText: "Brutal. Loud. Unstoppable. WAAAGH!",
+      accentColor: "#2d5a1b", glowColor: "rgba(45,90,27,0.7)", borderColor: "rgba(100,160,60,0.35)",
+      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
+    },
+    {
+      id: "tyranids", name: "Tyranids",
+      flavorText: "The Great Devourer consumes all.",
+      accentColor: "#4a1a6e", glowColor: "rgba(74,26,110,0.7)", borderColor: "rgba(180,140,200,0.35)",
+      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
+    },
+    {
+      id: "chaos-space-marines", name: "Chaos Space Marines",
+      flavorText: "Sworn to the dark gods. Corrupted. Deadly.",
+      accentColor: "#6e1a1a", glowColor: "rgba(110,26,26,0.8)", borderColor: "rgba(139,0,0,0.5)",
+      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
+    },
+  ],
+  "age-of-fantasy": [
+    {
+      id: "high-elves", name: "High Elves",
+      flavorText: "Ancient. Proud. Unmatched in blade and sorcery.",
+      accentColor: "#1a4a3a", glowColor: "rgba(26,74,58,0.7)", borderColor: "rgba(100,200,140,0.35)",
+      brand: "age-of-fantasy", productTypes: ["Infantry", "Cavalry", "Characters", "Vehicles"],
+    },
+    {
+      id: "undead", name: "Undead Legion",
+      flavorText: "Death is no barrier. The dead march eternal.",
+      accentColor: "#2a1a4a", glowColor: "rgba(42,26,74,0.7)", borderColor: "rgba(140,100,200,0.35)",
+      brand: "age-of-fantasy", productTypes: ["Infantry", "Cavalry", "Characters", "Vehicles"],
+    },
+  ],
+  "pokemon": [
+    {
+      id: "pokeballs", name: "Pokéballs",
+      flavorText: "Classic resin Pokéballs — hand-painted and display ready.",
+      accentColor: "#c8281c", glowColor: "rgba(200,40,28,0.6)", borderColor: "rgba(200,40,28,0.4)",
+      brand: "pokemon",
+    },
+    {
+      id: "themed-pokeballs", name: "Themed Pokéballs",
+      flavorText: "Custom-painted Pokéballs themed after your favourite Pokémon.",
+      accentColor: "#e8c838", glowColor: "rgba(232,200,56,0.6)", borderColor: "rgba(232,200,56,0.4)",
+      brand: "pokemon",
+    },
+    {
+      id: "3d-cards", name: "3D Display Cards",
+      flavorText: "Multicolour FDM Pokémon display cards — art you can hold.",
+      accentColor: "#4a78c8", glowColor: "rgba(74,120,200,0.6)", borderColor: "rgba(74,120,200,0.4)",
+      brand: "pokemon",
+    },
+    {
+      id: "figurines", name: "Figurines & Statues",
+      flavorText: "Resin Pokémon figurines, busts and display pieces.",
+      accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.6)", borderColor: "rgba(201,168,76,0.4)",
+      brand: "pokemon",
+    },
+  ],
+};
+
 export const siteCategories: SiteCategory[] = [
   {
     id: "grimdark-future",
@@ -261,13 +344,37 @@ export const products: Product[] = [
   p("un-5", "Spirit Hosts ×3", 180, "RESIN", "Infantry", "undead", "age-of-fantasy", "un-spirithosts", { role: "Support", tags: ["spirit", "undead", "ethereal"] }),
   p("un-6", "Necromancer", 160, "RESIN", "Characters", "undead", "age-of-fantasy", "un-necromancer", { role: "Support", tags: ["character", "magic", "undead"] }),
 
-  // Pokémon Merch
-  p("poke-1", "Charizard Statue", 650, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "poke-charizard", { tags: ["fire", "dragon", "statue"], isNewArrival: true }),
-  p("poke-2", "Pikachu Figurine", 180, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-pikachu", { tags: ["electric", "starter", "cute"] }),
-  p("poke-3", "Mewtwo Bust", 350, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-mewtwo", { tags: ["psychic", "legendary", "bust"] }),
-  p("poke-4", "Gengar Figure", 220, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-gengar", { tags: ["ghost", "fan-favourite"] }),
-  p("poke-5", "Snorlax Display", 480, "FDM", "Characters", "pokemon-merch", "pokemon", "poke-snorlax", { tags: ["normal", "display"] }),
-  p("poke-6", "Eevee Collection Set", 420, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-eevee", { tags: ["normal", "collection", "set"], isPreorder: true, preorderDate: "September 2026" }),
+  // Pokémon — Figurines & Statues
+  p("poke-1", "Charizard Statue", 650, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "poke-charizard", { tags: ["fire", "dragon", "statue", "figurine"], isNewArrival: true }),
+  p("poke-2", "Pikachu Figurine", 180, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-pikachu", { tags: ["electric", "starter", "figurine"] }),
+  p("poke-3", "Mewtwo Bust", 350, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-mewtwo", { tags: ["psychic", "legendary", "bust", "figurine"] }),
+  p("poke-4", "Gengar Figure", 220, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-gengar", { tags: ["ghost", "fan-favourite", "figurine"] }),
+  p("poke-5", "Snorlax Display Piece", 480, "FDM", "Characters", "pokemon-merch", "pokemon", "poke-snorlax", { tags: ["normal", "display", "figurine"] }),
+  p("poke-6", "Eevee Collection Set", 420, "RESIN", "Characters", "pokemon-merch", "pokemon", "poke-eevee", { tags: ["normal", "collection", "set", "figurine"], isPreorder: true, preorderDate: "September 2026" }),
+
+  // Pokémon — Pokéballs
+  p("pokeball-1", "Standard Pokéball", 120, "RESIN", "Characters", "pokemon-merch", "pokemon", "pokeball-standard", { tags: ["pokeball", "classic", "display"] }),
+  p("pokeball-2", "Great Ball", 120, "RESIN", "Characters", "pokemon-merch", "pokemon", "pokeball-great", { tags: ["pokeball", "great", "display"] }),
+  p("pokeball-3", "Ultra Ball", 135, "RESIN", "Characters", "pokemon-merch", "pokemon", "pokeball-ultra", { tags: ["pokeball", "ultra", "display"], isNewArrival: true }),
+  p("pokeball-4", "Master Ball", 180, "RESIN", "Characters", "pokemon-merch", "pokemon", "pokeball-master", { tags: ["pokeball", "master", "legendary"] }),
+  p("pokeball-5", "Pokéball Trio Set", 320, "RESIN", "Characters", "pokemon-merch", "pokemon", "pokeball-trio", { tags: ["pokeball", "set", "collection"] }),
+  p("pokeball-6", "Safari Ball", 135, "RESIN", "Characters", "pokemon-merch", "pokemon", "pokeball-safari", { tags: ["pokeball", "safari", "display"] }),
+
+  // Pokémon — Themed Pokéballs
+  p("themed-pb-1", "Charizard Flame Pokéball", 280, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "themed-charizard-ball", { tags: ["themed-pokeball", "charizard", "fire", "display"], isNewArrival: true }),
+  p("themed-pb-2", "Pikachu Thunder Pokéball", 280, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "themed-pikachu-ball", { tags: ["themed-pokeball", "pikachu", "electric", "display"] }),
+  p("themed-pb-3", "Mewtwo Psychic Pokéball", 280, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "themed-mewtwo-ball", { tags: ["themed-pokeball", "mewtwo", "psychic", "legendary"] }),
+  p("themed-pb-4", "Eevee Woodland Pokéball", 260, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "themed-eevee-ball", { tags: ["themed-pokeball", "eevee", "normal", "display"] }),
+  p("themed-pb-5", "Gengar Shadow Pokéball", 280, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "themed-gengar-ball", { tags: ["themed-pokeball", "gengar", "ghost", "display"] }),
+  p("themed-pb-6", "Custom Themed Pokéball", 320, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "themed-custom-ball", { tags: ["themed-pokeball", "custom", "bespoke"], isPreorder: true, preorderDate: "August 2026" }),
+
+  // Pokémon — 3D Display Cards
+  p("3dcard-1", "Charizard 3D Display Card", 380, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "3dcard-charizard", { tags: ["3d-card", "charizard", "fire", "display"], isNewArrival: true }),
+  p("3dcard-2", "Pikachu 3D Display Card", 320, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "3dcard-pikachu", { tags: ["3d-card", "pikachu", "electric", "display"] }),
+  p("3dcard-3", "Gengar 3D Display Card", 340, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "3dcard-gengar", { tags: ["3d-card", "gengar", "ghost", "display"] }),
+  p("3dcard-4", "Mewtwo 3D Display Card", 380, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "3dcard-mewtwo", { tags: ["3d-card", "mewtwo", "legendary", "display"] }),
+  p("3dcard-5", "Eevee 3D Display Card", 320, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "3dcard-eevee", { tags: ["3d-card", "eevee", "normal", "display"] }),
+  p("3dcard-6", "Snorlax 3D Display Card", 340, "MULTICOLOUR", "Characters", "pokemon-merch", "pokemon", "3dcard-snorlax", { tags: ["3d-card", "snorlax", "normal", "display"], isPreorder: true, preorderDate: "October 2026" }),
 
   // Basing & Battle Effects
   p("bas-1", "Urban Rubble Base Set ×5 (32mm)", 120, "RESIN", "Basing", "custom-projects", "basing-battle-effects", "bas-urban", { tags: ["base", "urban", "32mm"] }),
@@ -288,6 +395,31 @@ export const products: Product[] = [
 
 export function getProductsByFaction(factionId: string): Product[] {
   return products.filter((p) => p.faction === factionId);
+}
+
+export function getBrandFactions(brandId: SiteCategoryId): BrandFaction[] {
+  return brandFactions[brandId] ?? [];
+}
+
+export function getBrandFactionById(brandId: SiteCategoryId, factionId: string): BrandFaction | undefined {
+  return (brandFactions[brandId] ?? []).find((f) => f.id === factionId);
+}
+
+export function getProductsByBrandAndFaction(brandId: SiteCategoryId, factionId: string): Product[] {
+  // For Pokémon, factionId maps to a product sub-type tag
+  if (brandId === "pokemon") {
+    const tagMap: Record<string, string> = {
+      "pokeballs": "pokeball",
+      "themed-pokeballs": "themed-pokeball",
+      "3d-cards": "3d-card",
+      "figurines": "figurine",
+    };
+    const tag = tagMap[factionId];
+    if (tag) {
+      return products.filter((p) => p.siteCategory === brandId && (p.tags ?? []).includes(tag));
+    }
+  }
+  return products.filter((p) => p.siteCategory === brandId && p.faction === factionId);
 }
 
 export function getProductsBySiteCategory(categoryId: SiteCategoryId): Product[] {

@@ -204,3 +204,74 @@ test.describe("404 Not Found", () => {
     await expect(page.locator("body")).not.toContainText(/500 internal server error/i);
   });
 });
+
+test.describe("Navbar mega-menu", () => {
+  test("SHOP button is visible in the desktop nav", async ({ page }) => {
+    await page.goto("/");
+    // The SHOP trigger is a <button> in the nav
+    const shopBtn = page.locator("nav button", { hasText: /^shop$/i });
+    await expect(shopBtn).toBeVisible();
+  });
+
+  test("clicking SHOP opens the mega-menu panel", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    // Left column header "Browse by Brand" should appear
+    await expect(page.locator("body")).toContainText(/browse by brand/i);
+  });
+
+  test("mega-menu lists all five brands", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    await expect(page.locator("body")).toContainText(/grimdark future/i);
+    await expect(page.locator("body")).toContainText(/age of fantasy/i);
+    await expect(page.locator("body")).toContainText(/pok[eé]mon/i);
+    await expect(page.locator("body")).toContainText(/basing/i);
+    await expect(page.locator("body")).toContainText(/gaming.*terrain|terrain.*gaming/i);
+  });
+
+  test("hovering a brand entry switches the right panel to that brand", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    // Hover over Age of Fantasy entry
+    await page.locator("nav button", { hasText: /age of fantasy/i }).hover();
+    // Right panel should now show Age of Fantasy content
+    await expect(page.locator("body")).toContainText(/age of fantasy/i);
+    await expect(page.locator("body")).toContainText(/heroic warriors|legendary warriors|ancient magic/i);
+  });
+
+  test("mega-menu shows subcategory chips for active brand", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    // Default active brand is Grimdark Future — right panel shows Infantry / Vehicles / Characters
+    await expect(page.locator("body")).toContainText(/infantry/i);
+    await expect(page.locator("body")).toContainText(/vehicles/i);
+    await expect(page.locator("body")).toContainText(/characters/i);
+  });
+
+  test("clicking a brand entry in the mega-menu navigates to its page", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    // Click the Pokémon brand entry button
+    await page.locator("nav button", { hasText: /pok[eé]mon/i }).click();
+    await expect(page).toHaveURL("/pokemon");
+    await expect(page.locator("body")).not.toContainText(/500 internal server error/i);
+  });
+
+  test("VIEW ALL link in mega-menu navigates to /shop", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    await page.getByRole("link", { name: /view all/i }).click();
+    await expect(page).toHaveURL("/shop");
+  });
+
+  test("mega-menu closes after clicking a subcategory link", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav button", { hasText: /^shop$/i }).click();
+    // Click Infantry subcategory chip
+    const infantryLink = page.locator("nav a", { hasText: /^infantry$/i }).first();
+    await infantryLink.click();
+    // Mega-menu should be gone
+    await expect(page.locator("body")).not.toContainText(/browse by brand/i);
+  });
+});

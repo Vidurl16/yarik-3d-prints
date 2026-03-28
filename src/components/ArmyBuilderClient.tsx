@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product } from "@/lib/products";
 import type { ThemeTokens } from "@/components/theme/themes";
+import { motion } from "framer-motion";
 
 const ROLE_SECTIONS = [
   {
@@ -312,6 +313,30 @@ export default function ArmyBuilderClient({
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
 
+  // Faction filter — derive unique factions from mainProducts
+  const factionList = useMemo(() => {
+    const seen = new Set<string>();
+    const result: { id: string; label: string }[] = [];
+    for (const p of mainProducts) {
+      if (p.faction && !seen.has(p.faction)) {
+        seen.add(p.faction);
+        result.push({
+          id: p.faction,
+          label: p.faction.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+        });
+      }
+    }
+    return result;
+  }, [mainProducts]);
+
+  const [selectedFaction, setSelectedFaction] = useState<string>("all");
+
+  // Filter mainProducts by faction when one is selected
+  const filteredProducts = useMemo(() => {
+    if (selectedFaction === "all") return mainProducts;
+    return mainProducts.filter((p) => p.faction === selectedFaction);
+  }, [mainProducts, selectedFaction]);
+
   const { addItem, updateQuantity, items: cartItems, openDrawer } = useCartStore();
 
   function setQty(productId: string, qty: number) {
@@ -326,18 +351,18 @@ export default function ArmyBuilderClient({
     });
   }
 
-  // Group products by role section
+  // Group products by role section (using faction-filtered products)
   const productsByRole = useMemo(() => {
     const map: Record<string, Product[]> = {};
     for (const section of ROLE_SECTIONS) {
-      map[section.id] = mainProducts.filter(
+      map[section.id] = filteredProducts.filter(
         (p) => p.role && (section.roles as readonly string[]).includes(p.role)
       );
     }
     return map;
-  }, [mainProducts]);
+  }, [filteredProducts]);
 
-  // Summary: selected items
+  // Summary: selected items (always look up from full mainProducts list)
   const selectedEntries = useMemo(() => {
     return Object.entries(selections)
       .filter(([, qty]) => qty > 0)
@@ -406,7 +431,7 @@ export default function ArmyBuilderClient({
           count +
           Object.entries(selections)
             .filter(([id, qty]) => {
-              const product = mainProducts.find((p) => p.id === id);
+              const product = mainProducts.find((p) => p.id === id); // always full list
               return qty > 0 && product?.role === role;
             })
             .reduce((s, [, qty]) => s + qty, 0)
@@ -445,6 +470,44 @@ export default function ArmyBuilderClient({
             Select units by role · Add basing &amp; battle effects · Add
             warband to cart
           </p>
+
+          {/* Faction selector */}
+          {factionList.length > 1 && (
+            <div className="flex items-center gap-3 mt-6 flex-wrap">
+              <span
+                className="font-body text-xs tracking-[0.15em] uppercase flex-shrink-0"
+                style={{ color: "var(--muted)" }}
+              >
+                Faction
+              </span>
+              <button
+                onClick={() => setSelectedFaction("all")}
+                className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all"
+                style={{
+                  border: "1px solid var(--border)",
+                  color: selectedFaction === "all" ? "var(--bg)" : "var(--muted)",
+                  background: selectedFaction === "all" ? "var(--primary)" : "transparent",
+                }}
+              >
+                All Factions
+              </button>
+              {factionList.map((f) => (
+                <motion.button
+                  key={f.id}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setSelectedFaction(f.id)}
+                  className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all"
+                  style={{
+                    border: selectedFaction === f.id ? "1px solid var(--primary)" : "1px solid var(--border)",
+                    color: selectedFaction === f.id ? "var(--bg)" : "var(--muted)",
+                    background: selectedFaction === f.id ? "var(--primary)" : "transparent",
+                  }}
+                >
+                  {f.label}
+                </motion.button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

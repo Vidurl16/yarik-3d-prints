@@ -21,13 +21,25 @@ interface ShippingAddress {
   country: string;
 }
 
+interface ShippingMethod {
+  id: string;
+  label: string;
+  priceCents: number;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const {
       items,
       customerEmail,
       shippingAddress,
-    }: { items: CartLineItem[]; customerEmail?: string; shippingAddress?: ShippingAddress } = await req.json();
+      shippingMethod,
+    }: {
+      items: CartLineItem[];
+      customerEmail?: string;
+      shippingAddress?: ShippingAddress;
+      shippingMethod?: ShippingMethod;
+    } = await req.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
@@ -70,10 +82,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const totalCents = items.reduce(
+    const itemsTotalCents = items.reduce(
       (sum, item) => sum + Math.round(item.price * 100) * item.quantity,
       0
     );
+    const shippingCents = shippingMethod?.priceCents ?? 0;
+    const totalCents = itemsTotalCents + shippingCents;
 
     const provider = getPaymentProvider(secretKeyOverride);
 
@@ -88,7 +102,10 @@ export async function POST(req: NextRequest) {
       payment_provider: provider.name,
       payment_session_id: placeholderSessionId,
       payment_status: "pending",
-      shipping_address: shippingAddress ? (shippingAddress as unknown as Record<string, string>) : null,
+      shipping_address: {
+        ...(shippingAddress ? (shippingAddress as unknown as Record<string, string>) : {}),
+        ...(shippingMethod ? { shipping_method_id: shippingMethod.id, shipping_method_label: shippingMethod.label, shipping_price_cents: String(shippingMethod.priceCents) } : {}),
+      },
     });
 
     if (!orderId) {

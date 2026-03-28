@@ -5,6 +5,8 @@ import Image from "next/image";
 import BrandIcon from "@/components/BrandIcon";
 import type { DbProduct } from "@/lib/data/types";
 import BrandProductGrid from "./BrandProductGrid";
+import FactionTileGrid from "./FactionTileGrid";
+import { brandFactions } from "@/lib/products";
 
 interface BrandPageProps {
   themeId: ThemeId;
@@ -40,6 +42,8 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
   const theme = THEMES[themeId];
   const hasArmyBuilder = (ARMY_BUILDER_BRANDS as readonly string[]).includes(brandSlug);
   const addons = BRAND_ADDONS[brandSlug] ?? [];
+  const factions = brandFactions[brandSlug as keyof typeof brandFactions] ?? [];
+  const hasFactions = factions.length > 0;
 
   return (
     // data-theme drives all CSS var(--bg/text/primary/…) for this brand
@@ -145,8 +149,12 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
         </div>
       </section>
 
-      {/* ── FILTER BAR + PRODUCT GRID ────────────────────────── */}
-      <BrandProductGrid products={products} brandSlug={brandSlug} />
+      {/* ── FACTION TILES (for brands with factions) OR PRODUCT GRID ─── */}
+      {hasFactions ? (
+        <FactionTileGrid brandSlug={brandSlug} factions={factions} />
+      ) : (
+        <BrandProductGrid products={products} brandSlug={brandSlug} />
+      )}
 
       {/* ── UPSELL SECTION (placeholder) ─────────────────────── */}
       <section
