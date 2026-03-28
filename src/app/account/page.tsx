@@ -14,6 +14,25 @@ function formatDate(iso: string) {
   });
 }
 
+const STATUS_STYLES: Record<string, { bg: string; color: string; border: string }> = {
+  paid:      { bg: "rgba(21,128,61,0.12)",  color: "#166534", border: "rgba(21,128,61,0.35)" },
+  pending:   { bg: "rgba(161,98,7,0.12)",   color: "#92400e", border: "rgba(161,98,7,0.35)" },
+  cancelled: { bg: "rgba(185,28,28,0.10)",  color: "#991b1b", border: "rgba(185,28,28,0.30)" },
+  refunded:  { bg: "rgba(107,114,128,0.12)", color: "#374151", border: "rgba(107,114,128,0.3)" },
+};
+
+function OrderStatusBadge({ status }: { status: string }) {
+  const s = STATUS_STYLES[status] ?? STATUS_STYLES.pending;
+  return (
+    <span
+      className="inline-block font-body text-[11px] tracking-[0.1em] px-2.5 py-0.5 mt-1 uppercase"
+      style={{ background: s.bg, color: s.color, border: `1px solid ${s.border}` }}
+    >
+      {status}
+    </span>
+  );
+}
+
 interface PageProps {
   searchParams: Promise<{ updated?: string }>;
 }
@@ -81,17 +100,7 @@ export default async function AccountPage({ searchParams }: PageProps) {
                       <p className="font-body text-sm" style={{ color: "var(--text)" }}>
                         {formatPrice(order.total_amount_cents ?? 0, order.currency ?? "ZAR")}
                       </p>
-                      <span
-                        className={`inline-block font-body text-xs tracking-wider px-2 py-0.5 mt-1 ${
-                          order.payment_status === "paid"
-                            ? "bg-green-900/30 text-green-400 border border-green-800/40"
-                            : order.payment_status === "pending"
-                            ? "bg-yellow-900/30 text-yellow-400 border border-yellow-800/40"
-                            : "bg-red-900/30 text-red-400 border border-red-800/40"
-                        }`}
-                      >
-                        {order.payment_status.toUpperCase()}
-                      </span>
+                      <OrderStatusBadge status={order.payment_status} />
                     </div>
                   </div>
                 </div>
