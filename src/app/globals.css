@@ -281,3 +281,22 @@ body {
   color: #c4a045;
   border: 1px solid rgba(196, 160, 69, 0.4);
 }
+
+/* Light-theme overrides — dark text + tinted fill for legibility on beige bg */
+[data-theme="dexarium"] .print-badge-resin {
+  background: rgba(139, 0, 0, 0.1);
+  color: #8b0000;
+  border: 1px solid rgba(139, 0, 0, 0.5);
+}
+
+[data-theme="dexarium"] .print-badge-fdm {
+  background: rgba(20, 55, 130, 0.1);
+  color: #1e3782;
+  border: 1px solid rgba(20, 55, 130, 0.45);
+}
+
+[data-theme="dexarium"] .print-badge-multicolour {
+  background: rgba(130, 90, 0, 0.1);
+  color: #6b4a00;
+  border: 1px solid rgba(160, 110, 0, 0.5);
+}
