@@ -2,7 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteCategories, formatPrice } from "@/lib/products";
 import { getNewArrivals, getPreorders } from "@/lib/data/products";
-import BrandIcon from "@/components/BrandIcon";
+
+const CATEGORY_THUMBNAIL: Record<string, string> = {
+  "grimdark-future":           "/images/categories/thumbnails/grimdark-future.jpg",
+  "age-of-fantasy":            "/images/categories/thumbnails/age-of-fantasy.jpg",
+  "pokemon":                   "/images/categories/thumbnails/pokemon.jpg",
+  "basing-battle-effects":     "/images/categories/thumbnails/basing-bits.jpg",
+  "gaming-accessories-terrain":"/images/categories/thumbnails/terrain.jpg",
+  "display-figures-busts":     "/images/categories/thumbnails/figurines-and-busts.jpg",
+};
 
 // Map siteCategory IDs → top-level brand routes
 const CATEGORY_ROUTE_MAP: Record<string, string> = {
@@ -196,46 +204,57 @@ export default async function HeroPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {siteCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={CATEGORY_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
-              className="group relative flex flex-col items-center text-center p-6 transition-all duration-300 hover:-translate-y-1"
-              style={{
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{
-                  background: `radial-gradient(ellipse 80% 60% at 50% 120%, var(--glow) 0%, transparent 70%)`,
-                }}
-              />
-              <div className="relative z-10">
-                <div className="w-16 h-16 mb-4 mx-auto flex items-center justify-center">
-                  <BrandIcon
-                    id={cat.id}
-                    className="w-full h-full"
-                    style={{ color: cat.accentColor }}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {siteCategories.map((cat) => {
+            const thumb = CATEGORY_THUMBNAIL[cat.id];
+            return (
+              <Link
+                key={cat.id}
+                href={CATEGORY_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
+                className="group relative overflow-hidden"
+                style={{ border: "1px solid var(--border)", aspectRatio: "3/4" }}
+              >
+                {thumb ? (
+                  <Image
+                    src={thumb}
+                    alt={cat.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
                   />
+                ) : (
+                  <div className="absolute inset-0" style={{ background: "var(--surface)" }} />
+                )}
+                {/* Dark gradient overlay */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)",
+                  }}
+                />
+                {/* Hover glow */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: `radial-gradient(ellipse 80% 40% at 50% 120%, var(--glow) 0%, transparent 70%)` }}
+                />
+                {/* Text */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
+                  <h3
+                    className="font-heading text-xs sm:text-sm tracking-[0.08em] leading-tight mb-1"
+                    style={{ color: "#fff" }}
+                  >
+                    {cat.name.toUpperCase()}
+                  </h3>
+                  <span
+                    className="font-body text-xs tracking-[0.08em] transition-colors"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    EXPLORE →
+                  </span>
                 </div>
-                <h3
-                  className="font-heading text-sm tracking-[0.1em] mb-3"
-                  style={{ color: "var(--text)" }}
-                >
-                  {cat.name.toUpperCase()}
-                </h3>
-                <span
-                  className="mt-4 inline-block font-body text-xs tracking-[0.1em] transition-colors"
-                  style={{ color: "var(--primary)" }}
-                >
-                  EXPLORE →
-                </span>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </section>
 
