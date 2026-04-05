@@ -67,10 +67,10 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center px-4 pt-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <h1 className="font-heading text-2xl tracking-[0.15em] mb-2" style={{ color: "var(--primary)" }}>
+          <h1 className="font-heading text-4xl tracking-[0.15em] mb-3" style={{ color: "var(--primary)" }}>
             {mode === "login" ? "SIGN IN" : mode === "signup" ? "CREATE ACCOUNT" : "RESET PASSWORD"}
           </h1>
-          <p className="font-body text-xs tracking-wider" style={{ color: "var(--muted)" }}>
+          <p className="font-body text-sm tracking-wider" style={{ color: "var(--muted)" }}>
             THE DEXARIUM
           </p>
         </div>
@@ -96,7 +96,7 @@ function LoginForm() {
           ) : (
             <>
           <div>
-            <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
+            <label className="block font-body text-sm tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Email
             </label>
             <input
@@ -104,7 +104,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 font-body text-sm focus:outline-none transition-colors"
+              className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="your@email.com"
             />
@@ -112,7 +112,7 @@ function LoginForm() {
 
           {mode !== "forgot" && (
           <div>
-            <label className="block font-body text-xs tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
+            <label className="block font-body text-sm tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Password
             </label>
             <input
@@ -121,7 +121,7 @@ function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-4 py-3 font-body text-sm focus:outline-none transition-colors"
+              className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="••••••••"
             />
@@ -137,7 +137,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full disabled:opacity-50 font-body text-xs tracking-[0.2em] py-3.5 transition-colors duration-200 uppercase"
+            className="w-full disabled:opacity-50 font-body text-sm tracking-[0.2em] py-4 transition-colors duration-200 uppercase"
             style={{ background: "var(--accent)", color: "var(--bg)" }}
           >
             {loading ? "..." : mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send Reset Link"}
@@ -149,7 +149,7 @@ function LoginForm() {
         <div className="mt-6 text-center space-y-3">
           <button
             onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); setForgotSent(false); }}
-            className="font-body text-sm tracking-wider transition-colors hover:underline"
+            className="font-body text-base tracking-wider transition-colors hover:underline"
             style={{ color: "var(--primary)" }}
           >
             {mode === "login" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
@@ -158,7 +158,7 @@ function LoginForm() {
             <div>
               <button
                 onClick={() => { setMode("forgot"); setError(null); setForgotSent(false); }}
-                className="font-body text-xs tracking-wider transition-colors"
+                className="font-body text-sm tracking-wider transition-colors"
                 style={{ color: "var(--muted)", opacity: 0.7 }}
               >
                 Forgot password?
@@ -169,7 +169,7 @@ function LoginForm() {
             <div>
               <button
                 onClick={() => { setMode("login"); setError(null); setForgotSent(false); }}
-                className="font-body text-xs tracking-wider transition-colors"
+                className="font-body text-sm tracking-wider transition-colors"
                 style={{ color: "var(--muted)", opacity: 0.7 }}
               >
                 ← Back to sign in
@@ -177,7 +177,7 @@ function LoginForm() {
             </div>
           )}
           <div>
-            <Link href="/" className="font-body text-xs tracking-wider transition-colors" style={{ color: "var(--muted)", opacity: 0.6 }}>
+            <Link href="/" className="font-body text-sm tracking-wider transition-colors" style={{ color: "var(--muted)", opacity: 0.6 }}>
               ← Back to Dexarium
             </Link>
           </div>
