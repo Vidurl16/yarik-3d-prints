@@ -32,6 +32,13 @@ const FACTIONS = [
 
 const ROLES = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
 
+const TAG_GROUPS: { label: string; tags: string[] }[] = [
+  { label: "Pokémon", tags: ["pokeball", "themed-pokeball", "3d-card", "figurine"] },
+  { label: "Basing", tags: ["urban", "nature", "explosion", "base", "scatter"] },
+  { label: "Warhammer", tags: ["space-marines", "orks", "tyranids", "chaos", "elves", "undead"] },
+  { label: "General", tags: ["exclusive", "limited", "bundle", "custom", "terrain", "character", "vehicle"] },
+];
+
 interface Props {
   product?: DbProduct;
 }
@@ -50,7 +57,7 @@ export default function ProductForm({ product }: Props) {
     role: product?.role ?? "",
     price_cents: product?.price_cents ? String(product.price_cents / 100) : "",
     currency: product?.currency ?? "ZAR",
-    tags: (product?.tags ?? []).join(", "),
+    tags: product?.tags ?? [],
     is_new: product?.is_new ?? false,
     is_preorder: product?.is_preorder ?? false,
     is_active: product?.is_active ?? true,
@@ -102,6 +109,7 @@ export default function ProductForm({ product }: Props) {
         price_cents: Math.round(Number(form.price_cents) * 100),
         stock_quantity: form.stock_quantity !== "" ? Number(form.stock_quantity) : null,
         image_url: imageUrl || null,
+        tags: form.tags,
       };
 
       const url = isEditing
@@ -224,8 +232,43 @@ export default function ProductForm({ product }: Props) {
       </div>
 
       <div>
-        <label className={labelClass}>Tags (comma-separated)</label>
-        <input name="tags" value={form.tags} onChange={handleChange} className={inputClass} placeholder="resin, infantry, exclusive" />
+        <label className={labelClass}>Tags</label>
+        <div className="space-y-3">
+          {TAG_GROUPS.map((group) => (
+            <div key={group.label}>
+              <p className="font-body text-[10px] tracking-[0.15em] text-[rgba(196,160,69,0.5)] uppercase mb-1.5">
+                {group.label}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {group.tags.map((tag) => {
+                  const selected = (form.tags as string[]).includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() =>
+                        setForm((prev) => ({
+                          ...prev,
+                          tags: selected
+                            ? (prev.tags as string[]).filter((t) => t !== tag)
+                            : [...(prev.tags as string[]), tag],
+                        }))
+                      }
+                      className="font-body text-xs tracking-wider px-3 py-1.5 transition-all duration-150 border"
+                      style={{
+                        background: selected ? "rgba(196,160,69,0.15)" : "transparent",
+                        borderColor: selected ? "rgba(196,160,69,0.6)" : "rgba(196,160,69,0.18)",
+                        color: selected ? "#c4a045" : "rgba(240,232,216,0.5)",
+                      }}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div>
