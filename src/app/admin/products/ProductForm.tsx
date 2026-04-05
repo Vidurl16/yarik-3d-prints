@@ -10,6 +10,7 @@ const BRANDS = [
   "pokemon",
   "basing-battle-effects",
   "gaming-accessories-terrain",
+  "display-figures-busts",
 ];
 
 const TYPES = [
@@ -19,18 +20,85 @@ const TYPES = [
 
 const PRINT_TYPES = ["RESIN", "FDM", "MULTICOLOUR"];
 
-const FACTIONS: { group: string; ids: string[] }[] = [
-  { group: "Grimdark Future — Imperial", ids: ["space-marines","dark-angels","blood-angels","space-wolves","black-templars","custodians","imperial-guard","sisters-of-battle","grey-knights","adeptus-mechanicus","knights"] },
-  { group: "Grimdark Future — Chaos",    ids: ["chaos-space-marines","death-guard","thousand-sons","world-eaters","emperors-children","chaos-knights","chaos-titans"] },
-  { group: "Grimdark Future — Xenos",    ids: ["orks","necrons","tyranids","eldar","dark-eldar","tau","leagues-of-votann","genestealer-cults"] },
-  { group: "Age of Fantasy — Order",     ids: ["high-elves","wood-elves","dark-elves","woodelves","lizardmen","cities"] },
-  { group: "Age of Fantasy — Death",     ids: ["undead","vampire-lords","flesh-eaters"] },
-  { group: "Age of Fantasy — Chaos",     ids: ["rotkin","chas-knights","chaos-dwarves"] },
-  { group: "Age of Fantasy — Destruction", ids: ["greenskins","goblins","ogres","giants","ratmen"] },
-  { group: "Basing",                     ids: ["old-world-city","modern-city","jungle-and-forest","rock-and-crystals","alien-worlds","elemental","caves-and-swamps","desert","oceanic","chaos-wastes","animal-life","misc-and-skulls","unique-debris"] },
-  { group: "Pokémon",                    ids: ["pokeballs","themed-pokeballs","3d-cards","figurines"] },
-  { group: "Display Figures",            ids: ["comics","games","movies","other"] },
-  { group: "General",                    ids: ["custom-projects"] },
+const FACTIONS: { group: string; options: { id: string; label: string }[] }[] = [
+  { group: "Grimdark Future — Imperial", options: [
+    { id: "space-marines",      label: "Angels of Death" },
+    { id: "dark-angels",        label: "Dark Angels of Death" },
+    { id: "blood-angels",       label: "Bloodied Angels of Death" },
+    { id: "space-wolves",       label: "Space Vikings" },
+    { id: "black-templars",     label: "Templars" },
+    { id: "custodians",         label: "Custodians" },
+    { id: "imperial-guard",     label: "The Guard" },
+    { id: "sisters-of-battle",  label: "Battle Sisters" },
+    { id: "grey-knights",       label: "Silver Paladins" },
+    { id: "adeptus-mechanicus", label: "Mars Tech" },
+    { id: "knights",            label: "Knights Collosus" },
+  ]},
+  { group: "Grimdark Future — Chaos", options: [
+    { id: "chaos-space-marines", label: "Lords of Chaos" },
+    { id: "death-guard",         label: "Lords of Decay" },
+    { id: "thousand-sons",       label: "Lords of Sorcery" },
+    { id: "world-eaters",        label: "Lords of Slaughter" },
+    { id: "emperors-children",   label: "Lords of Perfection" },
+    { id: "chaos-knights",       label: "Legio Demonica" },
+    { id: "chaos-titans",        label: "Chaotic Knights Collosus" },
+  ]},
+  { group: "Grimdark Future — Xenos", options: [
+    { id: "orks",               label: "Greenskins" },
+    { id: "necrons",            label: "Undying Legion" },
+    { id: "tyranids",           label: "The Swarm" },
+    { id: "eldar",              label: "Eldar" },
+    { id: "dark-eldar",         label: "Dark Eldar" },
+    { id: "tau",                label: "The Greater Good" },
+    { id: "leagues-of-votann",  label: "Dwarf Kin" },
+    { id: "genestealer-cults",  label: "Gene Cults" },
+  ]},
+  { group: "Age of Fantasy — Order", options: [
+    { id: "high-elves",  label: "Eternals" },
+    { id: "wood-elves",  label: "Elves" },
+    { id: "dark-elves",  label: "Dark Elves" },
+    { id: "woodelves",   label: "Wood Elves" },
+    { id: "lizardmen",   label: "Lizardmen" },
+    { id: "cities",      label: "Cities" },
+  ]},
+  { group: "Age of Fantasy — Death", options: [
+    { id: "undead",         label: "The Haunted" },
+    { id: "vampire-lords",  label: "Vampire Lords" },
+    { id: "flesh-eaters",   label: "Flesh Eaters" },
+  ]},
+  { group: "Age of Fantasy — Chaos", options: [
+    { id: "rotkin",        label: "Rotkin" },
+    { id: "chas-knights",  label: "Chaos Knights" },
+    { id: "chaos-dwarves", label: "Chaos Dwarves" },
+  ]},
+  { group: "Age of Fantasy — Destruction", options: [
+    { id: "greenskins", label: "Greenskins" },
+    { id: "goblins",    label: "Goblins" },
+    { id: "ogres",      label: "Ogres" },
+    { id: "giants",     label: "Giants" },
+    { id: "ratmen",     label: "Ratmen" },
+  ]},
+  { group: "Basing & Battle Effects", options: [
+    { id: "old-world-city",    label: "Old World City" },
+    { id: "modern-city",       label: "Modern City" },
+    { id: "jungle-and-forest", label: "Jungle & Forest" },
+    { id: "rock-and-crystals", label: "Rock & Crystals" },
+    { id: "alien-worlds",      label: "Alien Worlds" },
+    { id: "elemental",         label: "Elemental" },
+    { id: "caves-and-swamps",  label: "Caves & Swamps" },
+    { id: "desert",            label: "Desert" },
+    { id: "oceanic",           label: "Oceanic" },
+    { id: "chaos-wastes",      label: "Chaos Wastes" },
+    { id: "animal-life",       label: "Animal Life" },
+    { id: "misc-and-skulls",   label: "Misc & Skulls" },
+    { id: "unique-debris",     label: "Unique Debris" },
+  ]},
+  { group: "Display Figures & Busts", options: [
+    { id: "comics",  label: "Comics" },
+    { id: "games",   label: "Games" },
+    { id: "movies",  label: "Movies" },
+    { id: "other",   label: "Other" },
+  ]},
 ];
 
 const ROLES = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
@@ -204,12 +272,16 @@ export default function ProductForm({ product }: Props) {
           </select>
         </div>
         <div>
-          <label className={labelClass}>Faction</label>
+          <label className={labelClass}>
+            Faction <span style={{ opacity: 0.5, fontWeight: 400 }}>(Pokémon: leave blank, use tags instead)</span>
+          </label>
           <select name="faction" value={form.faction} onChange={handleChange} className={inputClass}>
-            <option value="">None</option>
+            <option value="">— None —</option>
             {FACTIONS.map((group) => (
               <optgroup key={group.group} label={group.group}>
-                {group.ids.map((id) => <option key={id} value={id}>{id}</option>)}
+                {group.options.map((o) => (
+                  <option key={o.id} value={o.id}>{o.label}</option>
+                ))}
               </optgroup>
             ))}
           </select>
