@@ -211,12 +211,12 @@ export default function Nav() {
                       border: "1px solid rgba(196,160,69,0.14)",
                       backdropFilter: "blur(20px)",
                       boxShadow: "0 24px 48px rgba(0,0,0,0.7)",
-                      width: "800px",
+                      width: "920px",
                     }}
                   >
                     {/* Left: Brand list */}
-                    <div className="w-72 flex-shrink-0 py-4 border-r border-[rgba(196,160,69,0.08)]">
-                      <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase px-4 pb-2">
+                    <div className="w-80 flex-shrink-0 py-4 border-r border-[rgba(196,160,69,0.08)]">
+                      <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase px-5 pb-3">
                         Browse by Brand
                       </p>
                       {BRAND_MENU.map((brand) => (
@@ -224,7 +224,7 @@ export default function Nav() {
                           key={brand.id}
                           onMouseEnter={() => setActiveBrand(brand.id)}
                           onClick={() => { setShopOpen(false); router.push(brand.href); }}
-                          className="w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors group"
+                          className="w-full flex items-center gap-4 px-5 py-4 text-left transition-colors group"
                           style={{
                             background: activeBrand === brand.id
                               ? `rgba(${brand.accentColor.slice(1).match(/../g)!.map(h => parseInt(h, 16)).join(",")}, 0.12)`
@@ -234,15 +234,15 @@ export default function Nav() {
                               : "2px solid transparent",
                           }}
                         >
-                          <span className="text-base leading-none flex-shrink-0">{brand.icon}</span>
+                          <span className="text-xl leading-none flex-shrink-0">{brand.icon}</span>
                           <div className="min-w-0">
                             <p
-                              className="font-body text-sm tracking-wider truncate"
+                              className="font-body text-base tracking-wider truncate"
                               style={{ color: activeBrand === brand.id ? "#f0e8d8" : "rgba(240,232,216,0.7)" }}
                             >
                               {brand.label}
                             </p>
-                            <p className="font-body text-xs text-[rgba(240,232,216,0.4)] truncate mt-0.5">
+                            <p className="font-body text-sm text-[rgba(240,232,216,0.4)] truncate mt-0.5">
                               {brand.tagline}
                             </p>
                           </div>
@@ -273,28 +273,28 @@ export default function Nav() {
                       <Link
                         href={activeBrandData.href}
                         onClick={() => setShopOpen(false)}
-                        className="block mb-4 group"
+                        className="block mb-5 group"
                       >
-                        <p className="font-heading text-base tracking-wider text-[#f0e8d8] group-hover:text-[#c4a045] transition-colors">
+                        <p className="font-heading text-xl tracking-wider text-[#f0e8d8] group-hover:text-[#c4a045] transition-colors">
                           {activeBrandData.label.toUpperCase()}
                         </p>
-                        <p className="font-body text-xs text-[rgba(240,232,216,0.45)] mt-0.5">
+                        <p className="font-body text-sm text-[rgba(240,232,216,0.45)] mt-1">
                           {activeBrandData.tagline}
                         </p>
                       </Link>
 
                       {activeBrandData.factions.length > 0 && (
                         <>
-                          <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-2">
+                          <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
                             Factions
                           </p>
-                          <div className="grid grid-cols-2 gap-1 mb-4">
+                          <div className="grid grid-cols-2 gap-1 mb-5">
                             {activeBrandData.factions.map((faction) => (
                               <Link
                                 key={faction.href}
                                 href={faction.href}
                                 onClick={() => setShopOpen(false)}
-                                className="font-body text-sm tracking-wider text-[rgba(240,232,216,0.75)] hover:text-[#c4a045] transition-colors py-2 px-3 hover:bg-[rgba(196,160,69,0.06)]"
+                                className="font-body text-base tracking-wider text-[rgba(240,232,216,0.75)] hover:text-[#c4a045] transition-colors py-2.5 px-3 hover:bg-[rgba(196,160,69,0.06)]"
                               >
                                 {faction.label}
                               </Link>
@@ -303,16 +303,16 @@ export default function Nav() {
                         </>
                       )}
 
-                      <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-2">
+                      <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
                         Product Types
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-2">
                         {activeBrandData.subcategories.map((sub) => (
                           <Link
                             key={sub.href}
                             href={sub.href}
                             onClick={() => setShopOpen(false)}
-                            className="font-body text-xs tracking-wider px-4 py-2 transition-all duration-150"
+                            className="font-body text-sm tracking-wider px-5 py-2.5 transition-all duration-150"
                             style={{
                               border: "1px solid rgba(196,160,69,0.2)",
                               color: "rgba(240,232,216,0.7)",
