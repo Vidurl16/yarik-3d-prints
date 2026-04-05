@@ -26,6 +26,8 @@ function toDbProduct(prod: Product): DbProduct {
     currency: "ZAR",
     tags: prod.tags ?? [],
     image_url: prod.imageUrl,
+    image_urls: null,
+    options: null,
     is_preorder: prod.isPreorder ?? false,
     is_new: prod.isNewArrival ?? false,
     is_active: true,
