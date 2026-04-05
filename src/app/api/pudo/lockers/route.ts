@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// PUDO API base URL — confirm with Yarik once business API account is active
-const PUDO_BASE = "https://api.pudo.co.za/v1";
+// PUDO API — The Courier Guy locker network
+// Docs: https://api-docs.pudo.co.za
+const PUDO_BASE = "https://api-pudo.co.za";
 
 export async function GET(req: NextRequest) {
   const apiKey = process.env.PUDO_API_KEY;
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const res = await fetch(
-      `${PUDO_BASE}/lockers?search=${encodeURIComponent(search)}`,
+      `${PUDO_BASE}/lockers-data?search=${encodeURIComponent(search)}`,
       {
         headers: {
           Authorization: `Bearer ${apiKey}`,
