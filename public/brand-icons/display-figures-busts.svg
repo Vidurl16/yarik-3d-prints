@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Bust/pedestal silhouette — Display Figures & Busts category icon -->
+  <!-- Head -->
+  <ellipse cx="256" cy="148" rx="72" ry="84" fill="currentColor" opacity="0.9"/>
+  <!-- Neck -->
+  <rect x="228" y="224" width="56" height="40" rx="4" fill="currentColor" opacity="0.9"/>
+  <!-- Shoulders / bust -->
+  <path d="M148 264 Q176 256 228 264 L228 320 Q192 328 148 316 Z" fill="currentColor" opacity="0.9"/>
+  <path d="M364 264 Q336 256 284 264 L284 320 Q320 328 364 316 Z" fill="currentColor" opacity="0.9"/>
+  <rect x="148" y="264" width="216" height="56" rx="0" fill="currentColor" opacity="0.9"/>
+  <!-- Pedestal -->
+  <rect x="186" y="328" width="140" height="24" rx="2" fill="currentColor" opacity="0.85"/>
+  <rect x="166" y="352" width="180" height="16" rx="2" fill="currentColor" opacity="0.8"/>
+  <rect x="146" y="368" width="220" height="32" rx="3" fill="currentColor" opacity="0.85"/>
+</svg>

@@ -340,7 +340,7 @@ export default function ProductForm({ product }: Props) {
               <p className="font-body text-[10px] tracking-[0.15em] text-[rgba(196,160,69,0.5)] uppercase mb-1.5">
                 {group.label}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {group.tags.map((tag) => {
                   const selected = (form.tags as string[]).includes(tag);
                   return (
