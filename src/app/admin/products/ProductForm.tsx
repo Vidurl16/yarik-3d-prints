@@ -20,14 +20,23 @@ const TYPES = [
 const PRINT_TYPES = ["RESIN", "FDM", "MULTICOLOUR"];
 
 const FACTIONS = [
+  // Grimdark Future
   "space-marines",
   "orks",
   "tyranids",
   "chaos-space-marines",
+  // Age of Fantasy
   "high-elves",
   "undead",
+  // Pokémon
   "pokemon-merch",
+  // Gaming & Terrain
   "custom-projects",
+  // Display Figures & Busts
+  "comics",
+  "games",
+  "movies",
+  "other",
 ];
 
 const ROLES = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
