@@ -89,6 +89,21 @@ const BRAND_MENU = [
     ],
     factions: [],
   },
+  {
+    id: "display-figures-busts",
+    label: "Display Figures & Busts",
+    icon: "🗿",
+    tagline: "Comics · Games · Movies · Other",
+    href: "/display-figures-busts",
+    accentColor: "#8a5ab0",
+    subcategories: [
+      { label: "Comics", href: "/display-figures-busts/comics" },
+      { label: "Games", href: "/display-figures-busts/games" },
+      { label: "Movies", href: "/display-figures-busts/movies" },
+      { label: "Other", href: "/display-figures-busts/other" },
+    ],
+    factions: [],
+  },
 ];
 
 const navLinks = [
@@ -196,11 +211,11 @@ export default function Nav() {
                       border: "1px solid rgba(196,160,69,0.14)",
                       backdropFilter: "blur(20px)",
                       boxShadow: "0 24px 48px rgba(0,0,0,0.7)",
-                      width: "640px",
+                      width: "800px",
                     }}
                   >
                     {/* Left: Brand list */}
-                    <div className="w-56 flex-shrink-0 py-3 border-r border-[rgba(196,160,69,0.08)]">
+                    <div className="w-72 flex-shrink-0 py-4 border-r border-[rgba(196,160,69,0.08)]">
                       <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase px-4 pb-2">
                         Browse by Brand
                       </p>
@@ -209,7 +224,7 @@ export default function Nav() {
                           key={brand.id}
                           onMouseEnter={() => setActiveBrand(brand.id)}
                           onClick={() => { setShopOpen(false); router.push(brand.href); }}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors group"
+                          className="w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors group"
                           style={{
                             background: activeBrand === brand.id
                               ? `rgba(${brand.accentColor.slice(1).match(/../g)!.map(h => parseInt(h, 16)).join(",")}, 0.12)`
@@ -222,12 +237,12 @@ export default function Nav() {
                           <span className="text-base leading-none flex-shrink-0">{brand.icon}</span>
                           <div className="min-w-0">
                             <p
-                              className="font-body text-xs tracking-wider truncate"
+                              className="font-body text-sm tracking-wider truncate"
                               style={{ color: activeBrand === brand.id ? "#f0e8d8" : "rgba(240,232,216,0.7)" }}
                             >
                               {brand.label}
                             </p>
-                            <p className="font-body text-[10px] text-[rgba(240,232,216,0.4)] truncate mt-0.5">
+                            <p className="font-body text-xs text-[rgba(240,232,216,0.4)] truncate mt-0.5">
                               {brand.tagline}
                             </p>
                           </div>
@@ -253,7 +268,7 @@ export default function Nav() {
                       initial={{ opacity: 0, x: 8 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.15 }}
-                      className="flex-1 py-4 px-5"
+                      className="flex-1 py-6 px-7"
                     >
                       <Link
                         href={activeBrandData.href}
@@ -279,7 +294,7 @@ export default function Nav() {
                                 key={faction.href}
                                 href={faction.href}
                                 onClick={() => setShopOpen(false)}
-                                className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.75)] hover:text-[#c4a045] transition-colors py-1.5 px-2 hover:bg-[rgba(196,160,69,0.06)]"
+                                className="font-body text-sm tracking-wider text-[rgba(240,232,216,0.75)] hover:text-[#c4a045] transition-colors py-2 px-3 hover:bg-[rgba(196,160,69,0.06)]"
                               >
                                 {faction.label}
                               </Link>
@@ -297,7 +312,7 @@ export default function Nav() {
                             key={sub.href}
                             href={sub.href}
                             onClick={() => setShopOpen(false)}
-                            className="font-body text-[11px] tracking-wider px-3 py-1.5 transition-all duration-150"
+                            className="font-body text-xs tracking-wider px-4 py-2 transition-all duration-150"
                             style={{
                               border: "1px solid rgba(196,160,69,0.2)",
                               color: "rgba(240,232,216,0.7)",

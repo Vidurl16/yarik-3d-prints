@@ -6,7 +6,8 @@ export type SiteCategoryId =
   | "age-of-fantasy"
   | "pokemon"
   | "basing-battle-effects"
-  | "gaming-accessories-terrain";
+  | "gaming-accessories-terrain"
+  | "display-figures-busts";
 
 export interface Product {
   id: string;
@@ -130,6 +131,32 @@ export const brandFactions: Partial<Record<SiteCategoryId, BrandFaction[]>> = {
       brand: "pokemon",
     },
   ],
+  "display-figures-busts": [
+    {
+      id: "comics", name: "Comics",
+      flavorText: "Display figures from comic universes.",
+      accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.5)", borderColor: "rgba(201,168,76,0.3)",
+      brand: "display-figures-busts",
+    },
+    {
+      id: "games", name: "Games",
+      flavorText: "Figures from video & tabletop games.",
+      accentColor: "#3a7a5a", glowColor: "rgba(58,122,90,0.5)", borderColor: "rgba(58,122,90,0.3)",
+      brand: "display-figures-busts",
+    },
+    {
+      id: "movies", name: "Movies",
+      flavorText: "Iconic characters from the silver screen.",
+      accentColor: "#1a4a7a", glowColor: "rgba(26,74,122,0.5)", borderColor: "rgba(26,74,122,0.3)",
+      brand: "display-figures-busts",
+    },
+    {
+      id: "other", name: "Other",
+      flavorText: "Unique display pieces that defy categories.",
+      accentColor: "#4a4a4a", glowColor: "rgba(74,74,74,0.5)", borderColor: "rgba(120,120,120,0.3)",
+      brand: "display-figures-busts",
+    },
+  ],
 };
 
 export const siteCategories: SiteCategory[] = [
@@ -191,6 +218,18 @@ export const siteCategories: SiteCategory[] = [
     accentColor: "#2a3a5a",
     glowColor: "rgba(42,58,90,0.5)",
     borderColor: "rgba(80,120,180,0.35)",
+    theme: "neutral",
+  },
+  {
+    id: "display-figures-busts",
+    name: "Display Figures & Busts",
+    shortName: "Display",
+    flavorText: "Comics, games, movies — beautifully rendered in resin.",
+    icon: "🗿",
+    iconSrc: "/brand-icons/display-figures-busts.svg",
+    accentColor: "#5a3a7a",
+    glowColor: "rgba(90,58,122,0.5)",
+    borderColor: "rgba(130,80,180,0.35)",
     theme: "neutral",
   },
 ];

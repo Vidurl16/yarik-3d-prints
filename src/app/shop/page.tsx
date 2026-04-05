@@ -66,12 +66,9 @@ export default function ShopPage() {
                     style={{ color: cat.accentColor }}
                   />
                 </div>
-                <h2 className="font-heading text-xl tracking-[0.08em] mb-2 transition-colors" style={{ color: "var(--text)" }}>
+                <h2 className="font-heading text-xl tracking-[0.08em] mb-4 transition-colors" style={{ color: "var(--text)" }}>
                   {cat.name.toUpperCase()}
                 </h2>
-                <p className="font-body text-sm leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-                  {cat.flavorText}
-                </p>
                 <span
                   className="font-body text-xs tracking-[0.2em] transition-colors"
                   style={{ color: cat.accentColor }}

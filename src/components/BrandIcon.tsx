@@ -158,6 +158,28 @@ export default function BrandIcon({ id, className = "", style }: BrandIconProps)
         </svg>
       );
 
+    /* ── Display Figures & Busts — pedestal bust silhouette ──────────────── */
+    case "display-figures-busts":
+      return (
+        <svg {...shared}>
+          {/* Head */}
+          <ellipse cx="256" cy="130" rx="80" ry="90" fill="currentColor" />
+          {/* Neck */}
+          <rect x="226" y="210" width="60" height="60" rx="8" fill="currentColor" />
+          {/* Shoulders / bust truncation */}
+          <path
+            fill="currentColor"
+            d="M 140,270 Q 130,310 160,330 L 352,330 Q 382,310 372,270 Q 340,240 256,238 Q 172,240 140,270 Z"
+          />
+          {/* Pedestal column */}
+          <rect x="216" y="330" width="80" height="80" rx="4" fill="currentColor" opacity="0.75" />
+          {/* Pedestal base */}
+          <rect x="160" y="408" width="192" height="32" rx="6" fill="currentColor" opacity="0.85" />
+          {/* Pedestal foot */}
+          <rect x="136" y="436" width="240" height="20" rx="4" fill="currentColor" opacity="0.6" />
+        </svg>
+      );
+
     default:
       return null;
   }

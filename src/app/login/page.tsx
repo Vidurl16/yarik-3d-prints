@@ -149,8 +149,8 @@ function LoginForm() {
         <div className="mt-6 text-center space-y-3">
           <button
             onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); setForgotSent(false); }}
-            className="font-body text-xs tracking-wider transition-colors"
-            style={{ color: "var(--muted)" }}
+            className="font-body text-sm tracking-wider transition-colors hover:underline"
+            style={{ color: "var(--primary)" }}
           >
             {mode === "login" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </button>

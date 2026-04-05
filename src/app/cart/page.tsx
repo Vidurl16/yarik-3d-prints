@@ -5,12 +5,13 @@ import { formatPrice } from "@/lib/products";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 
 const SHIPPING_METHODS = [
-  { id: "postnet", label: "PostNet to PostNet", sub: "Drop off & collect at any PostNet branch", priceCents: 8900 },
-  { id: "courier-door", label: "The Courier Guy — to the door", sub: "Delivered to your address (1–3 business days)", priceCents: 14900 },
-  { id: "courier-pudo", label: "The Courier Guy — PUDO locker", sub: "Collect at your nearest PUDO locker", priceCents: 9900 },
+  { id: "postnet",            label: "PostNet to PostNet",              sub: "Drop off & collect at any PostNet branch",      priceCents: 8900 },
+  { id: "courier-door",       label: "The Courier Guy — to the door",   sub: "Delivered to your address (1–3 business days)", priceCents: 14900 },
+  { id: "courier-pudo",       label: "The Courier Guy — PUDO locker",   sub: "Collect at your nearest PUDO locker",           priceCents: 9900 },
+  { id: "collection-ballito", label: "Collection — Ballito",            sub: "Arrange pickup in Ballito (contact us first)",  priceCents: 0 },
 ] as const;
 
 type ShippingMethodId = (typeof SHIPPING_METHODS)[number]["id"];
@@ -28,8 +29,19 @@ function CartContent() {
   const [address, setAddress] = useState({
     name: "", line1: "", line2: "", city: "", province: "", postal_code: "", country: "ZA",
   });
-  const [showAddress, setShowAddress] = useState(false);
+  const [pudoFields, setPudoFields] = useState({ name: "", email: "", phone: "", lockerName: "" });
   const [selectedShipping, setSelectedShipping] = useState<ShippingMethodId>("postnet");
+
+  const canCheckout = useMemo(() => {
+    if (items.length === 0) return false;
+    if (selectedShipping === "courier-door") {
+      return !!(address.name && address.line1 && address.city && address.province && address.postal_code);
+    }
+    if (selectedShipping === "courier-pudo") {
+      return !!(pudoFields.name && pudoFields.email && pudoFields.phone && pudoFields.lockerName);
+    }
+    return true; // postnet and collection-ballito need no address
+  }, [items, selectedShipping, address, pudoFields]);
 
   async function copyOrderId() {
     if (!orderId) return;
@@ -48,9 +60,12 @@ function CartContent() {
     setError(null);
 
     try {
-      const shippingAddress = showAddress && address.name && address.line1 && address.city
-        ? { ...address, country: address.country || "ZA" }
-        : undefined;
+      const shippingAddress =
+        selectedShipping === "courier-door"
+          ? { ...address, country: "ZA" }
+          : selectedShipping === "courier-pudo"
+          ? { name: pudoFields.name, email: pudoFields.email, phone: pudoFields.phone, locker: pudoFields.lockerName }
+          : undefined;
 
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -455,47 +470,84 @@ function CartContent() {
                   </p>
                 </div>
 
-                {/* Shipping Address */}
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setShowAddress(!showAddress)}
-                    className="flex items-center gap-2 font-body text-xs tracking-[0.1em] mb-2 transition-colors"
-                    style={{ color: showAddress ? "var(--primary)" : "var(--muted)" }}
-                  >
-                    <span>{showAddress ? "▾" : "▸"}</span>
-                    ADD SHIPPING ADDRESS
-                  </button>
+                {/* Shipping details — method-specific fields */}
+                {selectedShipping === "courier-door" && (
+                  <div className="space-y-2">
+                    <p className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+                      DELIVERY ADDRESS <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
+                    </p>
+                    {[
+                      { key: "name",        label: "Full name",              placeholder: "Recipient name",   required: true },
+                      { key: "line1",       label: "Address line 1",         placeholder: "Street address",   required: true },
+                      { key: "line2",       label: "Address line 2",         placeholder: "Apt, unit, etc.",  required: false },
+                      { key: "city",        label: "City",                   placeholder: "Cape Town",        required: true },
+                      { key: "province",    label: "Province",               placeholder: "Western Cape",     required: true },
+                      { key: "postal_code", label: "Postal code",            placeholder: "8001",             required: true },
+                    ].map(({ key, label, placeholder, required }) => (
+                      <div key={key}>
+                        <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
+                          {label.toUpperCase()}{required && <span style={{ color: "rgba(139,0,0,0.9)" }}> *</span>}
+                        </label>
+                        <input
+                          type="text"
+                          value={address[key as keyof typeof address]}
+                          onChange={(e) => setAddress((a) => ({ ...a, [key]: e.target.value }))}
+                          placeholder={placeholder}
+                          className="w-full px-3 py-2 font-body text-xs"
+                          style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-                  {showAddress && (
-                    <div className="space-y-2">
-                      {[
-                        { key: "name", label: "Full name", placeholder: "Recipient name" },
-                        { key: "line1", label: "Address line 1", placeholder: "Street address" },
-                        { key: "line2", label: "Address line 2 (optional)", placeholder: "Apt, unit, etc." },
-                        { key: "city", label: "City", placeholder: "Cape Town" },
-                        { key: "province", label: "Province", placeholder: "Western Cape" },
-                        { key: "postal_code", label: "Postal code", placeholder: "8001" },
-                      ].map(({ key, label, placeholder }) => (
-                        <div key={key}>
-                          <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
-                            {label.toUpperCase()}
-                          </label>
-                          <input
-                            type="text"
-                            value={address[key as keyof typeof address]}
-                            onChange={(e) => setAddress((a) => ({ ...a, [key]: e.target.value }))}
-                            placeholder={placeholder}
-                            className="w-full px-3 py-2 font-body text-xs"
-                            style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                {selectedShipping === "courier-pudo" && (
+                  <div className="space-y-2">
+                    <p className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+                      PUDO LOCKER DETAILS <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
+                    </p>
+                    {[
+                      { key: "name",       label: "Full Name",        type: "text",  placeholder: "Jane Smith" },
+                      { key: "email",      label: "Email",            type: "email", placeholder: "your@email.com" },
+                      { key: "phone",      label: "Phone Number",     type: "tel",   placeholder: "+27 ..." },
+                      { key: "lockerName", label: "PUDO Locker Name", type: "text",  placeholder: "e.g. PUDO Umhlanga" },
+                    ].map(({ key, label, type, placeholder }) => (
+                      <div key={key}>
+                        <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
+                          {label.toUpperCase()} <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
+                        </label>
+                        <input
+                          type={type}
+                          value={pudoFields[key as keyof typeof pudoFields]}
+                          onChange={(e) => setPudoFields((p) => ({ ...p, [key]: e.target.value }))}
+                          placeholder={placeholder}
+                          className="w-full px-3 py-2 font-body text-xs"
+                          style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-                <div className="flex items-center justify-between mb-6">
+                {selectedShipping === "collection-ballito" && (
+                  <div className="p-4" style={{ background: "var(--bg)", border: "1px solid var(--border)" }}>
+                    <p className="font-body text-xs tracking-wider mb-2" style={{ color: "var(--primary)" }}>
+                      COLLECTION ARRANGEMENT
+                    </p>
+                    <p className="font-body text-xs leading-relaxed mb-3" style={{ color: "var(--muted)" }}>
+                      Please contact us to arrange your collection in Ballito before placing your order.
+                    </p>
+                    <a
+                      href="mailto:info@thedexarium.co.za?subject=Collection"
+                      className="font-body text-xs tracking-[0.15em] transition-colors hover:underline"
+                      style={{ color: "var(--primary)" }}
+                    >
+                      EMAIL US — SUBJECT: COLLECTION →
+                    </a>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between mb-2 pt-2">
                   <span className="font-body text-xs tracking-[0.15em]" style={{ color: "var(--text)" }}>
                     TOTAL
                   </span>
@@ -506,17 +558,27 @@ function CartContent() {
 
                 <button
                   onClick={handleCheckout}
-                  disabled={checkingOut}
+                  disabled={!canCheckout || checkingOut}
                   className="w-full py-3 font-body text-sm tracking-[0.15em] transition-all duration-200"
                   style={{
-                    background: checkingOut ? "var(--muted)" : "var(--accent)",
+                    background: !canCheckout ? "var(--muted)" : checkingOut ? "var(--muted)" : "var(--accent)",
                     color: "var(--bg)",
-                    opacity: checkingOut ? 0.6 : 1,
-                    cursor: checkingOut ? "wait" : "pointer",
+                    opacity: !canCheckout || checkingOut ? 0.5 : 1,
+                    cursor: !canCheckout || checkingOut ? "not-allowed" : "pointer",
                   }}
                 >
                   {checkingOut ? "REDIRECTING…" : "PROCEED TO CHECKOUT"}
                 </button>
+
+                {!canCheckout && items.length > 0 && (
+                  <p className="font-body text-xs text-center mt-2" style={{ color: "var(--muted)" }}>
+                    {selectedShipping === "courier-door"
+                      ? "Complete your delivery address to continue."
+                      : selectedShipping === "courier-pudo"
+                      ? "Complete your PUDO locker details to continue."
+                      : ""}
+                  </p>
+                )}
 
                 {error && (
                   <p className="font-body text-xs text-[#ff6060] mt-2 text-center">

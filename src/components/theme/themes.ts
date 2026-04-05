@@ -9,7 +9,8 @@ export type ThemeId =
   | "fantasy"
   | "pokemon"
   | "basing"
-  | "terrain";
+  | "terrain"
+  | "display";
 
 /** Map from URL brand slug → ThemeId */
 export const BRAND_THEME_MAP: Record<string, ThemeId> = {
@@ -18,6 +19,7 @@ export const BRAND_THEME_MAP: Record<string, ThemeId> = {
   pokemon: "pokemon",
   "basing-battle-effects": "basing",
   "gaming-accessories-terrain": "terrain",
+  "display-figures-busts": "display",
 };
 
 /** All valid brand slugs (used in generateStaticParams) */
@@ -154,6 +156,22 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     icon: "🗺️",
     iconSrc: "/brand-icons/gaming-accessories-terrain.svg",
     tagline: "Build Your Battlefield",
+  },
+  display: {
+    bg: "#0a080e",
+    surface: "#140f1e",
+    text: "#e8e0f0",
+    muted: "#5a5070",
+    primary: "#8a5ab0",
+    accent: "#5a3a7a",
+    border: "rgba(138,90,176,0.25)",
+    heroImage: "/brand-assets/display/hero.jpeg",
+    heroFit: "cover",
+    heroPosition: "center center",
+    label: "Display Figures & Busts",
+    icon: "🗿",
+    iconSrc: "/brand-icons/display-figures-busts.svg",
+    tagline: "Comics · Games · Movies · Other",
   },
 };
 

@@ -50,6 +50,7 @@ export default async function ArmyBuilderPage({ params }: Props) {
 
   return (
     <ArmyBuilderClient
+      brand={brand}
       theme={theme}
       mainProducts={mainProducts}
       basingSuggestion={basingSuggestion}

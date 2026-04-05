@@ -78,17 +78,11 @@ export default function FactionTileGrid({ brandSlug, factions }: FactionTileGrid
               <div className="relative z-10 h-full flex flex-col justify-between p-6">
                 <div>
                   <h3
-                    className="font-heading text-xl tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300"
+                    className="font-heading text-xl tracking-wider group-hover:tracking-widest transition-all duration-300"
                     style={{ color: "var(--text)" }}
                   >
                     {faction.name.toUpperCase()}
                   </h3>
-                  <p
-                    className="font-body text-sm leading-relaxed"
-                    style={{ color: "var(--muted)" }}
-                  >
-                    {faction.flavorText}
-                  </p>
                 </div>
 
                 <div className="flex items-center gap-2">

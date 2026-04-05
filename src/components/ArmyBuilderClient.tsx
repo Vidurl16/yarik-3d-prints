@@ -6,6 +6,26 @@ import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product } from "@/lib/products";
 import type { ThemeTokens } from "@/components/theme/themes";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+
+const GAME_SYSTEMS = [
+  { id: "grimdark-future",  label: "Grimdark Future", icon: "⚙️" },
+  { id: "age-of-fantasy",   label: "Age of Fantasy",  icon: "⚔️" },
+] as const;
+
+const FACTION_GROUPS: Record<string, { label: string; factionIds: string[] }[]> = {
+  "grimdark-future": [
+    { label: "Imperial", factionIds: ["space-marines"] },
+    { label: "Chaos",    factionIds: ["chaos-space-marines"] },
+    { label: "Alien",    factionIds: ["tyranids", "orks"] },
+  ],
+  "age-of-fantasy": [
+    { label: "Order",       factionIds: ["high-elves"] },
+    { label: "Death",       factionIds: ["undead"] },
+    { label: "Chaos",       factionIds: [] },
+    { label: "Destruction", factionIds: [] },
+  ],
+};
 
 const ROLE_SECTIONS = [
   {
@@ -46,6 +66,7 @@ const ROLE_SECTIONS = [
 ] as const;
 
 interface Props {
+  brand: string;
   theme: ThemeTokens;
   mainProducts: Product[];
   basingSuggestion: Product;
@@ -303,11 +324,13 @@ function UpsellRow({
 }
 
 export default function ArmyBuilderClient({
+  brand,
   theme,
   mainProducts,
   basingSuggestion,
   battleEffectsSuggestion,
 }: Props) {
+  const router = useRouter();
   const [selections, setSelections] = useState<Record<string, number>>({});
   const [basingActive, setBasingActive] = useState(false);
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
@@ -471,18 +494,36 @@ export default function ArmyBuilderClient({
             warband to cart
           </p>
 
-          {/* Faction selector */}
-          {factionList.length > 1 && (
-            <div className="flex items-center gap-3 mt-6 flex-wrap">
-              <span
-                className="font-body text-xs tracking-[0.15em] uppercase flex-shrink-0"
-                style={{ color: "var(--muted)" }}
-              >
-                Faction
-              </span>
+          {/* Game System Toggle */}
+          <div className="flex gap-2 mt-6">
+            {GAME_SYSTEMS.map((sys) => (
               <button
+                key={sys.id}
+                onClick={() => { if (sys.id !== brand) router.push(`/${sys.id}/army-builder`); }}
+                className="flex items-center gap-2 px-5 py-2.5 font-body text-sm tracking-[0.1em] transition-all"
+                style={brand === sys.id
+                  ? { background: "var(--primary)", color: "var(--bg)" }
+                  : { border: "1px solid var(--border)", color: "var(--muted)" }}
+              >
+                <span>{sys.icon}</span>
+                {sys.label.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
+          {/* Faction selector — grouped by alliance */}
+          <div className="mt-6">
+            <span
+              className="font-body text-xs tracking-[0.2em] uppercase block mb-3"
+              style={{ color: "var(--muted)" }}
+            >
+              Faction
+            </span>
+            <div className="flex flex-wrap gap-2 mb-3">
+              <motion.button
+                whileTap={{ scale: 0.97 }}
                 onClick={() => setSelectedFaction("all")}
-                className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all"
+                className="font-body text-sm tracking-wider px-5 py-3 flex-shrink-0 transition-all"
                 style={{
                   border: "1px solid var(--border)",
                   color: selectedFaction === "all" ? "var(--bg)" : "var(--muted)",
@@ -490,24 +531,40 @@ export default function ArmyBuilderClient({
                 }}
               >
                 All Factions
-              </button>
-              {factionList.map((f) => (
-                <motion.button
-                  key={f.id}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setSelectedFaction(f.id)}
-                  className="font-body text-xs tracking-wider px-4 py-1.5 flex-shrink-0 transition-all"
-                  style={{
-                    border: selectedFaction === f.id ? "1px solid var(--primary)" : "1px solid var(--border)",
-                    color: selectedFaction === f.id ? "var(--bg)" : "var(--muted)",
-                    background: selectedFaction === f.id ? "var(--primary)" : "transparent",
-                  }}
-                >
-                  {f.label}
-                </motion.button>
-              ))}
+              </motion.button>
             </div>
-          )}
+            {(FACTION_GROUPS[brand] ?? []).map((group) => {
+              const groupFactions = factionList.filter((f) => group.factionIds.includes(f.id));
+              if (groupFactions.length === 0) return null;
+              return (
+                <div key={group.label} className="mb-4">
+                  <p
+                    className="font-body text-[10px] tracking-[0.25em] uppercase mb-2"
+                    style={{ color: "var(--muted)", opacity: 0.55 }}
+                  >
+                    {group.label}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {groupFactions.map((f) => (
+                      <motion.button
+                        key={f.id}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => setSelectedFaction(f.id)}
+                        className="font-body text-sm tracking-wider px-5 py-3 flex-shrink-0 transition-all capitalize"
+                        style={{
+                          border: selectedFaction === f.id ? "1px solid var(--primary)" : "1px solid var(--border)",
+                          color: selectedFaction === f.id ? "var(--bg)" : "var(--text)",
+                          background: selectedFaction === f.id ? "var(--primary)" : "transparent",
+                        }}
+                      >
+                        {f.label}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 

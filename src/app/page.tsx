@@ -11,6 +11,7 @@ const CATEGORY_ROUTE_MAP: Record<string, string> = {
   "pokemon": "/pokemon",
   "basing-battle-effects": "/basing-battle-effects",
   "gaming-accessories-terrain": "/gaming-accessories-terrain",
+  "display-figures-busts": "/display-figures-busts",
 };
 
 export default async function HeroPage() {
@@ -25,7 +26,7 @@ export default async function HeroPage() {
     <div data-theme="dexarium" style={{ background: "var(--bg)", color: "var(--text)" }}>
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="relative min-h-screen flex items-start justify-center overflow-hidden">
         {/* Subtle warm vignette at bottom */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -50,7 +51,7 @@ export default async function HeroPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-20 pb-32">
+        <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-24 pb-32">
           {/* Logo */}
           <div className="flex justify-center mb-8 animate-fade-in-up">
             <div
@@ -113,7 +114,7 @@ export default async function HeroPage() {
               BROWSE SHOP
             </Link>
             <Link
-              href="/builder"
+              href="/grimdark-future/army-builder"
               className="group font-body text-xs sm:text-sm tracking-[0.2em] px-8 py-4 transition-all duration-300 min-w-[200px] text-center"
               style={{
                 background: "var(--accent)",
@@ -221,17 +222,11 @@ export default async function HeroPage() {
                   />
                 </div>
                 <h3
-                  className="font-heading text-sm tracking-[0.1em] mb-2"
+                  className="font-heading text-sm tracking-[0.1em] mb-3"
                   style={{ color: "var(--text)" }}
                 >
                   {cat.shortName.toUpperCase()}
                 </h3>
-                <p
-                  className="font-body text-[11px] leading-relaxed"
-                  style={{ color: "var(--muted)" }}
-                >
-                  {cat.flavorText}
-                </p>
                 <span
                   className="mt-4 inline-block font-body text-xs tracking-[0.1em] transition-colors"
                   style={{ color: "var(--primary)" }}
