@@ -61,75 +61,64 @@ export interface BrandFaction {
   brand: SiteCategoryId;
   /** Product type categories available within this faction */
   productTypes?: string[];
+  /** Optional photo image for faction tile (under public/) */
+  imageUrl?: string;
 }
 
 /** Brand → faction/category groupings for the new navigation structure */
 export const brandFactions: Partial<Record<SiteCategoryId, BrandFaction[]>> = {
   "grimdark-future": [
-    {
-      id: "space-marines", name: "Space Marines",
-      flavorText: "The Emperor's finest. Unyielding. Eternal.",
-      accentColor: "#1a3a6e", glowColor: "rgba(26,58,110,0.7)", borderColor: "rgba(201,168,76,0.4)",
-      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
-    },
-    {
-      id: "orks", name: "Orks",
-      flavorText: "Brutal. Loud. Unstoppable. WAAAGH!",
-      accentColor: "#2d5a1b", glowColor: "rgba(45,90,27,0.7)", borderColor: "rgba(100,160,60,0.35)",
-      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
-    },
-    {
-      id: "tyranids", name: "Tyranids",
-      flavorText: "The Great Devourer consumes all.",
-      accentColor: "#4a1a6e", glowColor: "rgba(74,26,110,0.7)", borderColor: "rgba(180,140,200,0.35)",
-      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
-    },
-    {
-      id: "chaos-space-marines", name: "Chaos Space Marines",
-      flavorText: "Sworn to the dark gods. Corrupted. Deadly.",
-      accentColor: "#6e1a1a", glowColor: "rgba(110,26,26,0.8)", borderColor: "rgba(139,0,0,0.5)",
-      brand: "grimdark-future", productTypes: ["Infantry", "Characters", "Vehicles"],
-    },
+    { id: "space-marines",        name: "Angels of Death",           flavorText: "The Emperor's finest. Unyielding. Eternal.",              accentColor: "#1a3a6e", glowColor: "rgba(26,58,110,0.7)",  borderColor: "rgba(201,168,76,0.4)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/angels-of-death.jpg" },
+    { id: "dark-angels",          name: "Dark Angels of Death",      flavorText: "Secrets buried in blood. Honour through redemption.",     accentColor: "#1a3a1a", glowColor: "rgba(26,58,26,0.7)",   borderColor: "rgba(100,160,60,0.4)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/dark-angels-of-death.jpg" },
+    { id: "blood-angels",         name: "Bloodied Angels of Death",  flavorText: "Feral fury beneath gilded armour.",                       accentColor: "#8b0000", glowColor: "rgba(139,0,0,0.7)",    borderColor: "rgba(200,50,50,0.4)",   brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/bloodied-angels-of-death.jpg" },
+    { id: "space-wolves",         name: "Space Vikings",             flavorText: "Howling into the void. Wild. Unbroken.",                  accentColor: "#2a3a5a", glowColor: "rgba(42,58,90,0.7)",   borderColor: "rgba(140,160,200,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/space-vikings.jpg" },
+    { id: "black-templars",       name: "Templars",                  flavorText: "Crusaders of the void. No mercy. No retreat.",            accentColor: "#1a1a1a", glowColor: "rgba(60,50,0,0.7)",    borderColor: "rgba(200,168,76,0.4)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/templars.jpg" },
+    { id: "custodians",           name: "Custodians",                flavorText: "The golden guard of the god-emperor. Peerless.",          accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.7)", borderColor: "rgba(201,168,76,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/custodians.jpg" },
+    { id: "imperial-guard",       name: "The Guard",                 flavorText: "A trillion soldiers. Courage in numbers.",                accentColor: "#5a4a2a", glowColor: "rgba(90,74,42,0.7)",   borderColor: "rgba(140,120,60,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/the-guard.jpg" },
+    { id: "sisters-of-battle",    name: "Battle Sisters",            flavorText: "Faith forged in fire. Blessed bolt and flame.",           accentColor: "#8b1a1a", glowColor: "rgba(139,26,26,0.7)", borderColor: "rgba(200,80,80,0.4)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/battle-sisters.jpg" },
+    { id: "grey-knights",         name: "Silver Paladins",           flavorText: "Daemon hunters. Psychic warriors forged in silver.",      accentColor: "#5a6a7a", glowColor: "rgba(90,106,122,0.7)", borderColor: "rgba(180,200,220,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/silver-paladins.jpg" },
+    { id: "adeptus-mechanicus",   name: "Mars Tech",                 flavorText: "Machine and flesh. The Omnissiah provides.",              accentColor: "#8b1a00", glowColor: "rgba(139,26,0,0.7)",  borderColor: "rgba(200,80,40,0.4)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/mars-tech.jpg" },
+    { id: "knights",              name: "Knights Collosus",          flavorText: "Walking cathedrals of death. Household honour.",          accentColor: "#3a2a1a", glowColor: "rgba(58,42,26,0.7)",  borderColor: "rgba(160,120,60,0.4)", brand: "grimdark-future", productTypes: ["Characters","Vehicles"],             imageUrl: "/images/categories/factions/grimdark-future/knights-collosus.jpg" },
+    { id: "chaos-space-marines",  name: "Lords of Chaos",            flavorText: "Sworn to the dark gods. Corrupted. Deadly.",             accentColor: "#6e1a1a", glowColor: "rgba(110,26,26,0.8)", borderColor: "rgba(139,0,0,0.5)",   brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/lords-of-chaos.jpg" },
+    { id: "death-guard",          name: "Lords of Decay",            flavorText: "Blessed by pestilence. Rot made manifest.",              accentColor: "#4a5a1a", glowColor: "rgba(74,90,26,0.7)",  borderColor: "rgba(120,140,50,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/lords-of-decay.jpg" },
+    { id: "thousand-sons",        name: "Lords of Sorcery",          flavorText: "Masters of the warp. Knowledge is power.",               accentColor: "#1a2a6e", glowColor: "rgba(26,42,110,0.7)", borderColor: "rgba(80,120,200,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/lords-of-sorcery.jpg" },
+    { id: "world-eaters",         name: "Lords of Slaughter",        flavorText: "Blood for the Blood God. Skulls for the skull throne.",  accentColor: "#8b0000", glowColor: "rgba(139,0,0,0.8)",  borderColor: "rgba(180,40,40,0.5)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/lords-of-slaughter.jpg" },
+    { id: "emperors-children",    name: "Lords of Perfection",       flavorText: "Pleasure. Pain. Excess without limit.",                  accentColor: "#6e1a6e", glowColor: "rgba(110,26,110,0.7)", borderColor: "rgba(180,80,180,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/lords-of-perfection.jpg" },
+    { id: "chaos-knights",        name: "Legio Demonica",            flavorText: "Corrupted warmachines. Daemon-bound iron.",              accentColor: "#3a1a1a", glowColor: "rgba(58,26,26,0.7)",  borderColor: "rgba(140,50,50,0.4)",  brand: "grimdark-future", productTypes: ["Characters","Vehicles"],             imageUrl: "/images/categories/factions/grimdark-future/legio-demonica.jpg" },
+    { id: "chaos-titans",         name: "Chaotic Knights Collosus",  flavorText: "Titan-scale heresy. The ground trembles.",               accentColor: "#4a1a0a", glowColor: "rgba(74,26,10,0.7)",  borderColor: "rgba(160,70,40,0.4)",  brand: "grimdark-future", productTypes: ["Vehicles"],                          imageUrl: "/images/categories/factions/grimdark-future/chaotic-knights-collosus.jpg" },
+    { id: "orks",                 name: "Greenskins",                flavorText: "Brutal. Loud. Unstoppable. WAAAGH!",                     accentColor: "#2d5a1b", glowColor: "rgba(45,90,27,0.7)",  borderColor: "rgba(100,160,60,0.35)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/greenskins.jpg" },
+    { id: "necrons",              name: "Undying Legion",            flavorText: "Ancient beyond reckoning. Death is just a delay.",       accentColor: "#1a4a1a", glowColor: "rgba(26,74,26,0.7)",  borderColor: "rgba(80,200,80,0.4)",  brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/undying-legion.jpg" },
+    { id: "tyranids",             name: "The Swarm",                 flavorText: "The Great Devourer consumes all.",                       accentColor: "#4a1a6e", glowColor: "rgba(74,26,110,0.7)", borderColor: "rgba(180,140,200,0.35)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/the-swarm.jpg" },
+    { id: "eldar",                name: "Eldar",                     flavorText: "Ancient. Graceful. Deadly beyond measure.",             accentColor: "#1a3a5a", glowColor: "rgba(26,58,90,0.7)",  borderColor: "rgba(100,160,220,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/eldar.jpg" },
+    { id: "dark-eldar",           name: "Dark Eldar",                flavorText: "Raiders from the webway. Pain is their currency.",       accentColor: "#3a1a4a", glowColor: "rgba(58,26,74,0.7)",  borderColor: "rgba(140,80,200,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/dark-eldar.jpg" },
+    { id: "tau",                  name: "The Greater Good",          flavorText: "For the Greater Good. United, humanity shall prevail.",  accentColor: "#1a4a5a", glowColor: "rgba(26,74,90,0.7)",  borderColor: "rgba(80,160,180,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/the-greater-good.jpg" },
+    { id: "leagues-of-votann",    name: "Dwarf Kin",                 flavorText: "Ancient grudges never forgotten. Kin stand together.",   accentColor: "#5a3a1a", glowColor: "rgba(90,58,26,0.7)",  borderColor: "rgba(160,120,60,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/dwarf-kin.jpg" },
+    { id: "genestealer-cults",    name: "Gene Cults",                flavorText: "The Great Devourer's vanguard, hiding in plain sight.",  accentColor: "#4a1a3a", glowColor: "rgba(74,26,58,0.7)",  borderColor: "rgba(160,80,140,0.4)", brand: "grimdark-future", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/grimdark-future/gene-cults.jpg" },
   ],
   "age-of-fantasy": [
-    {
-      id: "high-elves", name: "High Elves",
-      flavorText: "Ancient. Proud. Unmatched in blade and sorcery.",
-      accentColor: "#1a4a3a", glowColor: "rgba(26,74,58,0.7)", borderColor: "rgba(100,200,140,0.35)",
-      brand: "age-of-fantasy", productTypes: ["Infantry", "Cavalry", "Characters", "Vehicles"],
-    },
-    {
-      id: "undead", name: "Undead Legion",
-      flavorText: "Death is no barrier. The dead march eternal.",
-      accentColor: "#2a1a4a", glowColor: "rgba(42,26,74,0.7)", borderColor: "rgba(140,100,200,0.35)",
-      brand: "age-of-fantasy", productTypes: ["Infantry", "Cavalry", "Characters", "Vehicles"],
-    },
+    { id: "high-elves",    name: "Eternals",       flavorText: "Immortal warriors. Shining blade and unwavering resolve.",     accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.7)", borderColor: "rgba(201,168,76,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/eternals.jpg" },
+    { id: "wood-elves",    name: "Elves",          flavorText: "Swift as the wind. Masters of the ancient forests.",           accentColor: "#2a5a2a", glowColor: "rgba(42,90,42,0.7)",   borderColor: "rgba(100,180,80,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/elves.jpg" },
+    { id: "dark-elves",    name: "Dark Elves",     flavorText: "Ruthless. Cunning. No mercy for the weak.",                    accentColor: "#2a1a4a", glowColor: "rgba(42,26,74,0.7)",   borderColor: "rgba(120,80,180,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/dark-elves.jpg" },
+    { id: "woodelves",     name: "Wood Elves",     flavorText: "Guardians of the sacred groves. Nature's wrath incarnate.",   accentColor: "#3a5a1a", glowColor: "rgba(58,90,26,0.7)",   borderColor: "rgba(120,160,60,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/woodelves.jpg" },
+    { id: "lizardmen",     name: "Lizardmen",      flavorText: "Ancient servants of the Old Ones. Cold-blooded wrath.",        accentColor: "#1a5a3a", glowColor: "rgba(26,90,58,0.7)",   borderColor: "rgba(60,160,100,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/lizardmen.jpg" },
+    { id: "cities",        name: "Cities",         flavorText: "Armies of the city-states. Strength in unity.",               accentColor: "#3a3a5a", glowColor: "rgba(58,58,90,0.7)",   borderColor: "rgba(120,120,180,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/cities.jpg" },
+    { id: "vampire-lords", name: "Vampire Lords",  flavorText: "Eternal nobility. Blood is both thirst and throne.",          accentColor: "#5a1a1a", glowColor: "rgba(90,26,26,0.7)",   borderColor: "rgba(160,60,60,0.4)",  brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/vampire-lords.jpg" },
+    { id: "undead",        name: "The Haunted",    flavorText: "Spectral legions. The veil between worlds grows thin.",       accentColor: "#2a1a4a", glowColor: "rgba(42,26,74,0.7)",   borderColor: "rgba(140,100,200,0.35)", brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/the-haunted.jpg" },
+    { id: "flesh-eaters",  name: "Flesh Eaters",   flavorText: "Delusional ghouls believing themselves noble knights.",        accentColor: "#4a1a1a", glowColor: "rgba(74,26,26,0.7)",  borderColor: "rgba(140,50,50,0.4)",  brand: "age-of-fantasy", productTypes: ["Infantry","Characters"],           imageUrl: "/images/categories/factions/age-of-fantasy/flesh-eaters.jpg" },
+    { id: "rotkin",        name: "Rotkin",         flavorText: "Plague monks. Disease and devotion inseparable.",             accentColor: "#4a5a1a", glowColor: "rgba(74,90,26,0.7)",   borderColor: "rgba(120,140,50,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Characters"],           imageUrl: "/images/categories/factions/age-of-fantasy/rotkin.jpg" },
+    { id: "ratmen",        name: "Ratmen",         flavorText: "Skittering masses. Outnumber, overwhelm, devour.",            accentColor: "#5a4a1a", glowColor: "rgba(90,74,26,0.7)",   borderColor: "rgba(160,130,50,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Characters"],           imageUrl: "/images/categories/factions/age-of-fantasy/ratmen.jpg" },
+    { id: "chas-knights",  name: "Chaos Knights",  flavorText: "Armoured servants of the dark gods. Dread made flesh.",      accentColor: "#6e1a1a", glowColor: "rgba(110,26,26,0.7)", borderColor: "rgba(160,50,50,0.4)",  brand: "age-of-fantasy", productTypes: ["Infantry","Cavalry","Characters"], imageUrl: "/images/categories/factions/age-of-fantasy/chas-knights.jpg" },
+    { id: "chaos-dwarves", name: "Chaos Dwarves",  flavorText: "Forge-masters of the dark lands. Industry and malice.",      accentColor: "#3a1a1a", glowColor: "rgba(58,26,26,0.7)",  borderColor: "rgba(120,50,30,0.4)",  brand: "age-of-fantasy", productTypes: ["Infantry","Characters","Vehicles"], imageUrl: "/images/categories/factions/age-of-fantasy/chaos-dwarves.jpg" },
+    { id: "greenskins",    name: "Greenskins",     flavorText: "The biggest and the baddest. WAAAGH!",                        accentColor: "#2d5a1b", glowColor: "rgba(45,90,27,0.7)",  borderColor: "rgba(100,160,60,0.35)", brand: "age-of-fantasy", productTypes: ["Infantry","Characters"],          imageUrl: "/images/categories/factions/age-of-fantasy/greenskins.jpg" },
+    { id: "goblins",       name: "Goblins",        flavorText: "Cunning little terrors. More dangerous in numbers.",          accentColor: "#3a6a1a", glowColor: "rgba(58,106,26,0.7)", borderColor: "rgba(100,180,50,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Characters"],           imageUrl: "/images/categories/factions/age-of-fantasy/goblins.jpg" },
+    { id: "ogres",         name: "Ogres",          flavorText: "Hungry. Massive. Unstoppable eating machines.",              accentColor: "#5a3a1a", glowColor: "rgba(90,58,26,0.7)",  borderColor: "rgba(160,110,50,0.4)", brand: "age-of-fantasy", productTypes: ["Infantry","Characters"],           imageUrl: "/images/categories/factions/age-of-fantasy/ogres.jpg" },
+    { id: "giants",        name: "Giants",         flavorText: "Towering behemoths that shake the earth.",                   accentColor: "#3a2a1a", glowColor: "rgba(58,42,26,0.7)",  borderColor: "rgba(140,100,50,0.4)", brand: "age-of-fantasy", productTypes: ["Characters"],                      imageUrl: "/images/categories/factions/age-of-fantasy/giants.jpg" },
   ],
   "pokemon": [
-    {
-      id: "pokeballs", name: "Pokéballs",
-      flavorText: "Classic resin Pokéballs — hand-painted and display ready.",
-      accentColor: "#c8281c", glowColor: "rgba(200,40,28,0.6)", borderColor: "rgba(200,40,28,0.4)",
-      brand: "pokemon",
-    },
-    {
-      id: "themed-pokeballs", name: "Themed Pokéballs",
-      flavorText: "Custom-painted Pokéballs themed after your favourite Pokémon.",
-      accentColor: "#e8c838", glowColor: "rgba(232,200,56,0.6)", borderColor: "rgba(232,200,56,0.4)",
-      brand: "pokemon",
-    },
-    {
-      id: "3d-cards", name: "3D Display Cards",
-      flavorText: "Multicolour FDM Pokémon display cards — art you can hold.",
-      accentColor: "#4a78c8", glowColor: "rgba(74,120,200,0.6)", borderColor: "rgba(74,120,200,0.4)",
-      brand: "pokemon",
-    },
-    {
-      id: "figurines", name: "Figurines & Statues",
-      flavorText: "Resin Pokémon figurines, busts and display pieces.",
-      accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.6)", borderColor: "rgba(201,168,76,0.4)",
-      brand: "pokemon",
-    },
+    { id: "pokeballs",        name: "Pokéballs",        flavorText: "Classic resin Pokéballs — hand-painted and display ready.",              accentColor: "#c8281c", glowColor: "rgba(200,40,28,0.6)",  borderColor: "rgba(200,40,28,0.4)",  brand: "pokemon", imageUrl: "/images/categories/factions/pokemon/pokeballs.jpg" },
+    { id: "themed-pokeballs", name: "Themed Pokéballs", flavorText: "Custom-painted Pokéballs themed after your favourite Pokémon.",          accentColor: "#e8c838", glowColor: "rgba(232,200,56,0.6)", borderColor: "rgba(232,200,56,0.4)", brand: "pokemon", imageUrl: "/images/categories/factions/pokemon/themed-pokeballs.jpg" },
+    { id: "3d-cards",         name: "3D Display Cards", flavorText: "Multicolour FDM Pokémon display cards — art you can hold.",             accentColor: "#4a78c8", glowColor: "rgba(74,120,200,0.6)", borderColor: "rgba(74,120,200,0.4)", brand: "pokemon", imageUrl: "/images/categories/factions/pokemon/3d-cards.jpg" },
+    { id: "figurines",        name: "Figurines & Statues", flavorText: "Resin Pokémon figurines, busts and display pieces.",                accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.6)", borderColor: "rgba(201,168,76,0.4)", brand: "pokemon", imageUrl: "/images/categories/factions/pokemon/figurines.jpg" },
   ],
   "display-figures-busts": [
     {
