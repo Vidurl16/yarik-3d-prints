@@ -11,6 +11,8 @@ export interface DbProduct {
   currency: string;
   tags: string[];
   image_url: string | null;
+  image_urls: string[] | null;
+  options: Array<{ label: string; choices: string[] }> | null;
   is_preorder: boolean;
   is_new: boolean;
   is_active: boolean;

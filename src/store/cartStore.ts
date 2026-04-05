@@ -11,6 +11,7 @@ export interface CartItem {
   quantity: number;
   imageUrl: string;
   printType: "RESIN" | "FDM" | "MULTICOLOUR";
+  selectedOptions?: Record<string, string>;
 }
 
 interface CartStore {
@@ -56,10 +57,15 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         set((state) => {
-          const existing = state.items.find((i) => i.id === item.id);
+          const optKey = JSON.stringify(item.selectedOptions ?? {});
+          const existing = state.items.find(
+            (i) => i.id === item.id && JSON.stringify(i.selectedOptions ?? {}) === optKey
+          );
           const newItems = existing
             ? state.items.map((i) =>
-                i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                i.id === item.id && JSON.stringify(i.selectedOptions ?? {}) === optKey
+                  ? { ...i, quantity: i.quantity + 1 }
+                  : i
               )
             : [...state.items, { ...item, quantity: 1 }];
           return { items: newItems };

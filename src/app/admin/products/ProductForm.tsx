@@ -72,9 +72,15 @@ export default function ProductForm({ product }: Props) {
     is_active: product?.is_active ?? true,
     preorder_date: product?.preorder_date ?? "",
     image_url: product?.image_url ?? "",
+    image_urls: product?.image_urls ?? [],
     stock_quantity: product?.stock_quantity != null ? String(product.stock_quantity) : "",
   });
 
+  const [options, setOptions] = useState<Array<{ label: string; choices: string }>>(
+    (product?.options ?? []).map((o) => ({ label: o.label, choices: o.choices.join(", ") }))
+  );
+
+  const [imageFiles, setImageFiles] = useState<(File | null)[]>([null, null]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -95,30 +101,47 @@ export default function ProductForm({ product }: Props) {
 
     try {
       let imageUrl = form.image_url;
+      setUploading(true);
 
-      // Upload image if selected
+      // Upload primary image if selected
       if (imageFile) {
-        setUploading(true);
         const formData = new FormData();
         formData.append("file", imageFile);
         formData.append("productId", product?.id ?? "new");
-
-        const uploadRes = await fetch("/api/admin/upload-image", {
-          method: "POST",
-          body: formData,
-        });
+        const uploadRes = await fetch("/api/admin/upload-image", { method: "POST", body: formData });
         if (!uploadRes.ok) throw new Error("Image upload failed");
-        const uploadData = await uploadRes.json();
-        imageUrl = uploadData.url;
-        setUploading(false);
+        imageUrl = (await uploadRes.json()).url;
       }
+
+      // Upload extra images (slots 1 & 2)
+      const extraUrls: string[] = [...(form.image_urls ?? [])];
+      for (let i = 0; i < imageFiles.length; i++) {
+        const f = imageFiles[i];
+        if (f) {
+          const fd = new FormData();
+          fd.append("file", f);
+          fd.append("productId", product?.id ?? "new");
+          const r = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+          if (!r.ok) throw new Error(`Extra image ${i + 1} upload failed`);
+          extraUrls[i] = (await r.json()).url;
+        }
+      }
+
+      setUploading(false);
 
       const payload = {
         ...form,
         price_cents: Math.round(Number(form.price_cents) * 100),
         stock_quantity: form.stock_quantity !== "" ? Number(form.stock_quantity) : null,
         image_url: imageUrl || null,
+        image_urls: extraUrls.filter(Boolean),
         tags: form.tags,
+        options: options
+          .filter((o) => o.label.trim() && o.choices.trim())
+          .map((o) => ({
+            label: o.label.trim(),
+            choices: o.choices.split(",").map((c) => c.trim()).filter(Boolean),
+          })),
       };
 
       const url = isEditing
@@ -280,13 +303,13 @@ export default function ProductForm({ product }: Props) {
         </div>
       </div>
 
+      {/* Primary image */}
       <div>
-        <label className={labelClass}>Image URL (or upload below)</label>
+        <label className={labelClass}>Image URL — Primary</label>
         <input name="image_url" value={form.image_url} onChange={handleChange} className={inputClass} placeholder="https://..." />
       </div>
-
       <div>
-        <label className={labelClass}>Upload Image (max 5 MB)</label>
+        <label className={labelClass}>Upload Primary Image (max 5 MB)</label>
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
@@ -294,6 +317,87 @@ export default function ProductForm({ product }: Props) {
           className="font-body text-xs text-[rgba(240,232,216,0.6)] file:mr-3 file:px-3 file:py-1.5 file:bg-[#1c1508] file:border file:border-[rgba(196,160,69,0.2)] file:text-[#c4a045] file:text-xs file:cursor-pointer"
         />
         {uploading && <p className="font-body text-xs text-[#c4a045] mt-1">Uploading...</p>}
+      </div>
+
+      {/* Extra images (slots 2 & 3) */}
+      {[0, 1].map((i) => (
+        <div key={i}>
+          <label className={labelClass}>Image {i + 2} URL (optional)</label>
+          <input
+            value={(form.image_urls ?? [])[i] ?? ""}
+            onChange={(e) => {
+              const urls = [...(form.image_urls ?? [])];
+              urls[i] = e.target.value;
+              setForm((prev) => ({ ...prev, image_urls: urls }));
+            }}
+            className={inputClass}
+            placeholder="https://..."
+          />
+          <div className="mt-1">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(e) => {
+                const files = [...imageFiles];
+                files[i] = e.target.files?.[0] ?? null;
+                setImageFiles(files);
+              }}
+              className="font-body text-xs text-[rgba(240,232,216,0.6)] file:mr-3 file:px-3 file:py-1.5 file:bg-[#1c1508] file:border file:border-[rgba(196,160,69,0.2)] file:text-[#c4a045] file:text-xs file:cursor-pointer"
+            />
+          </div>
+        </div>
+      ))}
+
+      {/* Options */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className={labelClass}>Options (wargear, colour, etc.)</label>
+          <button
+            type="button"
+            onClick={() => setOptions((prev) => [...prev, { label: "", choices: "" }])}
+            className="font-body text-xs tracking-wider px-3 py-1 border border-[rgba(196,160,69,0.3)] text-[#c4a045] hover:border-[rgba(196,160,69,0.6)] transition-colors"
+          >
+            + Add Option
+          </button>
+        </div>
+        {options.length === 0 && (
+          <p className="font-body text-xs text-[rgba(240,232,216,0.3)]">No options. Click "+ Add Option" to add wargear choices, colours, etc.</p>
+        )}
+        <div className="space-y-3">
+          {options.map((opt, i) => (
+            <div key={i} className="flex gap-2 items-start">
+              <div className="flex-1 space-y-1">
+                <input
+                  value={opt.label}
+                  onChange={(e) => {
+                    const next = [...options];
+                    next[i] = { ...next[i], label: e.target.value };
+                    setOptions(next);
+                  }}
+                  className={inputClass}
+                  placeholder="Option name (e.g. Colour)"
+                />
+                <input
+                  value={opt.choices}
+                  onChange={(e) => {
+                    const next = [...options];
+                    next[i] = { ...next[i], choices: e.target.value };
+                    setOptions(next);
+                  }}
+                  className={inputClass}
+                  placeholder="Choices, comma-separated (e.g. Red, Blue, Green)"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setOptions((prev) => prev.filter((_, j) => j !== i))}
+                className="font-body text-xs text-red-400 hover:text-red-300 px-2 py-2.5 mt-0.5"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex items-center gap-6">

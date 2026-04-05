@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
-import { getProductBySlug } from "@/lib/data/products";
-import Image from "next/image";
+import { getProductBySlug, getCatalogProductsByBrand } from "@/lib/data/products";
 import Link from "next/link";
 import type { Metadata } from "next";
 import AddToCartButton from "./AddToCartButton";
+import ProductGallery from "@/components/ProductGallery";
+import BasingQuickAdd from "@/components/BasingQuickAdd";
 
 interface PageProps {
   params: Promise<{ faction: string; slug: string }>;
@@ -23,13 +24,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { faction, slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, basingProducts] = await Promise.all([
+    getProductBySlug(slug),
+    getCatalogProductsByBrand("basing-battle-effects"),
+  ]);
 
   if (!product) notFound();
 
   const priceZAR = product.price_cents / 100;
   const formattedPrice = `R ${priceZAR.toLocaleString("en-ZA", { minimumFractionDigits: 0 })}`;
-  const imageUrl = product.image_url ?? `https://picsum.photos/seed/${product.slug}/800/800`;
+  const primaryImage = product.image_url ?? `https://picsum.photos/seed/${product.slug}/800/800`;
+  const allImages = [primaryImage, ...(product.image_urls ?? [])].filter(Boolean).slice(0, 3);
   const isOutOfStock = product.stock_quantity != null && product.stock_quantity <= 0;
   const isLowStock = product.stock_quantity != null && product.stock_quantity > 0 && product.stock_quantity <= 5;
 
@@ -37,6 +42,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
     product.print_type === "FDM" || product.print_type === "MULTICOLOUR" || product.print_type === "RESIN"
       ? product.print_type
       : "RESIN";
+
+  // Pick 2 basing suggestions relevant to the brand
+  const basingSuggestions = basingProducts.slice(0, 2);
 
   return (
     <div className="min-h-screen pt-24 pb-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -51,23 +59,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Image */}
-          <div
-            className="relative aspect-square overflow-hidden"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-          >
-            <Image
-              src={imageUrl}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[rgba(10,10,10,0.3)]" />
+          {/* Product Image / Gallery */}
+          <div>
+            <ProductGallery images={allImages} alt={product.name} />
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="flex gap-2 mt-3">
               {product.is_new && (
                 <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.9)] text-[#f0e8d8]">NEW</span>
               )}
@@ -136,15 +133,16 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            {/* Add to Cart */}
+            {/* Options + Add to Cart */}
             <div className="mb-6">
               <AddToCartButton
                 product={{
                   id: product.id,
                   name: product.name,
                   price: priceZAR,
-                  imageUrl,
+                  imageUrl: primaryImage,
                   printType,
+                  options: product.options ?? [],
                 }}
                 isOutOfStock={isOutOfStock}
               />
@@ -167,6 +165,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* #4 — Basing & Battle Effects quick-add */}
+        <BasingQuickAdd products={basingSuggestions} />
       </div>
     </div>
   );
