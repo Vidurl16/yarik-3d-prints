@@ -19,33 +19,26 @@ const TYPES = [
 
 const PRINT_TYPES = ["RESIN", "FDM", "MULTICOLOUR"];
 
-const FACTIONS = [
-  // Grimdark Future
-  "space-marines",
-  "orks",
-  "tyranids",
-  "chaos-space-marines",
-  // Age of Fantasy
-  "high-elves",
-  "undead",
-  // Pokémon
-  "pokemon-merch",
-  // Gaming & Terrain
-  "custom-projects",
-  // Display Figures & Busts
-  "comics",
-  "games",
-  "movies",
-  "other",
+const FACTIONS: { group: string; ids: string[] }[] = [
+  { group: "Grimdark Future — Imperial", ids: ["space-marines","dark-angels","blood-angels","space-wolves","black-templars","custodians","imperial-guard","sisters-of-battle","grey-knights","adeptus-mechanicus","knights"] },
+  { group: "Grimdark Future — Chaos",    ids: ["chaos-space-marines","death-guard","thousand-sons","world-eaters","emperors-children","chaos-knights","chaos-titans"] },
+  { group: "Grimdark Future — Xenos",    ids: ["orks","necrons","tyranids","eldar","dark-eldar","tau","leagues-of-votann","genestealer-cults"] },
+  { group: "Age of Fantasy — Order",     ids: ["high-elves","wood-elves","dark-elves","woodelves","lizardmen","cities"] },
+  { group: "Age of Fantasy — Death",     ids: ["undead","vampire-lords","flesh-eaters"] },
+  { group: "Age of Fantasy — Chaos",     ids: ["rotkin","chas-knights","chaos-dwarves"] },
+  { group: "Age of Fantasy — Destruction", ids: ["greenskins","goblins","ogres","giants","ratmen"] },
+  { group: "Basing",                     ids: ["old-world-city","modern-city","jungle-and-forest","rock-and-crystals","alien-worlds","elemental","caves-and-swamps","desert","oceanic","chaos-wastes","animal-life","misc-and-skulls","unique-debris"] },
+  { group: "Pokémon",                    ids: ["pokeballs","themed-pokeballs","3d-cards","figurines"] },
+  { group: "Display Figures",            ids: ["comics","games","movies","other"] },
+  { group: "General",                    ids: ["custom-projects"] },
 ];
 
 const ROLES = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
 
 const TAG_GROUPS: { label: string; tags: string[] }[] = [
-  { label: "Pokémon", tags: ["pokeball", "themed-pokeball", "3d-card", "figurine"] },
-  { label: "Basing", tags: ["urban", "nature", "explosion", "base", "scatter"] },
-  { label: "Warhammer", tags: ["space-marines", "orks", "tyranids", "chaos", "elves", "undead"] },
-  { label: "General", tags: ["exclusive", "limited", "bundle", "custom", "terrain", "character", "vehicle"] },
+  { label: "Pokémon",  tags: ["pokeball", "themed-pokeball", "3d-card", "figurine"] },
+  { label: "Basing",   tags: ["base", "scatter", "marker", "effect", "debris", "rubble"] },
+  { label: "General",  tags: ["exclusive", "limited", "bundle", "custom", "new-arrival", "preorder"] },
 ];
 
 interface Props {
@@ -214,7 +207,11 @@ export default function ProductForm({ product }: Props) {
           <label className={labelClass}>Faction</label>
           <select name="faction" value={form.faction} onChange={handleChange} className={inputClass}>
             <option value="">None</option>
-            {FACTIONS.map((f) => <option key={f} value={f}>{f}</option>)}
+            {FACTIONS.map((group) => (
+              <optgroup key={group.group} label={group.group}>
+                {group.ids.map((id) => <option key={id} value={id}>{id}</option>)}
+              </optgroup>
+            ))}
           </select>
         </div>
         <div>
