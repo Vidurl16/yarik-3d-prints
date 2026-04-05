@@ -204,7 +204,7 @@ export default async function HeroPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {siteCategories.map((cat) => {
             const thumb = CATEGORY_THUMBNAIL[cat.id];
             return (
@@ -212,7 +212,7 @@ export default async function HeroPage() {
                 key={cat.id}
                 href={CATEGORY_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
                 className="group relative overflow-hidden"
-                style={{ border: "1px solid var(--border)", aspectRatio: "3/4" }}
+                style={{ border: "1px solid var(--border)", aspectRatio: "3/5" }}
               >
                 {thumb ? (
                   <Image
@@ -240,13 +240,13 @@ export default async function HeroPage() {
                 {/* Text */}
                 <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
                   <h3
-                    className="font-heading text-xs sm:text-sm tracking-[0.08em] leading-tight mb-1"
+                    className="font-heading text-sm sm:text-base tracking-[0.08em] leading-tight mb-1"
                     style={{ color: "#fff" }}
                   >
                     {cat.name.toUpperCase()}
                   </h3>
                   <span
-                    className="font-body text-xs tracking-[0.08em] transition-colors"
+                    className="font-body text-xs tracking-[0.1em] transition-colors"
                     style={{ color: "var(--primary)" }}
                   >
                     EXPLORE →
