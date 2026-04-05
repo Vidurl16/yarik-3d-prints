@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
 
   return (
-    <div className="min-h-screen bg-[#0c0902] pt-16">
+    <div className="min-h-screen bg-[#0c0902] pt-20">
       {/* Admin nav */}
       <div className="bg-[#110d05] border-b border-[rgba(196,160,69,0.1)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">

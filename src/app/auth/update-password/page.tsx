@@ -50,7 +50,7 @@ export default function UpdatePasswordPage() {
 
   if (!ready) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 pt-16" style={{ background: "var(--bg)", color: "var(--text)" }}>
+      <div className="min-h-screen flex items-center justify-center px-4 pt-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
         <div className="text-center max-w-sm">
           <p className="font-heading text-sm tracking-widest mb-4" style={{ color: "var(--primary)", opacity: 0.85 }}>
             VERIFYING RESET LINK…
@@ -65,7 +65,7 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 pt-16" style={{ background: "var(--bg)", color: "var(--text)" }}>
+    <div className="min-h-screen flex items-center justify-center px-4 pt-20" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
           <h1 className="font-heading text-2xl tracking-[0.15em] mb-2" style={{ color: "var(--primary)" }}>
