@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product } from "@/lib/products";
 import type { ThemeTokens } from "@/components/theme/themes";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const GAME_SYSTEMS = [
   { id: "grimdark-future",  label: "Grimdark Future", icon: "⚙️" },
@@ -330,7 +330,6 @@ export default function ArmyBuilderClient({
   basingSuggestion,
   battleEffectsSuggestion,
 }: Props) {
-  const router = useRouter();
   const [selections, setSelections] = useState<Record<string, number>>({});
   const [basingActive, setBasingActive] = useState(false);
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
@@ -497,9 +496,9 @@ export default function ArmyBuilderClient({
           {/* Game System Toggle */}
           <div className="flex gap-2 mt-6">
             {GAME_SYSTEMS.map((sys) => (
-              <button
+              <Link
                 key={sys.id}
-                onClick={() => { if (sys.id !== brand) router.push(`/${sys.id}/army-builder`); }}
+                href={`/${sys.id}/army-builder`}
                 className="flex items-center gap-2 px-5 py-2.5 font-body text-sm tracking-[0.1em] transition-all"
                 style={brand === sys.id
                   ? { background: "var(--primary)", color: "var(--bg)" }
@@ -507,7 +506,7 @@ export default function ArmyBuilderClient({
               >
                 <span>{sys.icon}</span>
                 {sys.label.toUpperCase()}
-              </button>
+              </Link>
             ))}
           </div>
 
