@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState, useEffect, useMemo } from "react";
+import PudoLockerPicker from "@/components/PudoLockerPicker";
 
 const SHIPPING_METHODS = [
   { id: "postnet",            label: "PostNet to PostNet",              sub: "Drop off & collect at any PostNet branch",      priceCents: 8900 },
@@ -29,7 +30,7 @@ function CartContent() {
   const [address, setAddress] = useState({
     name: "", line1: "", line2: "", city: "", province: "", postal_code: "", country: "ZA",
   });
-  const [pudoFields, setPudoFields] = useState({ name: "", email: "", phone: "", lockerName: "" });
+  const [pudoFields, setPudoFields] = useState({ name: "", email: "", phone: "", lockerName: "", lockerId: "" });
   const [selectedShipping, setSelectedShipping] = useState<ShippingMethodId>("postnet");
 
   const canCheckout = useMemo(() => {
@@ -39,6 +40,7 @@ function CartContent() {
     }
     if (selectedShipping === "courier-pudo") {
       return !!(pudoFields.name && pudoFields.email && pudoFields.phone && pudoFields.lockerName);
+      // lockerId is optional — falls back to lockerName text for manual entry
     }
     return true; // postnet and collection-ballito need no address
   }, [items, selectedShipping, address, pudoFields]);
@@ -64,7 +66,7 @@ function CartContent() {
         selectedShipping === "courier-door"
           ? { ...address, country: "ZA" }
           : selectedShipping === "courier-pudo"
-          ? { name: pudoFields.name, email: pudoFields.email, phone: pudoFields.phone, locker: pudoFields.lockerName }
+          ? { name: pudoFields.name, email: pudoFields.email, phone: pudoFields.phone, locker: pudoFields.lockerName, locker_id: pudoFields.lockerId || undefined }
           : undefined;
 
       const res = await fetch("/api/checkout", {
@@ -507,10 +509,9 @@ function CartContent() {
                       PUDO LOCKER DETAILS <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
                     </p>
                     {[
-                      { key: "name",       label: "Full Name",        type: "text",  placeholder: "Jane Smith" },
-                      { key: "email",      label: "Email",            type: "email", placeholder: "your@email.com" },
-                      { key: "phone",      label: "Phone Number",     type: "tel",   placeholder: "+27 ..." },
-                      { key: "lockerName", label: "PUDO Locker Name", type: "text",  placeholder: "e.g. PUDO Umhlanga" },
+                      { key: "name",  label: "Full Name",    type: "text",  placeholder: "Jane Smith" },
+                      { key: "email", label: "Email",        type: "email", placeholder: "your@email.com" },
+                      { key: "phone", label: "Phone Number", type: "tel",   placeholder: "+27 ..." },
                     ].map(({ key, label, type, placeholder }) => (
                       <div key={key}>
                         <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
@@ -526,6 +527,11 @@ function CartContent() {
                         />
                       </div>
                     ))}
+                    <PudoLockerPicker
+                      selectedId={pudoFields.lockerId}
+                      selectedName={pudoFields.lockerName}
+                      onSelect={(id, name) => setPudoFields((p) => ({ ...p, lockerId: id, lockerName: name }))}
+                    />
                   </div>
                 )}
 
