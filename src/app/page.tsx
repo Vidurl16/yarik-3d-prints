@@ -225,7 +225,7 @@ export default async function HeroPage() {
                   className="font-heading text-sm tracking-[0.1em] mb-3"
                   style={{ color: "var(--text)" }}
                 >
-                  {cat.shortName.toUpperCase()}
+                  {cat.name.toUpperCase()}
                 </h3>
                 <span
                   className="mt-4 inline-block font-body text-xs tracking-[0.1em] transition-colors"
