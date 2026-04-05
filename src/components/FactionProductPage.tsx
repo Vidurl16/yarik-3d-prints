@@ -24,6 +24,8 @@ function toDbShape(p: Product): DbProduct {
     currency: "ZAR",
     tags: p.tags ?? [],
     image_url: p.imageUrl,
+    image_urls: null,
+    options: null,
     is_preorder: p.isPreorder ?? false,
     is_new: p.isNewArrival ?? false,
     is_active: true,
