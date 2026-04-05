@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/auth/isAdmin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import AdminSignOut from "./AdminSignOut";
+import PurgeCacheButton from "./PurgeCacheButton";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getSession();
@@ -40,6 +41,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <PurgeCacheButton />
             <span className="font-body text-xs text-[rgba(240,232,216,0.55)]">{user.email}</span>
             <AdminSignOut />
           </div>
