@@ -35,16 +35,6 @@ export default async function HeroPage() {
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <div className="relative min-h-screen flex items-start justify-center overflow-hidden">
-        {/* Hero SVG background — parchment + gold glow + diagonal lines */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('/brand-assets/dexarium/hero.svg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.35,
-          }}
-        />
         {/* Subtle warm vignette at bottom */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -213,36 +203,9 @@ export default async function HeroPage() {
         </div>
       </div>
 
-      {/* ── MARQUEE STRIP ──────────────────────────────────── */}
-      <div
-        className="overflow-hidden"
-        style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)", height: "36px" }}
-        aria-hidden="true"
-      >
-        <div className="animate-marquee inline-flex items-center h-full gap-0">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <span key={i} className="font-heading text-[10px] tracking-[0.25em] inline-flex items-center gap-8 px-8" style={{ color: "var(--primary)" }}>
-              {["RESIN", "FDM", "CUSTOM ORDERS", "SOUTH AFRICA", "FROM SPARK TO LEGEND", "RESIN", "FDM", "CUSTOM ORDERS", "SOUTH AFRICA", "FROM SPARK TO LEGEND"].map((t) => (
-                <span key={t} className="inline-flex items-center gap-8">{t}<span style={{ opacity: 0.4 }}>·</span></span>
-              ))}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* ── CATEGORY TILES ─────────────────────────────────── */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto relative">
-        {/* Subtle ruled-paper background */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('/brand-assets/dexarium/texture-02.svg')",
-            backgroundSize: "512px 512px",
-            backgroundRepeat: "repeat",
-            opacity: 0.04,
-          }}
-        />
-        <div className="relative text-center mb-8">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto">
+        <div className="text-center mb-8">
           <p
             className="font-body text-xs tracking-[0.15em] mb-3 uppercase"
             style={{ color: "var(--muted)" }}
@@ -257,15 +220,19 @@ export default async function HeroPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {siteCategories.map((cat) => {
             const thumb = CATEGORY_THUMBNAIL[cat.id];
             return (
               <Link
                 key={cat.id}
                 href={CATEGORY_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
-                className="group relative overflow-hidden"
-                style={{ border: "1px solid var(--border)", aspectRatio: "2/3", minHeight: "420px" }}
+                className="group relative overflow-hidden transition-all duration-300"
+                style={{
+                  border: "1px solid var(--border)",
+                  aspectRatio: "2/3",
+                  minHeight: "360px",
+                }}
               >
                 {thumb ? (
                   <Image
@@ -278,28 +245,28 @@ export default async function HeroPage() {
                 ) : (
                   <div className="absolute inset-0" style={{ background: "var(--surface)" }} />
                 )}
-                {/* Dark gradient overlay */}
+                {/* Gradient overlay — stronger at bottom for legibility */}
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)",
+                    background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.35) 45%, transparent 100%)",
                   }}
                 />
-                {/* Hover glow */}
+                {/* Accent border on hover */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `radial-gradient(ellipse 80% 40% at 50% 120%, var(--glow) 0%, transparent 70%)` }}
+                  style={{ boxShadow: "inset 0 0 0 1px var(--primary)" }}
                 />
                 {/* Text */}
-                <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
+                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
                   <h3
-                    className="font-heading text-base sm:text-lg tracking-[0.08em] leading-tight mb-1"
+                    className="font-heading text-sm sm:text-base tracking-[0.08em] leading-tight mb-2"
                     style={{ color: "#fff" }}
                   >
                     {cat.name.toUpperCase()}
                   </h3>
                   <span
-                    className="font-body text-xs tracking-[0.1em] transition-colors"
+                    className="font-body text-[11px] tracking-[0.12em] transition-all duration-300 opacity-0 group-hover:opacity-100 inline-block translate-y-1 group-hover:translate-y-0"
                     style={{ color: "var(--primary)" }}
                   >
                     EXPLORE →
@@ -318,7 +285,7 @@ export default async function HeroPage() {
             className="max-w-7xl mx-auto"
             style={{ borderTop: "1px solid var(--border)" }}
           >
-            <div className="flex items-center justify-between mb-10 pt-10">
+            <div className="flex items-center justify-between mb-8 pt-10">
               <div>
                 <p
                   className="font-body text-xs tracking-[0.15em] mb-2 uppercase"
@@ -347,42 +314,36 @@ export default async function HeroPage() {
                 <Link
                   key={product.id}
                   href={CATEGORY_ROUTE_MAP[product.brand] ?? `/shop/${product.brand}`}
-                  className="group card-bg overflow-hidden transition-all duration-300"
+                  className="group card-bg overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
                   style={{ border: "1px solid var(--border)" }}
                 >
-                    <div
-                      className="product-card-frame"
-                      style={{ background: "var(--surface)" }}
-                    >
-                      <Image
+                  <div
+                    className="product-card-frame"
+                    style={{ background: "var(--surface)" }}
+                  >
+                    <Image
                       src={product.image_url ?? `https://picsum.photos/seed/${product.slug}/400/400`}
                       alt={product.name}
-                        fill
-                        loading="lazy"
-                        className="product-card-image opacity-90 group-hover:opacity-100"
-                        sizes="(max-width: 640px) 50vw, 25vw"
-                      />
+                      fill
+                      loading="lazy"
+                      className="product-card-image opacity-90 group-hover:opacity-100"
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                    />
                     <span
                       className="absolute top-2 left-2 font-body text-xs tracking-[0.1em] px-2 py-0.5"
-                      style={{
-                        background: "var(--primary)",
-                        color: "var(--bg)",
-                      }}
+                      style={{ background: "var(--primary)", color: "var(--bg)" }}
                     >
                       NEW
                     </span>
                   </div>
-                  <div className="p-3">
+                  <div className="p-3" style={{ borderTop: "1px solid var(--border)" }}>
                     <p
                       className="font-body text-xs font-semibold leading-snug truncate"
                       style={{ color: "var(--text)" }}
                     >
                       {product.name}
                     </p>
-                    <p
-                      className="font-heading text-sm mt-1"
-                      style={{ color: "var(--primary)" }}
-                    >
+                    <p className="font-heading text-sm mt-1" style={{ color: "var(--primary)" }}>
                       {formatPrice(product.price_cents / 100)}
                     </p>
                   </div>
@@ -400,7 +361,7 @@ export default async function HeroPage() {
             className="max-w-7xl mx-auto"
             style={{ borderTop: "1px solid var(--border)" }}
           >
-            <div className="flex items-center justify-between mb-10 pt-10">
+            <div className="flex items-center justify-between mb-8 pt-10">
               <div>
                 <p
                   className="font-body text-xs tracking-[0.15em] mb-2 uppercase"
@@ -429,32 +390,32 @@ export default async function HeroPage() {
                 <Link
                   key={product.id}
                   href={CATEGORY_ROUTE_MAP[product.brand] ?? `/shop/${product.brand}`}
-                  className="group card-bg overflow-hidden transition-all duration-300"
-                  style={{ border: "1px solid var(--border)" }}
+                  className="group card-bg overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    border: "1px solid var(--border)",
+                    borderTop: "2px solid var(--accent)",
+                  }}
                 >
-                    <div
-                      className="product-card-frame"
-                      style={{ background: "var(--surface)" }}
-                    >
-                      <Image
+                  <div
+                    className="product-card-frame"
+                    style={{ background: "var(--surface)" }}
+                  >
+                    <Image
                       src={product.image_url ?? `https://picsum.photos/seed/${product.slug}/400/400`}
                       alt={product.name}
-                        fill
-                        loading="lazy"
-                        className="product-card-image opacity-70 group-hover:opacity-90"
-                        sizes="(max-width: 640px) 50vw, 25vw"
-                      />
+                      fill
+                      loading="lazy"
+                      className="product-card-image opacity-70 group-hover:opacity-90"
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                    />
                     <span
                       className="absolute top-2 left-2 font-body text-xs tracking-[0.1em] px-2 py-0.5"
-                      style={{
-                        background: "var(--accent)",
-                        color: "var(--bg)",
-                      }}
+                      style={{ background: "var(--accent)", color: "var(--bg)" }}
                     >
                       PREORDER
                     </span>
                   </div>
-                  <div className="p-3">
+                  <div className="p-3" style={{ borderTop: "1px solid var(--border)" }}>
                     <p
                       className="font-body text-xs font-semibold leading-snug truncate"
                       style={{ color: "var(--text)" }}
@@ -462,17 +423,11 @@ export default async function HeroPage() {
                       {product.name}
                     </p>
                     <div className="flex items-center justify-between mt-1">
-                      <p
-                        className="font-heading text-sm"
-                        style={{ color: "var(--primary)" }}
-                      >
+                      <p className="font-heading text-sm" style={{ color: "var(--primary)" }}>
                         {formatPrice(product.price_cents / 100)}
                       </p>
                       {product.preorder_date && (
-                        <p
-                          className="font-body text-xs"
-                          style={{ color: "var(--muted)" }}
-                        >
+                        <p className="font-body text-xs" style={{ color: "var(--muted)" }}>
                           {product.preorder_date}
                         </p>
                       )}
