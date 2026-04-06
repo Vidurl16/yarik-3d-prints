@@ -92,7 +92,7 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="relative min-h-[70vh] flex items-end overflow-hidden"
+        className="relative min-h-[55vh] flex items-end overflow-hidden"
       >
         {/* Full-bleed background image */}
         <Image

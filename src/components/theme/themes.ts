@@ -50,6 +50,8 @@ export interface ThemeTokens {
   heroFit?: "cover" | "contain";
   /** Background position for the hero image */
   heroPosition?: string;
+  /** Hero section min-height override (e.g. "50vh" for wide/short images) */
+  heroMinHeight?: string;
   /** Human-readable brand label */
   label: string;
   /** Emoji icon for nav / tiles (fallback) */
@@ -87,7 +89,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     border: "rgba(155,64,96,0.25)",
     heroImage: "/images/categories/banners/grimdark-future.jpg",
     heroFit: "cover",
-    heroPosition: "center 35%", // Tested: angel face centred at 1440px, 768px, 375px
+    heroPosition: "center 25%", // Angel face stays centred at reduced hero height
     label: "Grimdark Future",
     icon: "⚔️",
     iconSrc: "/brand-icons/grimdark-future.svg",
