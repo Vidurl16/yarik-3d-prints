@@ -35,6 +35,16 @@ export default async function HeroPage() {
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <div className="relative min-h-screen flex items-start justify-center overflow-hidden">
+        {/* Hero SVG background — parchment + gold glow + diagonal lines */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "url('/brand-assets/dexarium/hero.svg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: 0.35,
+          }}
+        />
         {/* Subtle warm vignette at bottom */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -134,7 +144,7 @@ export default async function HeroPage() {
             </Link>
           </div>
 
-          <div className="mt-16 flex flex-col items-center gap-2" style={{ opacity: 0.35 }}>
+          <div className="mt-10 flex flex-col items-center gap-2" style={{ opacity: 0.35 }}>
             <span
               className="font-body text-xs tracking-[0.15em]"
               style={{ color: "var(--primary)" }}
@@ -154,31 +164,47 @@ export default async function HeroPage() {
           style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}
         >
           <div
-            className="max-w-7xl mx-auto px-6 py-4 grid grid-cols-3"
+            className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-3"
             style={{ gap: 0 }}
           >
             {[
-              { label: "16K DENTAL RESIN", sub: "Medical-grade precision" },
-              { label: "BAMBU LAB FDM", sub: "Multicolour enclosed printing" },
-              { label: "MADE IN SA 🇿🇦", sub: "Shipped across South Africa" },
-            ].map(({ label, sub }, i) => (
+              {
+                label: "16K DENTAL RESIN", sub: "Medical-grade precision",
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5 mx-auto mb-1" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                  </svg>
+                ),
+              },
+              {
+                label: "BAMBU LAB FDM", sub: "Multicolour enclosed printing",
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5 mx-auto mb-1" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                  </svg>
+                ),
+              },
+              {
+                label: "MADE IN SA 🇿🇦", sub: "Shipped across South Africa",
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5 mx-auto mb-1" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                ),
+              },
+            ].map(({ label, sub, icon }, i) => (
               <div
                 key={label}
                 className="px-4 sm:px-6 text-center py-1"
                 style={{
                   borderLeft: i > 0 ? "1px solid var(--border)" : "none",
+                  color: "var(--primary)",
                 }}
               >
-                <p
-                  className="font-heading text-[11px] tracking-[0.15em]"
-                  style={{ color: "var(--primary)" }}
-                >
-                  {label}
-                </p>
-                <p
-                  className="font-body text-xs mt-0.5 hidden sm:block"
-                  style={{ color: "var(--muted)" }}
-                >
+                <div className="hidden sm:block">{icon}</div>
+                <p className="font-heading text-[11px] tracking-[0.15em]">{label}</p>
+                <p className="font-body text-xs mt-0.5 hidden sm:block" style={{ color: "var(--muted)" }}>
                   {sub}
                 </p>
               </div>
@@ -187,9 +213,36 @@ export default async function HeroPage() {
         </div>
       </div>
 
+      {/* ── MARQUEE STRIP ──────────────────────────────────── */}
+      <div
+        className="overflow-hidden"
+        style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)", height: "36px" }}
+        aria-hidden="true"
+      >
+        <div className="animate-marquee inline-flex items-center h-full gap-0">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <span key={i} className="font-heading text-[10px] tracking-[0.25em] inline-flex items-center gap-8 px-8" style={{ color: "var(--primary)" }}>
+              {["RESIN", "FDM", "CUSTOM ORDERS", "SOUTH AFRICA", "FROM SPARK TO LEGEND", "RESIN", "FDM", "CUSTOM ORDERS", "SOUTH AFRICA", "FROM SPARK TO LEGEND"].map((t) => (
+                <span key={t} className="inline-flex items-center gap-8">{t}<span style={{ opacity: 0.4 }}>·</span></span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* ── CATEGORY TILES ─────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto">
-        <div className="text-center mb-12">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto relative">
+        {/* Subtle ruled-paper background */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "url('/brand-assets/dexarium/texture-02.svg')",
+            backgroundSize: "512px 512px",
+            backgroundRepeat: "repeat",
+            opacity: 0.04,
+          }}
+        />
+        <div className="relative text-center mb-8">
           <p
             className="font-body text-xs tracking-[0.15em] mb-3 uppercase"
             style={{ color: "var(--muted)" }}
@@ -260,12 +313,12 @@ export default async function HeroPage() {
 
       {/* ── NEW ARRIVALS ───────────────────────────────────── */}
       {newArrivals.length > 0 && (
-        <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <section className="py-12 px-4 sm:px-6 lg:px-8">
           <div
             className="max-w-7xl mx-auto"
             style={{ borderTop: "1px solid var(--border)" }}
           >
-            <div className="flex items-center justify-between mb-10 pt-16">
+            <div className="flex items-center justify-between mb-10 pt-10">
               <div>
                 <p
                   className="font-body text-xs tracking-[0.15em] mb-2 uppercase"
@@ -342,12 +395,12 @@ export default async function HeroPage() {
 
       {/* ── PREORDERS ──────────────────────────────────────── */}
       {preorders.length > 0 && (
-        <section className="py-16 px-4 sm:px-6 lg:px-8 mb-8">
+        <section className="py-12 px-4 sm:px-6 lg:px-8 mb-8">
           <div
             className="max-w-7xl mx-auto"
             style={{ borderTop: "1px solid var(--border)" }}
           >
-            <div className="flex items-center justify-between mb-10 pt-16">
+            <div className="flex items-center justify-between mb-10 pt-10">
               <div>
                 <p
                   className="font-body text-xs tracking-[0.15em] mb-2 uppercase"
