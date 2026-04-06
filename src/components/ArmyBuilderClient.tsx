@@ -671,7 +671,7 @@ export default function ArmyBuilderClient({
 
         {/* Right: Sticky Summary Panel */}
         <aside
-          className="lg:w-96 xl:w-[420px] shrink-0"
+          className="lg:w-[480px] xl:w-[540px] shrink-0"
           style={{
             position: "sticky",
             top: "80px",
