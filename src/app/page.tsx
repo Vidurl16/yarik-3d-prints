@@ -59,11 +59,11 @@ export default async function HeroPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-28 pb-32">
+        <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-16 pb-16">
           {/* Logo */}
-          <div className="flex justify-center mb-8 animate-fade-in-up">
+          <div className="flex justify-center mb-6 animate-fade-in-up">
             <div
-              className="relative w-28 h-28 sm:w-36 sm:h-36 overflow-hidden rounded-full"
+              className="relative w-40 h-40 sm:w-52 sm:h-52 overflow-hidden rounded-full"
               style={{
                 boxShadow: "0 4px 32px var(--glow), 0 1px 4px rgba(0,0,0,0.1)",
                 border: "2px solid var(--border)",
@@ -74,7 +74,7 @@ export default async function HeroPage() {
                 alt="The Dexarium"
                 fill
                 className="object-cover"
-                sizes="(max-width: 640px) 112px, 144px"
+                sizes="(max-width: 640px) 160px, 208px"
                 priority
               />
             </div>
