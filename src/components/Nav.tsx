@@ -19,10 +19,14 @@ const BRAND_MENU = [
     accentColor: "#8b0000",
     subcategories: [],
     factions: [
-      { label: "Space Marines", href: "/grimdark-future/space-marines" },
-      { label: "Orks", href: "/grimdark-future/orks" },
-      { label: "Tyranids", href: "/grimdark-future/tyranids" },
-      { label: "Chaos Space Marines", href: "/grimdark-future/chaos-space-marines" },
+      { label: "Angels of Death", href: "/grimdark-future/space-marines" },
+      { label: "Lords of Chaos", href: "/grimdark-future/chaos-space-marines" },
+      { label: "Greenskins", href: "/grimdark-future/orks" },
+      { label: "The Swarm", href: "/grimdark-future/tyranids" },
+      { label: "Undying Legion", href: "/grimdark-future/necrons" },
+      { label: "The Guard", href: "/grimdark-future/imperial-guard" },
+      { label: "Custodians", href: "/grimdark-future/custodians" },
+      { label: "Battle Sisters", href: "/grimdark-future/sisters-of-battle" },
     ],
   },
   {
@@ -34,8 +38,14 @@ const BRAND_MENU = [
     accentColor: "#2a5a3a",
     subcategories: [],
     factions: [
-      { label: "High Elves", href: "/age-of-fantasy/high-elves" },
-      { label: "Undead Legion", href: "/age-of-fantasy/undead" },
+      { label: "Eternals", href: "/age-of-fantasy/high-elves" },
+      { label: "Vampire Lords", href: "/age-of-fantasy/vampire-lords" },
+      { label: "Greenskins", href: "/age-of-fantasy/greenskins" },
+      { label: "Lizardmen", href: "/age-of-fantasy/lizardmen" },
+      { label: "The Haunted", href: "/age-of-fantasy/undead" },
+      { label: "Chaos Knights", href: "/age-of-fantasy/chas-knights" },
+      { label: "Ratmen", href: "/age-of-fantasy/ratmen" },
+      { label: "Ogres", href: "/age-of-fantasy/ogres" },
     ],
   },
   {
@@ -61,9 +71,12 @@ const BRAND_MENU = [
     href: "/basing-battle-effects",
     accentColor: "#5a4a2a",
     subcategories: [
-      { label: "Bases", href: "/basing-battle-effects?filter=Bases" },
-      { label: "Scatter & Debris", href: "/basing-battle-effects?filter=Scatter+%26+Debris" },
-      { label: "Battle Effects", href: "/basing-battle-effects?filter=Battle+Effects" },
+      { label: "Old World City", href: "/basing-battle-effects/old-world-city" },
+      { label: "Modern City", href: "/basing-battle-effects/modern-city" },
+      { label: "Jungle & Forest", href: "/basing-battle-effects/jungle-and-forest" },
+      { label: "Rock & Crystals", href: "/basing-battle-effects/rock-and-crystals" },
+      { label: "Alien Worlds", href: "/basing-battle-effects/alien-worlds" },
+      { label: "Elemental", href: "/basing-battle-effects/elemental" },
     ],
     factions: [],
   },
@@ -88,10 +101,10 @@ const BRAND_MENU = [
     href: "/display-figures-busts",
     accentColor: "#8a5ab0",
     subcategories: [
-      { label: "Comics", href: "/display-figures-busts/comics" },
-      { label: "Games", href: "/display-figures-busts/games" },
-      { label: "Movies", href: "/display-figures-busts/movies" },
-      { label: "Other", href: "/display-figures-busts/other" },
+      { label: "Single Figures", href: "/display-figures-busts?tag=single+figures" },
+      { label: "Dioramas", href: "/display-figures-busts?tag=dioramas" },
+      { label: "Busts", href: "/display-figures-busts?tag=busts" },
+      { label: "Limited Edition", href: "/display-figures-busts?tag=limited+edition" },
     ],
     factions: [],
   },
@@ -277,7 +290,7 @@ export default function Nav() {
                       {activeBrandData.factions.length > 0 && (
                         <>
                           <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
-                            Factions
+                            Browse by Faction
                           </p>
                           <div className="grid grid-cols-2 gap-1 mb-5">
                             {activeBrandData.factions.map((faction) => (
