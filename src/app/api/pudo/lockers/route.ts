@@ -43,8 +43,10 @@ export async function GET(req: NextRequest) {
   try {
     // PUDO returns all lockers — no server-side search param supported.
     // We cache the full list for 1 h and filter here.
+    // Note: PUDO expects the literal pipe in the api_key, not %7C.
+    const encodedKey = apiKey.split("|").map(encodeURIComponent).join("|");
     const res = await fetch(
-      `${PUDO_BASE}/lockers-data?api_key=${encodeURIComponent(apiKey)}`,
+      `${PUDO_BASE}/lockers-data?api_key=${encodedKey}`,
       {
         headers: { Accept: "application/json" },
         next: { revalidate: 3600 },
