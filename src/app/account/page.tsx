@@ -57,6 +57,11 @@ export default async function AccountPage({ searchParams }: PageProps) {
         )}
         <div className="mb-10 flex items-start justify-between">
           <div>
+            {user.user_metadata?.full_name && (
+              <p className="font-body text-sm tracking-wider mb-1" style={{ color: "var(--text)" }}>
+                Welcome, {(user.user_metadata.full_name as string).split(" ")[0]}
+              </p>
+            )}
             <h1 className="font-heading text-2xl tracking-[0.15em] mb-1" style={{ color: "var(--primary)" }}>
               YOUR ACCOUNT
             </h1>

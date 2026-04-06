@@ -13,6 +13,7 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(
     callbackError === "auth_callback_failed"
@@ -43,7 +44,11 @@ function LoginForm() {
         setForgotSent(true);
       }
     } else if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName.trim() } },
+      });
       if (error) {
         setError(error.message);
       } else {
@@ -95,6 +100,23 @@ function LoginForm() {
             </div>
           ) : (
             <>
+          {mode === "signup" && (
+          <div>
+            <label className="block font-body text-sm tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
+              placeholder="Jane Smith"
+            />
+          </div>
+          )}
+
           <div>
             <label className="block font-body text-sm tracking-[0.2em] mb-2 uppercase" style={{ color: "var(--muted)" }}>
               Email

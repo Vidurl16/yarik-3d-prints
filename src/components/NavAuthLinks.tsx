@@ -9,6 +9,7 @@ export default function NavAuthLinks({ mobile = false }: { mobile?: boolean }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [admin, setAdmin] = useState(false);
+  const [firstName, setFirstName] = useState<string>("");
 
   useEffect(() => {
     let supabase: ReturnType<typeof getBrowserClient> | null = null;
@@ -19,21 +20,37 @@ export default function NavAuthLinks({ mobile = false }: { mobile?: boolean }) {
       return;
     }
 
-    supabase.auth.getUser().then(({ data }: { data: { user: User | null } }) => {
-      setUser(data.user);
+    async function loadUser(u: User) {
+      setUser(u);
       setReady(true);
+      fetch("/api/auth/me").then(r => r.json()).then(d => setAdmin(!!d.isAdmin)).catch(() => {});
+      // Fetch profile for display name — falls back to user_metadata if profile table not yet migrated
+      try {
+        const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", u.id).single();
+        const name = profile?.full_name || (u.user_metadata?.full_name as string | undefined) || "";
+        setFirstName(name.split(" ")[0] ?? "");
+      } catch {
+        const name = (u.user_metadata?.full_name as string | undefined) ?? "";
+        setFirstName(name.split(" ")[0] ?? "");
+      }
+    }
+
+    supabase.auth.getUser().then(({ data }: { data: { user: User | null } }) => {
       if (data.user) {
-        fetch("/api/auth/me").then(r => r.json()).then(d => setAdmin(!!d.isAdmin)).catch(() => {});
+        loadUser(data.user);
+      } else {
+        setReady(true);
       }
     }).catch(() => setReady(true));
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
-      setUser(session?.user ?? null);
-      setReady(true);
       if (session?.user) {
-        fetch("/api/auth/me").then(r => r.json()).then(d => setAdmin(!!d.isAdmin)).catch(() => {});
+        loadUser(session.user);
       } else {
+        setUser(null);
         setAdmin(false);
+        setFirstName("");
+        setReady(true);
       }
     });
     return () => sub.subscription.unsubscribe();
@@ -71,7 +88,7 @@ export default function NavAuthLinks({ mobile = false }: { mobile?: boolean }) {
         </Link>
       )}
       <Link href="/account" className={linkClass}>
-        ACCOUNT{underline}
+        {firstName ? `Welcome, ${firstName}` : "ACCOUNT"}{underline}
       </Link>
     </>
   );
