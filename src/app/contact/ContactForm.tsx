@@ -1,10 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
-import { submitContactForm } from "./actions";
-import type { ContactFormState } from "./actions";
-
-const INITIAL_STATE: ContactFormState = { status: "idle" };
+import { useState } from "react";
 
 const ENQUIRY_TYPES = [
   "Custom Print",
@@ -14,10 +10,188 @@ const ENQUIRY_TYPES = [
   "General Enquiry",
 ];
 
-export default function ContactForm() {
-  const [state, action, isPending] = useActionState(submitContactForm, INITIAL_STATE);
+const WEB3FORMS_KEY = "997cd55d-9ab5-472b-a867-f8c716756ca3";
 
-  if (state.status === "success") {
+type Status = "idle" | "pending" | "success" | "error";
+
+export default function ContactForm() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("pending");
+    setErrorMsg("");
+
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("name") as HTMLInputElement).value.trim();
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+    const enquiryType = (form.elements.namedItem("enquiryType") as HTMLSelectElement).value;
+    const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value.trim();
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `[Dexarium Enquiry] ${enquiryType ? enquiryType + " — " : ""}${name}`,
+          from_name: `${name} via The Dexarium`,
+          replyto: email,
+          message: `Name: ${name}\nEmail: ${email}${enquiryType ? `\nType: ${enquiryType}` : ""}\n\n${message}`,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorMsg("Failed to send your message. Please try again.");
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Failed to send your message. Please try again.");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div
+        className="p-8 text-center"
+        style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+      >
+        <div
+          className="w-12 h-12 mx-auto mb-4 flex items-center justify-center"
+          style={{ border: "1px solid var(--border)" }}
+        >
+          <svg className="w-6 h-6" style={{ color: "var(--primary)" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+          </svg>
+        </div>
+        <h3 className="font-heading text-lg tracking-widest mb-2" style={{ color: "var(--primary)" }}>
+          MESSAGE SENT
+        </h3>
+        <p className="font-body text-sm" style={{ color: "var(--muted)" }}>
+          We&apos;ve received your enquiry and will respond within 24 hours.
+        </p>
+      </div>
+    );
+  }
+
+  const isPending = status === "pending";
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="p-8 space-y-6"
+      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+    >
+      <h2 className="font-heading text-lg tracking-widest" style={{ color: "var(--primary)" }}>
+        SEND AN ENQUIRY
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+            Name <span style={{ color: "var(--accent)" }}>*</span>
+          </label>
+          <input
+            type="text"
+            name="name"
+            required
+            autoComplete="name"
+            placeholder="Your name"
+            className="w-full px-4 py-2.5 font-body text-sm outline-none transition-all"
+            style={{
+              background: "var(--bg)",
+              border: "1px solid var(--border)",
+              color: "var(--text)",
+            }}
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+            Email <span style={{ color: "var(--accent)" }}>*</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            required
+            autoComplete="email"
+            placeholder="your@email.com"
+            className="w-full px-4 py-2.5 font-body text-sm outline-none transition-all"
+            style={{
+              background: "var(--bg)",
+              border: "1px solid var(--border)",
+              color: "var(--text)",
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+          Enquiry Type
+        </label>
+        <select
+          name="enquiryType"
+          className="w-full px-4 py-2.5 font-body text-sm outline-none transition-all appearance-none"
+          style={{
+            background: "var(--bg)",
+            border: "1px solid var(--border)",
+            color: "var(--text)",
+          }}
+        >
+          <option value="">Select a type…</option>
+          {ENQUIRY_TYPES.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+          Message <span style={{ color: "var(--accent)" }}>*</span>
+        </label>
+        <textarea
+          name="message"
+          required
+          rows={5}
+          placeholder="Tell us about your project, order, or question…"
+          className="w-full px-4 py-2.5 font-body text-sm outline-none transition-all resize-none"
+          style={{
+            background: "var(--bg)",
+            border: "1px solid var(--border)",
+            color: "var(--text)",
+          }}
+        />
+      </div>
+
+      {status === "error" && errorMsg && (
+        <p className="font-body text-xs text-[#ff6060]">{errorMsg}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={isPending}
+        className="w-full py-3 font-body text-sm tracking-[0.15em] transition-all duration-200"
+        style={{
+          background: isPending ? "var(--muted)" : "var(--accent)",
+          color: "var(--bg)",
+          opacity: isPending ? 0.6 : 1,
+          cursor: isPending ? "wait" : "pointer",
+        }}
+      >
+        {isPending ? "SENDING…" : "SEND MESSAGE"}
+      </button>
+    </form>
+  );
+}
+
+
+  if (status === "success") {
     return (
       <div
         className="p-8 text-center"
