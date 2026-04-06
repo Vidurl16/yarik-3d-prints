@@ -335,21 +335,15 @@ export default function ArmyBuilderClient({
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
 
-  // Faction filter — derive unique factions from mainProducts
+  // Faction filter — all factions defined for this brand (show even if no products yet)
   const factionList = useMemo(() => {
-    const seen = new Set<string>();
-    const result: { id: string; label: string }[] = [];
-    for (const p of mainProducts) {
-      if (p.faction && !seen.has(p.faction)) {
-        seen.add(p.faction);
-        result.push({
-          id: p.faction,
-          label: p.faction.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-        });
-      }
-    }
-    return result;
-  }, [mainProducts]);
+    const groups = FACTION_GROUPS[brand] ?? [];
+    const allIds = groups.flatMap((g) => g.factionIds);
+    return allIds.map((id) => ({
+      id,
+      label: id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    }));
+  }, [brand]);
 
   const [selectedFaction, setSelectedFaction] = useState<string>("all");
 

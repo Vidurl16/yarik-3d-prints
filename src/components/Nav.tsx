@@ -313,7 +313,8 @@ export default function Nav() {
                       initial={{ opacity: 0, x: 8 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.15 }}
-                      className="flex-1 py-6 px-7"
+                      className="flex-1 py-6 px-7 overflow-y-auto"
+                      style={{ maxHeight: "calc(100vh - 120px)" }}
                     >
                       <Link
                         href={activeBrandData.href}
