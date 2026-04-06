@@ -125,8 +125,8 @@ export default async function HeroPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up-delay-3">
-            <Link
-              href="/shop"
+            <a
+              href="#categories"
               className="group font-body text-xs sm:text-sm tracking-[0.2em] px-8 py-4 transition-all duration-300 min-w-[200px] text-center"
               style={{
                 border: "1px solid var(--primary)",
@@ -134,7 +134,7 @@ export default async function HeroPage() {
               }}
             >
               BROWSE SHOP
-            </Link>
+            </a>
             <Link
               href="/grimdark-future/army-builder"
               className="group font-body text-xs sm:text-sm tracking-[0.2em] px-8 py-4 transition-all duration-300 min-w-[200px] text-center"
@@ -218,7 +218,7 @@ export default async function HeroPage() {
       </div>
 
       {/* ── CATEGORY TILES ─────────────────────────────────── */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto">
+      <section id="categories" className="py-12 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto">
         <div className="text-center mb-8">
           <p
             className="font-body text-xs tracking-[0.15em] mb-3 uppercase"
