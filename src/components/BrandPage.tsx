@@ -14,6 +14,14 @@ interface BrandPageProps {
   products?: DbProduct[];
 }
 
+// TODO: Replace placeholder images with real subcategory thumbnails (owner to upload)
+const DISPLAY_SUBCATEGORIES = [
+  { name: "Single Figures",  image: "/images/display-figures/single-placeholder.jpg" },
+  { name: "Dioramas",        image: "/images/display-figures/dioramas-placeholder.jpg" },
+  { name: "Busts",           image: "/images/display-figures/busts-placeholder.jpg" },
+  { name: "Limited Edition", image: "/images/display-figures/limited-placeholder.jpg" },
+];
+
 /** Cross-sell add-ons per brand — uses real DB brand slugs */
 const BRAND_ADDONS: Record<string, { label: string; sub: string; icon: string; slug: string }[]> = {
   "grimdark-future": [
@@ -156,56 +164,86 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
         <BrandProductGrid products={products} brandSlug={brandSlug} />
       )}
 
-      {/* ── UPSELL SECTION (placeholder) ─────────────────────── */}
-      <section
-        className="border-t"
-        style={{ borderColor: "var(--border)" }}
-      >
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <p
-            className="font-body text-xs tracking-[0.15em] uppercase mb-3"
-            style={{ color: "var(--primary)", opacity: 0.7 }}
-          >
-            Complete Your Build
-          </p>
+      {/* ── DISPLAY FIGURES SUBCATEGORY GRID ────────────────── */}
+      {brandSlug === "display-figures-busts" && (
+        <section className="max-w-7xl mx-auto px-6 py-12">
           <h2
-            className="font-heading text-2xl tracking-wider mb-8"
+            className="font-heading text-2xl tracking-wider mb-6"
             style={{ color: "var(--text)" }}
           >
-            ADD-ONS & EXTRAS
+            BROWSE BY SUBCATEGORY
           </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {addons.map(({ label, sub, icon, slug }) => (
-              <Link
-                key={slug}
-                href={`/${slug}`}
-                className="group flex items-center gap-4 p-5 transition-all duration-200"
-                style={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                }}
+          {/* TODO: Replace placeholder images with real subcategory thumbnails */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {DISPLAY_SUBCATEGORIES.map((sub) => (
+              <div
+                key={sub.name}
+                className="relative overflow-hidden"
+                style={{ aspectRatio: "1/1", background: "var(--surface)", border: "1px solid var(--border)" }}
               >
-                <span className="text-3xl">{icon}</span>
-                <div>
-                  <p
-                    className="font-heading text-sm tracking-wider"
-                    style={{ color: "var(--text)" }}
-                  >
-                    {label.toUpperCase()}
-                  </p>
-                  <p
-                    className="font-body text-xs mt-1"
-                    style={{ color: "var(--muted)" }}
-                  >
-                    {sub}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <p className="font-body text-xs tracking-wider text-center px-2" style={{ color: "var(--muted)" }}>
+                    {sub.name}
                   </p>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* ── UPSELL SECTION (hidden for Pokémon per TASK-04) ─────────────────────── */}
+      {addons.length > 0 && brandSlug !== "pokemon" && (
+        <section
+          className="border-t"
+          style={{ borderColor: "var(--border)" }}
+        >
+          <div className="max-w-7xl mx-auto px-6 py-16">
+            <p
+              className="font-body text-xs tracking-[0.15em] uppercase mb-3"
+              style={{ color: "var(--primary)", opacity: 0.7 }}
+            >
+              Complete Your Build
+            </p>
+            <h2
+              className="font-heading text-2xl tracking-wider mb-8"
+              style={{ color: "var(--text)" }}
+            >
+              ADD-ONS & EXTRAS
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {addons.map(({ label, sub, icon, slug }) => (
+                <Link
+                  key={slug}
+                  href={`/${slug}`}
+                  className="group flex items-center gap-4 p-5 transition-all duration-200"
+                  style={{
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  <span className="text-3xl">{icon}</span>
+                  <div>
+                    <p
+                      className="font-heading text-sm tracking-wider"
+                      style={{ color: "var(--text)" }}
+                    >
+                      {label.toUpperCase()}
+                    </p>
+                    <p
+                      className="font-body text-xs mt-1"
+                      style={{ color: "var(--muted)" }}
+                    >
+                      {sub}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
     </div>
   );
