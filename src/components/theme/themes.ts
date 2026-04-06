@@ -103,7 +103,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     border: "rgba(92,168,92,0.25)",
     heroImage: "/images/categories/banners/fantasy.jpg",
     heroFit: "cover",
-    heroPosition: "center 25%", // Tested: vampire rider face centred at 1440px, 768px, 375px
+    heroPosition: "center 45%",
     label: "Age of Fantasy",
     icon: "🏰",
     iconSrc: "/brand-icons/age-of-fantasy.svg",
