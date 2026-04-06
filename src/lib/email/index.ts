@@ -68,10 +68,10 @@ function buildOrderConfirmationHtml(
           <tr>
             <td style="padding:32px 40px 0;">
               <p style="margin:0 0 8px;color:#c9a84c;font-family:Georgia,serif;font-size:17px;font-weight:bold;letter-spacing:0.5px;">
-                Your warband is being forged.
+                Thank you for your order from The Dexarium!
               </p>
               <p style="margin:0;color:#9e8e78;font-family:Georgia,serif;font-size:15px;line-height:1.7;">
-                Thank you for your order. Your prints have entered the queue — medical-grade resin and multicolour FDM, built to battlefield standard. We'll send you a shipping notification the moment your order is on its way.
+                Your prints have entered the queue — medical-grade resin and multicolour FDM, built to battlefield standard. We'll send you a shipping notification the moment your order is on its way.
               </p>
             </td>
           </tr>
@@ -146,7 +146,7 @@ function buildOrderConfirmationHtml(
                   <td style="padding:16px 20px;">
                     <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:13px;color:#e8dcc8;">Questions about your order?</p>
                     <p style="margin:0;font-family:Georgia,serif;font-size:13px;color:#9e8e78;line-height:1.6;">
-                      Email: <a href="mailto:hello@yarik3d.co.za" style="color:#c9a84c;text-decoration:none;">hello@yarik3d.co.za</a>
+                      Email: <a href="mailto:yarikhansraj@gmail.com" style="color:#c9a84c;text-decoration:none;">yarikhansraj@gmail.com</a>
                       &nbsp;&middot;&nbsp;
                       WhatsApp: <a href="https://wa.me/27000000000" style="color:#c9a84c;text-decoration:none;">+27 XX XXX XXXX</a><br>
                       Include your order reference in any message.
@@ -201,7 +201,7 @@ export async function sendEmail({
     return;
   }
   const resend = new Resend(RESEND_KEY);
-  const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
+  const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html, replyTo: "yarikhansraj@gmail.com" });
   if (error) console.error("[Email] Failed to send to", to, error);
 }
 
@@ -229,7 +229,8 @@ export async function sendOrderConfirmationEmail(
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
     to: toEmail,
-    subject: `Your Dexarium order is confirmed — ${order.id.slice(0, 8).toUpperCase()}`,
+    replyTo: "yarikhansraj@gmail.com",
+    subject: `Your Dexarium Order Confirmation – #${order.id.slice(0, 8).toUpperCase()}`,
     html: buildOrderConfirmationHtml(order, items),
   });
 
