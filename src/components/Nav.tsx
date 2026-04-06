@@ -386,39 +386,89 @@ export default function Nav() {
             </div>
 
             {/* Army Builder dropdown */}
-            <div className="relative" ref={builderRef}>
+            <div
+              className="relative"
+              ref={builderRef}
+              onMouseEnter={() => setBuilderOpen(true)}
+              onMouseLeave={() => setBuilderOpen(false)}
+            >
               <button
-                onClick={() => setBuilderOpen((o) => !o)}
-                className="font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group flex items-center gap-1"
+                aria-expanded={builderOpen}
+                aria-haspopup="true"
+                className="flex items-center gap-1.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group"
               >
                 ARMY BUILDER
-                <svg className="w-3 h-3 opacity-60" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L1 3h10z"/></svg>
+                <motion.svg
+                  animate={{ rotate: builderOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="w-3 h-3"
+                  viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5}
+                >
+                  <path d="M2 4l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                </motion.svg>
                 <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </button>
               <AnimatePresence>
                 {builderOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: -4 }}
+                    initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-0 mt-2 w-48 border border-[rgba(196,160,69,0.2)] py-1"
-                    style={{ background: "#0d0c0a" }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    className="absolute top-full left-0 mt-2"
+                    style={{
+                      background: "linear-gradient(160deg, #100c04 0%, #1a1408 100%)",
+                      border: "1px solid rgba(196,160,69,0.14)",
+                      backdropFilter: "blur(20px)",
+                      boxShadow: "0 24px 48px rgba(0,0,0,0.7)",
+                      width: "280px",
+                    }}
                   >
-                    <Link
-                      href="/grimdark-future/army-builder"
-                      onClick={() => setBuilderOpen(false)}
-                      className="block px-4 py-2 font-body text-xs tracking-[0.12em] text-[#f0e8d8] hover:text-[#c4a045] hover:bg-[rgba(196,160,69,0.06)] transition-colors"
-                    >
-                      ⚙️ GRIMDARK FUTURE
-                    </Link>
-                    <Link
-                      href="/age-of-fantasy/army-builder"
-                      onClick={() => setBuilderOpen(false)}
-                      className="block px-4 py-2 font-body text-xs tracking-[0.12em] text-[#f0e8d8] hover:text-[#c4a045] hover:bg-[rgba(196,160,69,0.06)] transition-colors"
-                    >
-                      ⚔️ AGE OF FANTASY
-                    </Link>
+                    <div className="px-5 pt-4 pb-2 border-b border-[rgba(196,160,69,0.08)]">
+                      <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase">Select Game System</p>
+                    </div>
+                    <div className="p-3 space-y-1">
+                      <Link
+                        href="/grimdark-future/army-builder"
+                        onClick={() => setBuilderOpen(false)}
+                        className="flex items-center gap-4 px-4 py-3.5 transition-all duration-150 group/item"
+                        style={{ borderLeft: "2px solid transparent" }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.borderLeftColor = "#9b4060";
+                          (e.currentTarget as HTMLElement).style.background = "rgba(155,64,96,0.06)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.borderLeftColor = "transparent";
+                          (e.currentTarget as HTMLElement).style.background = "transparent";
+                        }}
+                      >
+                        <span className="text-xl">⚙️</span>
+                        <div>
+                          <p className="font-body text-sm tracking-[0.12em] text-[#f0e8d8] group-hover/item:text-[#c4a045] transition-colors">GRIMDARK FUTURE</p>
+                          <p className="font-body text-xs text-[rgba(240,232,216,0.4)] mt-0.5">40K-scale · Industrial war</p>
+                        </div>
+                      </Link>
+                      <Link
+                        href="/age-of-fantasy/army-builder"
+                        onClick={() => setBuilderOpen(false)}
+                        className="flex items-center gap-4 px-4 py-3.5 transition-all duration-150 group/item"
+                        style={{ borderLeft: "2px solid transparent" }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.borderLeftColor = "#5ca85c";
+                          (e.currentTarget as HTMLElement).style.background = "rgba(92,168,92,0.06)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.borderLeftColor = "transparent";
+                          (e.currentTarget as HTMLElement).style.background = "transparent";
+                        }}
+                      >
+                        <span className="text-xl">⚔️</span>
+                        <div>
+                          <p className="font-body text-sm tracking-[0.12em] text-[#f0e8d8] group-hover/item:text-[#c4a045] transition-colors">AGE OF FANTASY</p>
+                          <p className="font-body text-xs text-[rgba(240,232,216,0.4)] mt-0.5">Heroic warriors · Ancient magic</p>
+                        </div>
+                      </Link>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
