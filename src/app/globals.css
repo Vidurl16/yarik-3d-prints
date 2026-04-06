@@ -72,6 +72,17 @@
   --glow:    rgba(96, 128, 96, 0.15);
 }
 
+[data-theme="display"] {
+  --bg:      #000000;
+  --surface: #0d0d0d;
+  --text:    #ffffff;
+  --muted:   #888888;
+  --primary: #8a5ab0;
+  --accent:  #5a3a7a;
+  --border:  rgba(138, 90, 176, 0.25);
+  --glow:    rgba(138, 90, 176, 0.15);
+}
+
 @theme {
   --color-void: #0c0902;
   --color-blood: #8b0000;

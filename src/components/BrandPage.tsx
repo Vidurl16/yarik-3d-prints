@@ -173,20 +173,27 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
           >
             BROWSE BY SUBCATEGORY
           </h2>
-          {/* TODO: Replace placeholder images with real subcategory thumbnails */}
+          {/* TODO: Replace placeholder images with real subcategory thumbnails (owner to upload) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {DISPLAY_SUBCATEGORIES.map((sub) => (
-              <div
+              <a
                 key={sub.name}
-                className="relative overflow-hidden"
-                style={{ aspectRatio: "1/1", background: "var(--surface)", border: "1px solid var(--border)" }}
+                href={`/display-figures-busts?tag=${encodeURIComponent(sub.name.toLowerCase())}`}
+                className="group relative overflow-hidden cursor-pointer"
+                style={{ aspectRatio: "3/4", background: "#111111", border: "1px solid var(--border)" }}
               >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="font-body text-xs tracking-wider text-center px-2" style={{ color: "var(--muted)" }}>
+                <div className="absolute inset-0 flex flex-col items-center justify-end p-4"
+                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)" }}
+                >
+                  <p className="font-heading text-sm tracking-widest text-center uppercase group-hover:text-purple-300 transition-colors"
+                    style={{ color: "var(--text)" }}>
                     {sub.name}
                   </p>
+                  <span className="font-body text-xs mt-1 tracking-wider" style={{ color: "var(--primary)" }}>
+                    BROWSE →
+                  </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </section>
