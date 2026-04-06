@@ -133,7 +133,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     primary: "#a08040",
     accent: "#6b4e20",
     border: "rgba(160,128,64,0.25)",
-    heroImage: "/images/categories/thumbnails/basing-bits.jpg",
+    heroImage: "/images/categories/banners/terrain.jpg",
     heroFit: "cover",
     heroPosition: "center center",
     label: "Basing & Battle Effects",
