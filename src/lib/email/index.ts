@@ -8,6 +8,50 @@ function formatZAR(cents: number): string {
   return `R ${(cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 }
 
+function buildShippingBlock(order: DbOrder): string {
+  const meta = order.payment_metadata ?? {};
+  const addr = meta.shipping_address as Record<string, string> | undefined;
+  const postnet = meta.postnet_details as { branch_name?: string; number?: string; email?: string } | undefined;
+
+  if (!addr && !postnet) return "";
+
+  const method = addr?.shipping_method_label ?? "Standard delivery";
+  let details = "";
+
+  if (postnet?.branch_name) {
+    details = `
+      <p style="margin:4px 0;color:#e8dcc8;font-size:14px;">PostNet Branch: <strong>${postnet.branch_name}</strong></p>
+      ${postnet.number ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Branch #: ${postnet.number}</p>` : ""}
+      ${postnet.email ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Branch email: ${postnet.email}</p>` : ""}
+    `;
+  } else if (addr?.name) {
+    details = `
+      <p style="margin:4px 0;color:#e8dcc8;font-size:14px;">${addr.name}</p>
+      ${addr.line1 ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">${addr.line1}${addr.line2 ? `, ${addr.line2}` : ""}</p>` : ""}
+      ${addr.city ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">${addr.city}${addr.province ? `, ${addr.province}` : ""}${addr.postal_code ? ` ${addr.postal_code}` : ""}</p>` : ""}
+    `;
+  }
+
+  return `
+  <tr>
+    <td style="padding:24px 40px 0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#0c0902;border:1px solid rgba(196,160,69,0.15);">
+        <tr>
+          <td style="padding:16px 20px;">
+            <p style="margin:0 0 8px;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;">
+              Shipping
+            </p>
+            <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:13px;color:#9e8e78;">
+              Method: <strong style="color:#e8dcc8;">${method}</strong>
+            </p>
+            <div style="font-family:Georgia,serif;">${details}</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>`;
+}
+
 function buildOrderConfirmationHtml(
   order: DbOrder,
   items: DbOrderItem[]
@@ -125,6 +169,9 @@ function buildOrderConfirmationHtml(
               </table>
             </td>
           </tr>
+
+          <!-- Shipping details -->
+          ${buildShippingBlock(order)}
 
           <!-- What next -->
           <tr>

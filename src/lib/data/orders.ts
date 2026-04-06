@@ -12,6 +12,7 @@ export interface CreateOrderInput {
   payment_status?: PaymentStatus;
   payment_metadata?: Record<string, unknown>;
   shipping_address?: Record<string, string> | null;
+  postnet_details?: { branch_name: string; number: string; email: string } | null;
 }
 
 /**
@@ -43,6 +44,7 @@ export async function createOrder(input: CreateOrderInput): Promise<string | nul
         ...(input.payment_metadata ?? {}),
         // shipping_address stored here until DB column migration is applied
         ...(input.shipping_address ? { shipping_address: input.shipping_address } : {}),
+        ...(input.postnet_details ? { postnet_details: input.postnet_details } : {}),
       },
       status: "pending",
     })
