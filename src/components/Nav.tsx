@@ -153,7 +153,9 @@ export default function Nav() {
   const [activeBrand, setActiveBrand] = useState(BRAND_MENU[0].id);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  const [builderOpen, setBuilderOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const builderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -165,6 +167,16 @@ export default function Nav() {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setShopOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (builderRef.current && !builderRef.current.contains(e.target as Node)) {
+        setBuilderOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -370,14 +382,44 @@ export default function Nav() {
               </AnimatePresence>
             </div>
 
-            {/* Army Builder top-level link */}
-            <Link
-              href="/grimdark-future/army-builder"
-              className="font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group"
-            >
-              ARMY BUILDER
-              <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-            </Link>
+            {/* Army Builder dropdown */}
+            <div className="relative" ref={builderRef}>
+              <button
+                onClick={() => setBuilderOpen((o) => !o)}
+                className="font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group flex items-center gap-1"
+              >
+                ARMY BUILDER
+                <svg className="w-3 h-3 opacity-60" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L1 3h10z"/></svg>
+                <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              </button>
+              <AnimatePresence>
+                {builderOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 mt-2 w-48 border border-[rgba(196,160,69,0.2)] py-1"
+                    style={{ background: "#0d0c0a" }}
+                  >
+                    <Link
+                      href="/grimdark-future/army-builder"
+                      onClick={() => setBuilderOpen(false)}
+                      className="block px-4 py-2 font-body text-xs tracking-[0.12em] text-[#f0e8d8] hover:text-[#c4a045] hover:bg-[rgba(196,160,69,0.06)] transition-colors"
+                    >
+                      ⚙️ GRIMDARK FUTURE
+                    </Link>
+                    <Link
+                      href="/age-of-fantasy/army-builder"
+                      onClick={() => setBuilderOpen(false)}
+                      className="block px-4 py-2 font-body text-xs tracking-[0.12em] text-[#f0e8d8] hover:text-[#c4a045] hover:bg-[rgba(196,160,69,0.06)] transition-colors"
+                    >
+                      ⚔️ AGE OF FANTASY
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {navLinks.map(({ href, label }) => (
               <Link
@@ -524,7 +566,14 @@ export default function Nav() {
                   onClick={() => setMobileOpen(false)}
                   className="block px-2 py-2.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors"
                 >
-                  ARMY BUILDER
+                  ⚙️ ARMY BUILDER — GRIMDARK
+                </Link>
+                <Link
+                  href="/age-of-fantasy/army-builder"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-2 py-2.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors"
+                >
+                  ⚔️ ARMY BUILDER — FANTASY
                 </Link>
                 {navLinks.map(({ href, label }) => (
                   <Link
