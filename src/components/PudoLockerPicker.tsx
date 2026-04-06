@@ -33,12 +33,13 @@ export default function PudoLockerPicker({ selectedId, selectedName, onSelect, f
     setLoading(true);
     try {
       const res = await fetch(`/api/pudo/lockers?search=${encodeURIComponent(q)}`);
-      if (res.status === 503) { setApiUnavailable(true); return; }
+      // 503 = key not configured; 502 = PUDO API unreachable/error — both fall back to text input
+      if (!res.ok) { setApiUnavailable(true); return; }
       const data = await res.json();
       setResults(data.lockers ?? []);
       setOpen(true);
     } catch {
-      setResults([]);
+      setApiUnavailable(true);
     } finally {
       setLoading(false);
     }
