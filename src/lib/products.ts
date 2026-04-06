@@ -141,24 +141,28 @@ export const brandFactions: Partial<Record<SiteCategoryId, BrandFaction[]>> = {
       flavorText: "Display figures from comic universes.",
       accentColor: "#c9a84c", glowColor: "rgba(201,168,76,0.5)", borderColor: "rgba(201,168,76,0.3)",
       brand: "display-figures-busts",
+      imageUrl: "/images/categories/factions/display-figures-busts/comics.jpg",
     },
     {
       id: "games", name: "Games",
       flavorText: "Figures from video & tabletop games.",
       accentColor: "#3a7a5a", glowColor: "rgba(58,122,90,0.5)", borderColor: "rgba(58,122,90,0.3)",
       brand: "display-figures-busts",
+      imageUrl: "/images/categories/factions/display-figures-busts/games.jpg",
     },
     {
       id: "movies", name: "Movies",
       flavorText: "Iconic characters from the silver screen.",
       accentColor: "#1a4a7a", glowColor: "rgba(26,74,122,0.5)", borderColor: "rgba(26,74,122,0.3)",
       brand: "display-figures-busts",
+      imageUrl: "/images/categories/factions/display-figures-busts/movies.jpg",
     },
     {
       id: "other", name: "Other",
       flavorText: "Unique display pieces that defy categories.",
       accentColor: "#4a4a4a", glowColor: "rgba(74,74,74,0.5)", borderColor: "rgba(120,120,120,0.3)",
       brand: "display-figures-busts",
+      imageUrl: "/images/categories/factions/display-figures-busts/other.jpg",
     },
   ],
 };

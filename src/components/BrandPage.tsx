@@ -25,6 +25,7 @@ const DISPLAY_SUBCATEGORIES = [
     gradient: "linear-gradient(160deg, #1a1208 0%, #2e1f0d 50%, #1a1208 100%)",
     icon: "◈",
     desc: "Hand-crafted single miniatures",
+    imageUrl: "/images/categories/factions/display-figures-busts/single-figures.jpg",
   },
   {
     name: "Dioramas",
@@ -34,6 +35,7 @@ const DISPLAY_SUBCATEGORIES = [
     gradient: "linear-gradient(160deg, #0a1520 0%, #0f2535 50%, #0a1520 100%)",
     icon: "◉",
     desc: "Multi-figure scenic compositions",
+    imageUrl: "/images/categories/factions/display-figures-busts/dioramas.jpg",
   },
   {
     name: "Busts",
@@ -43,6 +45,7 @@ const DISPLAY_SUBCATEGORIES = [
     gradient: "linear-gradient(160deg, #130d1e 0%, #1f1230 50%, #130d1e 100%)",
     icon: "◎",
     desc: "Detailed portrait-scale busts",
+    imageUrl: "/images/categories/factions/display-figures-busts/busts.jpg",
   },
   {
     name: "Limited Edition",
@@ -52,6 +55,7 @@ const DISPLAY_SUBCATEGORIES = [
     gradient: "linear-gradient(160deg, #1a1500 0%, #2e2500 50%, #1a1500 100%)",
     icon: "✦",
     desc: "Exclusive & collector's pieces",
+    imageUrl: "/images/categories/factions/display-figures-busts/limited-editions.jpg",
   },
 ];
 
@@ -216,10 +220,20 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
                     border: `1px solid color-mix(in srgb, ${sub.accent} 30%, transparent)`,
                   }}
                 >
-                  {/* Corner accent */}
+                  {/* Photo background */}
+                  {sub.imageUrl && (
+                    <Image
+                      src={sub.imageUrl}
+                      alt={sub.name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                    />
+                  )}
+                  {/* Dark scrim */}
                   <div
-                    className="absolute top-0 right-0 w-14 h-14 opacity-20"
-                    style={{ background: `linear-gradient(225deg, ${sub.accent} 0%, transparent 70%)` }}
+                    className="absolute inset-0 pointer-events-none"
+                    style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)" }}
                   />
 
                   {/* Hover glow */}
