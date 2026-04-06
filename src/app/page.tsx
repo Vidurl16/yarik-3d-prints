@@ -188,7 +188,7 @@ export default async function HeroPage() {
       </div>
 
       {/* ── CATEGORY TILES ─────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto">
         <div className="text-center mb-12">
           <p
             className="font-body text-xs tracking-[0.15em] mb-3 uppercase"
@@ -204,7 +204,7 @@ export default async function HeroPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           {siteCategories.map((cat) => {
             const thumb = CATEGORY_THUMBNAIL[cat.id];
             return (
@@ -212,7 +212,7 @@ export default async function HeroPage() {
                 key={cat.id}
                 href={CATEGORY_ROUTE_MAP[cat.id] ?? `/shop/${cat.id}`}
                 className="group relative overflow-hidden"
-                style={{ border: "1px solid var(--border)", aspectRatio: "3/5" }}
+                style={{ border: "1px solid var(--border)", aspectRatio: "2/3", minHeight: "420px" }}
               >
                 {thumb ? (
                   <Image
@@ -220,7 +220,7 @@ export default async function HeroPage() {
                     alt={cat.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                   />
                 ) : (
                   <div className="absolute inset-0" style={{ background: "var(--surface)" }} />
@@ -240,7 +240,7 @@ export default async function HeroPage() {
                 {/* Text */}
                 <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
                   <h3
-                    className="font-heading text-sm sm:text-base tracking-[0.08em] leading-tight mb-1"
+                    className="font-heading text-base sm:text-lg tracking-[0.08em] leading-tight mb-1"
                     style={{ color: "#fff" }}
                   >
                     {cat.name.toUpperCase()}
