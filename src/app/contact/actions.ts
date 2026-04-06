@@ -1,10 +1,7 @@
 "use server";
 
-import { Resend } from "resend";
-
-const TO_EMAIL = process.env.RESEND_TO_EMAIL ?? "yarikhansraj@gmail.com";
-const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ?? "The Dexarium <onboarding@resend.dev>";
+// Uses Web3Forms (web3forms.com) — no domain verification required.
+// Add WEB3FORMS_KEY to Vercel env vars (register at web3forms.com with yarikhansraj@gmail.com).
 
 export interface ContactFormState {
   status: "idle" | "success" | "error";
@@ -28,37 +25,34 @@ export async function submitContactForm(
     return { status: "error", message: "Please enter a valid email address." };
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[Contact] RESEND_API_KEY not set — cannot send enquiry email");
+  const apiKey = process.env.WEB3FORMS_KEY;
+  if (!apiKey) {
+    console.warn("[Contact] WEB3FORMS_KEY not set");
     return {
       status: "error",
       message: "Email service not configured. Please contact us directly.",
     };
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const subject = `[Dexarium Enquiry] ${enquiryType ? enquiryType + " — " : ""}${name}`;
+  const body = `Name: ${name}\nEmail: ${email}${enquiryType ? `\nType: ${enquiryType}` : ""}\n\n${message}`;
 
-  const { error } = await resend.emails.send({
-    from: FROM_EMAIL,
-    to: TO_EMAIL,
-    replyTo: email,
-    subject: `[Dexarium Enquiry] ${enquiryType ? enquiryType + " — " : ""}${name}`,
-    html: `
-      <div style="font-family:Arial,sans-serif;max-width:600px;background:#0a0a0a;color:#d4d4d4;padding:32px;border:1px solid #1a1a1a;">
-        <h2 style="color:#c9a84c;font-family:Georgia,serif;letter-spacing:2px;margin:0 0 24px;">NEW ENQUIRY</h2>
-        <table style="width:100%;border-collapse:collapse;">
-          <tr><td style="padding:8px 0;color:#737373;font-size:12px;letter-spacing:1px;text-transform:uppercase;width:120px;">Name</td><td style="padding:8px 0;color:#d4d4d4;">${name}</td></tr>
-          <tr><td style="padding:8px 0;color:#737373;font-size:12px;letter-spacing:1px;text-transform:uppercase;">Email</td><td style="padding:8px 0;color:#c9a84c;"><a href="mailto:${email}" style="color:#c9a84c;">${email}</a></td></tr>
-          ${enquiryType ? `<tr><td style="padding:8px 0;color:#737373;font-size:12px;letter-spacing:1px;text-transform:uppercase;">Type</td><td style="padding:8px 0;color:#d4d4d4;">${enquiryType}</td></tr>` : ""}
-        </table>
-        <hr style="border:none;border-top:1px solid #1a1a1a;margin:20px 0;" />
-        <p style="white-space:pre-wrap;line-height:1.7;color:#d4d4d4;">${message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
-      </div>
-    `,
+  const res = await fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      access_key: apiKey,
+      subject,
+      from_name: `${name} via The Dexarium`,
+      replyto: email,
+      message: body,
+    }),
   });
 
-  if (error) {
-    console.error("[Contact] Failed to send enquiry:", error);
+  const data = await res.json();
+
+  if (!res.ok || !data.success) {
+    console.error("[Contact] Web3Forms error:", data);
     return { status: "error", message: "Failed to send your message. Please try again." };
   }
 
