@@ -118,4 +118,10 @@ export const dbBrandFilters: Record<string, DbFilterDef[]> = {
     { label: "Terrain",     match: (p) => p.type === "terrain"   || tags(p).includes("terrain") },
     { label: "Accessories", match: (p) => p.type === "accessory" || tags(p).some((t) => ["accessory", "dice", "token", "storage", "tray", "foam"].includes(t)) },
   ],
+  "display-figures-busts": [
+    { label: "Single Figures",  match: (p) => tags(p).includes("single figures") },
+    { label: "Dioramas",        match: (p) => tags(p).includes("dioramas") },
+    { label: "Busts",           match: (p) => tags(p).includes("busts") },
+    { label: "Limited Edition", match: (p) => tags(p).includes("limited edition") },
+  ],
 };

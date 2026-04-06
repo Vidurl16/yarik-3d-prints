@@ -12,6 +12,7 @@ interface BrandPageProps {
   themeId: ThemeId;
   brandSlug: string;
   products?: DbProduct[];
+  initialTag?: string;
 }
 
 // TODO: Replace placeholder images with real subcategory thumbnails (owner to upload)
@@ -46,7 +47,7 @@ const BRAND_ADDONS: Record<string, { label: string; sub: string; icon: string; s
   ],
 };
 
-export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPageProps) {
+export default function BrandPage({ themeId, brandSlug, products = [], initialTag }: BrandPageProps) {
   const theme = THEMES[themeId];
   const hasArmyBuilder = (ARMY_BUILDER_BRANDS as readonly string[]).includes(brandSlug);
   const addons = BRAND_ADDONS[brandSlug] ?? [];
@@ -161,7 +162,7 @@ export default function BrandPage({ themeId, brandSlug, products = [] }: BrandPa
       {hasFactions ? (
         <FactionTileGrid brandSlug={brandSlug} factions={factions} />
       ) : (
-        <BrandProductGrid products={products} brandSlug={brandSlug} />
+        <BrandProductGrid products={products} brandSlug={brandSlug} initialTag={initialTag} />
       )}
 
       {/* ── DISPLAY FIGURES SUBCATEGORY GRID ────────────────── */}

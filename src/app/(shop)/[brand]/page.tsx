@@ -9,6 +9,7 @@ export const revalidate = 60;
 
 interface Props {
   params: Promise<{ brand: string }>;
+  searchParams: Promise<{ tag?: string }>;
 }
 
 export function generateStaticParams() {
@@ -25,10 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BrandRoute({ params }: Props) {
+export default async function BrandRoute({ params, searchParams }: Props) {
   const { brand } = await params;
+  const { tag } = await searchParams;
   const themeId = BRAND_THEME_MAP[brand] ?? "dexarium";
   const products = await getProductsByBrand(brand);
 
-  return <BrandPage themeId={themeId} brandSlug={brand} products={products} />;
+  return <BrandPage themeId={themeId} brandSlug={brand} products={products} initialTag={tag} />;
 }

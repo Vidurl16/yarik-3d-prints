@@ -8,11 +8,18 @@ import { dbBrandFilters, type DbFilterDef } from "@/lib/brandFilters";
 interface BrandProductGridProps {
   products: DbProduct[];
   brandSlug: string;
+  initialTag?: string;
 }
 
-export default function BrandProductGrid({ products, brandSlug }: BrandProductGridProps) {
+export default function BrandProductGrid({ products, brandSlug, initialTag }: BrandProductGridProps) {
   const brandFilterDefs: DbFilterDef[] = dbBrandFilters[brandSlug] ?? [];
-  const [activeFilter, setActiveFilter] = useState<string>("All");
+
+  // Match URL ?tag= param to a filter label (case-insensitive)
+  const matchedInitial = initialTag
+    ? brandFilterDefs.find((f) => f.label.toLowerCase() === initialTag.toLowerCase())?.label
+    : undefined;
+
+  const [activeFilter, setActiveFilter] = useState<string>(matchedInitial ?? "All");
 
   const activeFilterDef = brandFilterDefs.find((f) => f.label === activeFilter);
   const filtered = activeFilter === "All" || !activeFilterDef
