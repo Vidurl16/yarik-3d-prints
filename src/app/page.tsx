@@ -43,6 +43,20 @@ export default async function HeroPage() {
               "radial-gradient(ellipse 80% 50% at 50% 110%, var(--glow) 0%, transparent 60%)",
           }}
         />
+        {/* Decorative corner ornaments */}
+        {([
+          ["top-8 left-8",    "M 0 48 L 0 0 L 48 0"],
+          ["top-8 right-8",   "M 48 48 L 48 0 L 0 0"],
+          ["bottom-24 left-8",  "M 0 0 L 0 48 L 48 48"],
+          ["bottom-24 right-8", "M 48 0 L 48 48 L 0 48"],
+        ] as [string, string][]).map(([pos, d]) => (
+          <div key={pos} className={`absolute ${pos} pointer-events-none hidden sm:block`} style={{ opacity: 0.18 }} aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="var(--primary)" strokeWidth="1.5">
+              <path d={d} />
+            </svg>
+          </div>
+        ))}
+
         {/* Very faint hex watermark */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
@@ -392,8 +406,10 @@ export default async function HeroPage() {
                   href={CATEGORY_ROUTE_MAP[product.brand] ?? `/shop/${product.brand}`}
                   className="group card-bg overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
                   style={{
-                    border: "1px solid var(--border)",
-                    borderTop: "2px solid var(--accent)",
+                    borderLeft: "1px solid var(--border)",
+                    borderRight: "1px solid var(--border)",
+                    borderBottom: "1px solid var(--border)",
+                    borderTop: "2px solid var(--primary)",
                   }}
                 >
                   <div
