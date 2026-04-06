@@ -53,8 +53,13 @@ export async function GET(req: NextRequest) {
 
     if (!res.ok) {
       const text = await res.text();
+      let pudoMessage: string | undefined;
+      try { pudoMessage = JSON.parse(text)?.message; } catch { /* not JSON */ }
       console.error("[PUDO] Locker fetch failed:", res.status, text);
-      return NextResponse.json({ error: "PUDO API error", status: res.status }, { status: 502 });
+      return NextResponse.json(
+        { error: "PUDO API error", status: res.status, detail: pudoMessage ?? text.slice(0, 200) },
+        { status: 502 }
+      );
     }
 
     const data = await res.json();
