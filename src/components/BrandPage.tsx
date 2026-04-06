@@ -159,7 +159,8 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
       </section>
 
       {/* ── FACTION TILES (for brands with factions) OR PRODUCT GRID ─── */}
-      {hasFactions ? (
+      {/* If a subcategory tag filter is active, show the product grid regardless of factions */}
+      {hasFactions && !initialTag ? (
         <FactionTileGrid brandSlug={brandSlug} factions={factions} />
       ) : (
         <BrandProductGrid products={products} brandSlug={brandSlug} initialTag={initialTag} />
