@@ -4,7 +4,7 @@ import { Resend } from "resend";
 
 const TO_EMAIL = process.env.RESEND_TO_EMAIL ?? "yarikhansraj@gmail.com";
 const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@yarik3d.co.za>";
+  process.env.RESEND_FROM_EMAIL ?? "The Dexarium <onboarding@resend.dev>";
 
 export interface ContactFormState {
   status: "idle" | "success" | "error";
