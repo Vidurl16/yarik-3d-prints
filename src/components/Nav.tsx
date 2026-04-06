@@ -17,11 +17,7 @@ const BRAND_MENU = [
     tagline: "40K-scale · Industrial war",
     href: "/grimdark-future",
     accentColor: "#8b0000",
-    subcategories: [
-      { label: "Infantry", href: "/grimdark-future?filter=Infantry" },
-      { label: "Vehicles", href: "/grimdark-future?filter=Vehicles" },
-      { label: "Characters", href: "/grimdark-future?filter=Characters" },
-    ],
+    subcategories: [],
     factions: [
       { label: "Space Marines", href: "/grimdark-future/space-marines" },
       { label: "Orks", href: "/grimdark-future/orks" },
@@ -36,12 +32,7 @@ const BRAND_MENU = [
     tagline: "Heroic warriors · Ancient magic",
     href: "/age-of-fantasy",
     accentColor: "#2a5a3a",
-    subcategories: [
-      { label: "Warbands", href: "/age-of-fantasy?filter=Warbands" },
-      { label: "Cavalry", href: "/age-of-fantasy?filter=Cavalry" },
-      { label: "Heroes & Wizards", href: "/age-of-fantasy?filter=Heroes+%26+Wizards" },
-      { label: "Monsters & Mounts", href: "/age-of-fantasy?filter=Monsters+%26+Mounts" },
-    ],
+    subcategories: [],
     factions: [
       { label: "High Elves", href: "/age-of-fantasy/high-elves" },
       { label: "Undead Legion", href: "/age-of-fantasy/undead" },
@@ -303,33 +294,37 @@ export default function Nav() {
                         </>
                       )}
 
-                      <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
-                        Product Types
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {activeBrandData.subcategories.map((sub) => (
-                          <Link
-                            key={sub.href}
-                            href={sub.href}
-                            onClick={() => setShopOpen(false)}
-                            className="font-body text-sm tracking-wider px-5 py-2.5 transition-all duration-150"
-                            style={{
-                              border: "1px solid rgba(196,160,69,0.2)",
-                              color: "rgba(240,232,216,0.7)",
-                            }}
-                            onMouseEnter={(e) => {
-                              (e.currentTarget as HTMLElement).style.borderColor = activeBrandData.accentColor;
-                              (e.currentTarget as HTMLElement).style.color = activeBrandData.accentColor;
-                            }}
-                            onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLElement).style.borderColor = "rgba(196,160,69,0.2)";
-                              (e.currentTarget as HTMLElement).style.color = "rgba(240,232,216,0.7)";
-                            }}
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
+                      {activeBrandData.subcategories.length > 0 && (
+                        <>
+                          <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
+                            Product Types
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {activeBrandData.subcategories.map((sub) => (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                onClick={() => setShopOpen(false)}
+                                className="font-body text-sm tracking-wider px-5 py-2.5 transition-all duration-150"
+                                style={{
+                                  border: "1px solid rgba(196,160,69,0.2)",
+                                  color: "rgba(240,232,216,0.7)",
+                                }}
+                                onMouseEnter={(e) => {
+                                  (e.currentTarget as HTMLElement).style.borderColor = activeBrandData.accentColor;
+                                  (e.currentTarget as HTMLElement).style.color = activeBrandData.accentColor;
+                                }}
+                                onMouseLeave={(e) => {
+                                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(196,160,69,0.2)";
+                                  (e.currentTarget as HTMLElement).style.color = "rgba(240,232,216,0.7)";
+                                }}
+                              >
+                                {sub.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </>
+                      )}
                     </motion.div>
                   </motion.div>
                 )}
