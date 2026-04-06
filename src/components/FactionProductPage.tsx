@@ -55,7 +55,37 @@ function groupProducts(
       .filter((g) => g.items.length > 0);
   }
 
-  // For war games: group by category
+  const t = (p: Product) => (p.tags ?? []).map((s) => s.toLowerCase());
+
+  if (brandSlug === "age-of-fantasy") {
+    const groups: { label: string; match: (p: Product) => boolean }[] = [
+      { label: "Heroes",      match: (p) => p.category === "Characters" || t(p).some((x) => ["hero", "heroes", "hq", "wizard", "magic"].includes(x)) },
+      { label: "Cavalry",     match: (p) => t(p).some((x) => ["cavalry", "mounted", "mount"].includes(x)) },
+      { label: "Infantry",    match: (p) => p.category === "Infantry" && !t(p).some((x) => ["cavalry", "mounted", "mount"].includes(x)) },
+      { label: "Monsters",    match: (p) => t(p).some((x) => ["monster", "monsters", "dragon", "beast", "creature"].includes(x)) || (p.category === "Vehicles" && !t(p).some((x) => ["warmachine", "chariot"].includes(x))) },
+      { label: "Warmachines", match: (p) => t(p).some((x) => ["warmachine", "warmachines", "chariot", "war machine"].includes(x)) },
+      { label: "Spells",      match: (p) => t(p).some((x) => ["spell", "spells", "magic-card"].includes(x)) },
+    ];
+    return groups
+      .map(({ label, match }) => ({ label, items: products.filter(match) }))
+      .filter((g) => g.items.length > 0);
+  }
+
+  if (brandSlug === "grimdark-future") {
+    const groups: { label: string; match: (p: Product) => boolean }[] = [
+      { label: "Characters",      match: (p) => p.category === "Characters" || t(p).some((x) => ["character", "characters", "hq", "leader"].includes(x)) },
+      { label: "Battleline",      match: (p) => t(p).includes("battleline") },
+      { label: "Infantry/Mounted",match: (p) => p.category === "Infantry" && !t(p).includes("battleline") && !t(p).some((x) => ["cavalry", "mounted"].includes(x)) },
+      { label: "Vehicles",        match: (p) => (p.category === "Vehicles" || t(p).some((x) => ["vehicle", "vehicles", "tank"].includes(x))) && !t(p).some((x) => ["monster", "beast", "creature"].includes(x)) },
+      { label: "Monsters",        match: (p) => t(p).some((x) => ["monster", "monsters", "beast", "creature"].includes(x)) },
+      { label: "Transports",      match: (p) => t(p).some((x) => ["transport", "transports"].includes(x)) },
+    ];
+    return groups
+      .map(({ label, match }) => ({ label, items: products.filter(match) }))
+      .filter((g) => g.items.length > 0);
+  }
+
+  // For all other brands: group by category
   const categoryOrder = ["Characters", "Infantry", "Vehicles", "Terrain", "Basing", "Accessories"];
   const grouped: Record<string, Product[]> = {};
   for (const p of products) {
