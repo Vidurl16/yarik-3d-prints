@@ -1,10 +1,28 @@
 import { siteCategories } from "@/lib/products";
 import Link from "next/link";
-import BrandIcon from "@/components/BrandIcon";
+import Image from "next/image";
 import HoverLink from "@/components/HoverLink";
 
 export const metadata = {
-  title: "Shop — YARIK 3D Prints",
+  title: "Shop — The Dexarium",
+};
+
+const CATEGORY_THUMBNAIL: Record<string, string> = {
+  "grimdark-future":            "/images/categories/thumbnails/grimdark-future.jpg",
+  "age-of-fantasy":             "/images/categories/thumbnails/age-of-fantasy.jpg",
+  "pokemon":                    "/images/categories/thumbnails/pokemon.jpg",
+  "basing-battle-effects":      "/images/categories/thumbnails/basing-bits.jpg",
+  "gaming-accessories-terrain": "/images/categories/thumbnails/terrain.jpg",
+  "display-figures-busts":      "/images/categories/thumbnails/figurines-and-busts.jpg",
+};
+
+const CATEGORY_ROUTE: Record<string, string> = {
+  "grimdark-future":            "/grimdark-future",
+  "age-of-fantasy":             "/age-of-fantasy",
+  "pokemon":                    "/pokemon",
+  "basing-battle-effects":      "/basing-battle-effects",
+  "gaming-accessories-terrain": "/gaming-accessories-terrain",
+  "display-figures-busts":      "/display-figures-busts",
 };
 
 export default function ShopPage() {
@@ -41,43 +59,62 @@ export default function ShopPage() {
 
       {/* Category Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {siteCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/shop/${cat.id}`}
-              className="group relative flex flex-col p-8 transition-all duration-300 hover:-translate-y-1"
-              style={{
-                background: "var(--surface)",
-                border: `1px solid ${cat.borderColor}`,
-              }}
-            >
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {siteCategories.map((cat) => {
+            const thumb = CATEGORY_THUMBNAIL[cat.id];
+            const href = CATEGORY_ROUTE[cat.id] ?? `/shop/${cat.id}`;
+            return (
+              <Link
+                key={cat.id}
+                href={href}
+                className="group relative overflow-hidden transition-all duration-300"
                 style={{
-                  background: `radial-gradient(ellipse 80% 60% at 50% 120%, ${cat.glowColor} 0%, transparent 70%)`,
+                  border: "1px solid var(--border)",
+                  aspectRatio: "2/3",
+                  minHeight: "320px",
                 }}
-              />
-              <div className="relative z-10">
-                <div className="w-20 h-20 mb-5 flex items-center justify-center">
-                  <BrandIcon
-                    id={cat.id}
-                    className="w-full h-full"
-                    style={{ color: cat.accentColor }}
+              >
+                {thumb ? (
+                  <Image
+                    src={thumb}
+                    alt={cat.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, 33vw"
                   />
+                ) : (
+                  <div className="absolute inset-0" style={{ background: "var(--surface)" }} />
+                )}
+                {/* Gradient overlay */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.35) 45%, transparent 100%)",
+                  }}
+                />
+                {/* Accent border on hover */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ boxShadow: "inset 0 0 0 1px var(--primary)" }}
+                />
+                {/* Text */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                  <h2
+                    className="font-heading text-sm sm:text-base tracking-[0.08em] leading-tight mb-2"
+                    style={{ color: "#fff" }}
+                  >
+                    {cat.name.toUpperCase()}
+                  </h2>
+                  <span
+                    className="font-body text-[11px] tracking-[0.12em] transition-all duration-300 opacity-0 group-hover:opacity-100 inline-block translate-y-1 group-hover:translate-y-0"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    EXPLORE →
+                  </span>
                 </div>
-                <h2 className="font-heading text-xl tracking-[0.08em] mb-4 transition-colors" style={{ color: "var(--text)" }}>
-                  {cat.name.toUpperCase()}
-                </h2>
-                <span
-                  className="font-body text-xs tracking-[0.2em] transition-colors"
-                  style={{ color: cat.accentColor }}
-                >
-                  EXPLORE COLLECTION →
-                </span>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
