@@ -34,11 +34,13 @@ export async function POST(req: NextRequest) {
       customerEmail,
       shippingAddress,
       shippingMethod,
+      postnet_details,
     }: {
       items: CartLineItem[];
       customerEmail?: string;
       shippingAddress?: ShippingAddress;
       shippingMethod?: ShippingMethod;
+      postnet_details?: { branch_name: string; number: string; email: string } | null;
     } = await req.json();
 
     if (!items || items.length === 0) {
@@ -106,6 +108,7 @@ export async function POST(req: NextRequest) {
         ...(shippingAddress ? (shippingAddress as unknown as Record<string, string>) : {}),
         ...(shippingMethod ? { shipping_method_id: shippingMethod.id, shipping_method_label: shippingMethod.label, shipping_price_cents: String(shippingMethod.priceCents) } : {}),
       },
+      ...(postnet_details ? { postnet_details } : {}),
     });
 
     if (!orderId) {

@@ -31,6 +31,7 @@ function CartContent() {
     name: "", line1: "", line2: "", city: "", province: "", postal_code: "", country: "ZA",
   });
   const [pudoFields, setPudoFields] = useState({ name: "", email: "", phone: "", lockerName: "", lockerId: "" });
+  const [postnetFields, setPostnetFields] = useState({ branchName: "", number: "", email: "" });
   const [selectedShipping, setSelectedShipping] = useState<ShippingMethodId>("postnet");
 
   const canCheckout = useMemo(() => {
@@ -42,8 +43,11 @@ function CartContent() {
       return !!(pudoFields.name && pudoFields.email && pudoFields.phone && pudoFields.lockerName);
       // lockerId is optional — falls back to lockerName text for manual entry
     }
-    return true; // postnet and collection-ballito need no address
-  }, [items, selectedShipping, address, pudoFields]);
+    if (selectedShipping === "postnet") {
+      return !!(postnetFields.branchName && postnetFields.number && postnetFields.email);
+    }
+    return true; // collection-ballito needs no address
+  }, [items, selectedShipping, address, pudoFields, postnetFields]);
 
   async function copyOrderId() {
     if (!orderId) return;
@@ -69,12 +73,19 @@ function CartContent() {
           ? { name: pudoFields.name, email: pudoFields.email, phone: pudoFields.phone, locker: pudoFields.lockerName, locker_id: pudoFields.lockerId || undefined }
           : undefined;
 
+      const postnetDetails = selectedShipping === "postnet" ? {
+        branch_name: postnetFields.branchName,
+        number: postnetFields.number,
+        email: postnetFields.email,
+      } : null;
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customerEmail: guestEmail.trim() || undefined,
           shippingAddress,
+          postnet_details: postnetDetails,
           shippingMethod: {
             id: shippingMethod.id,
             label: shippingMethod.label,
@@ -473,6 +484,33 @@ function CartContent() {
                 </div>
 
                 {/* Shipping details — method-specific fields */}
+                {selectedShipping === "postnet" && (
+                  <div className="space-y-2 mb-4">
+                    <p className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+                      POSTNET DETAILS <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
+                    </p>
+                    {[
+                      { key: "branchName", label: "PostNet Branch Name", type: "text",  placeholder: "e.g. Ballito PostNet" },
+                      { key: "number",     label: "PostNet Number",       type: "text",  placeholder: "e.g. 12345" },
+                      { key: "email",      label: "Email for Notification", type: "email", placeholder: "your@email.com" },
+                    ].map(({ key, label, type, placeholder }) => (
+                      <div key={key}>
+                        <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
+                          {label.toUpperCase()} <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
+                        </label>
+                        <input
+                          type={type}
+                          value={postnetFields[key as keyof typeof postnetFields]}
+                          onChange={(e) => setPostnetFields((p) => ({ ...p, [key]: e.target.value }))}
+                          placeholder={placeholder}
+                          className="w-full px-3 py-2 font-body text-xs"
+                          style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {selectedShipping === "courier-door" && (
                   <div className="space-y-2">
                     <p className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
@@ -582,6 +620,8 @@ function CartContent() {
                       ? "Complete your delivery address to continue."
                       : selectedShipping === "courier-pudo"
                       ? "Complete your PUDO locker details to continue."
+                      : selectedShipping === "postnet"
+                      ? "Complete your PostNet details (branch name, number, email) to continue."
                       : ""}
                   </p>
                 )}

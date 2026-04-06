@@ -150,6 +150,18 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
                   Paid at: {order.paid_at ? formatDate(order.paid_at) : "—"}
                 </p>
               </div>
+              {(() => {
+                const pd = ((order as unknown as Record<string, unknown>).postnet_details as Record<string, string> | undefined);
+                if (!pd) return null;
+                return (
+                  <div>
+                    <p className="text-[rgba(196,160,69,0.65)] uppercase tracking-[0.1em] mb-1">PostNet Details</p>
+                    <p className="text-[rgba(240,232,216,0.7)]">
+                      Branch: {pd.branch_name}<br />Number: {pd.number}<br />Email: {pd.email}
+                    </p>
+                  </div>
+                );
+              })()}
             </div>
           </td>
         </tr>
