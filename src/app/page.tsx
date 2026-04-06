@@ -59,7 +59,7 @@ export default async function HeroPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-16 pb-16">
+        <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-28 pb-16">
           {/* Logo */}
           <div className="flex justify-center mb-6 animate-fade-in-up">
             <div
