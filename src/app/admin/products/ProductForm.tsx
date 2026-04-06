@@ -101,12 +101,30 @@ const FACTIONS: { group: string; options: { id: string; label: string }[] }[] = 
   ]},
 ];
 
-const ROLES = ["HQ", "Battleline", "Infantry", "Cavalry", "Vehicles", "Transports", "Support"];
+// Valid roles map to Army Builder section labels and brand page filter categories:
+// Grimdark Future: Characters, Battleline, Infantry/Mounted, Vehicles, Monsters, Transports
+// Age of Fantasy:  Heroes, Cavalry, Infantry, Monsters, Warmachines, Spells
+const ROLES = [
+  "Characters", "Heroes",          // HQ / leaders (GF → Characters, AoF → Heroes)
+  "Battleline",                    // Core troops
+  "Infantry", "Infantry/Mounted",  // Foot soldiers
+  "Cavalry",                       // Mounted warriors
+  "Vehicles",                      // Tanks, walkers
+  "Monsters",                      // Beasts, dragons
+  "Transports",                    // Deployment units
+  "Warmachines",                   // War machines (AoF)
+  "Spells",                        // Spell cards (AoF)
+  "Support",                       // General support
+];
 
 const TAG_GROUPS: { label: string; tags: string[] }[] = [
-  { label: "Pokémon",  tags: ["pokeball", "themed-pokeball", "3d-card", "figurine"] },
-  { label: "Basing",   tags: ["base", "scatter", "marker", "effect", "debris", "rubble"] },
-  { label: "General",  tags: ["exclusive", "limited", "bundle", "custom", "new-arrival", "preorder"] },
+  // Grimdark Future filter tags
+  { label: "Grimdark Future", tags: ["characters", "battleline", "infantry/mounted", "vehicles", "monsters", "transports"] },
+  // Age of Fantasy filter tags
+  { label: "Age of Fantasy",  tags: ["heroes", "cavalry", "infantry", "monsters", "warmachines", "spells"] },
+  { label: "Pokémon",         tags: ["pokeball", "themed-pokeball", "3d-card", "figurine"] },
+  { label: "Basing",          tags: ["base", "scatter", "marker", "effect", "debris", "rubble"] },
+  { label: "General",         tags: ["exclusive", "limited", "bundle", "custom", "new-arrival", "preorder"] },
 ];
 
 interface Props {

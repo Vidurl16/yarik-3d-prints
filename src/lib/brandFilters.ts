@@ -48,37 +48,59 @@ function tags(p: DbProduct): string[] {
   return p.tags.map((t) => t.toLowerCase());
 }
 
+// Valid Grimdark Future filter tags: Characters, Battleline, Infantry/Mounted, Vehicles, Monsters, Transports
+// Valid Age of Fantasy filter tags: Heroes, Cavalry, Infantry, Monsters, Warmachines, Spells
 export const dbBrandFilters: Record<string, DbFilterDef[]> = {
   "grimdark-future": [
     {
-      label: "Infantry",
-      match: (p) => p.type === "infantry" || tags(p).some((t) => ["infantry", "cavalry"].includes(t)),
+      label: "Characters",
+      match: (p) => p.type === "character" || tags(p).some((t) => ["characters", "character", "hq", "leader"].includes(t)),
     },
     {
-      label: "Characters",
-      match: (p) => p.type === "character" || tags(p).some((t) => ["character", "hq", "leader"].includes(t)),
+      label: "Battleline",
+      match: (p) => p.type === "battleline" || tags(p).includes("battleline"),
+    },
+    {
+      label: "Infantry/Mounted",
+      match: (p) => p.type === "infantry" || p.type === "cavalry" || tags(p).some((t) => ["infantry/mounted", "infantry", "cavalry", "mounted"].includes(t)),
     },
     {
       label: "Vehicles",
-      match: (p) => p.type === "vehicle" || tags(p).some((t) => ["vehicle", "vehicles", "tank", "transport", "transports"].includes(t)),
+      match: (p) => p.type === "vehicle" || tags(p).some((t) => ["vehicles", "vehicle", "tank"].includes(t)),
+    },
+    {
+      label: "Monsters",
+      match: (p) => p.type === "monster" || tags(p).some((t) => ["monsters", "monster", "beast", "creature"].includes(t)),
+    },
+    {
+      label: "Transports",
+      match: (p) => p.type === "transport" || tags(p).some((t) => ["transports", "transport"].includes(t)),
     },
   ],
   "age-of-fantasy": [
     {
-      label: "Warbands",
-      match: (p) => (p.type === "infantry" || tags(p).includes("infantry")) && !tags(p).includes("cavalry"),
+      label: "Heroes",
+      match: (p) => p.type === "character" || tags(p).some((t) => ["heroes", "hero", "hq", "wizard", "magic"].includes(t)),
     },
     {
       label: "Cavalry",
       match: (p) => p.type === "cavalry" || tags(p).some((t) => ["cavalry", "mount", "mounted"].includes(t)),
     },
     {
-      label: "Heroes & Wizards",
-      match: (p) => p.type === "character" || tags(p).some((t) => ["character", "hq", "hero", "wizard", "magic"].includes(t)),
+      label: "Infantry",
+      match: (p) => (p.type === "infantry" || tags(p).includes("infantry")) && !tags(p).includes("cavalry"),
     },
     {
-      label: "Monsters & Mounts",
-      match: (p) => p.type === "monster" || tags(p).some((t) => ["monster", "dragon", "beast", "creature", "chariot"].includes(t)),
+      label: "Monsters",
+      match: (p) => p.type === "monster" || tags(p).some((t) => ["monsters", "monster", "dragon", "beast", "creature"].includes(t)),
+    },
+    {
+      label: "Warmachines",
+      match: (p) => p.type === "warmachine" || tags(p).some((t) => ["warmachines", "warmachine", "war machine", "chariot"].includes(t)),
+    },
+    {
+      label: "Spells",
+      match: (p) => p.type === "spell" || tags(p).some((t) => ["spells", "spell", "magic-card"].includes(t)),
     },
   ],
   "pokemon": [
