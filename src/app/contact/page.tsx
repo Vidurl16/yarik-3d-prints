@@ -39,9 +39,9 @@ export default function ContactPage() {
             {
               icon: "📧",
               label: "EMAIL",
-              value: "hello@yarik3d.co.za",
+              value: "yarikhansraj@gmail.com",
               sub: "Replies within 24 hours",
-              href: "mailto:hello@yarik3d.co.za",
+              href: "mailto:yarikhansraj@gmail.com",
             },
             {
               icon: "💬",
