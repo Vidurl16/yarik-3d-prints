@@ -44,7 +44,7 @@ function LoginForm() {
         setForgotSent(true);
       }
     } else if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({
+      const { data: signUpData, error } = await supabase.auth.signUp({
         email,
         password,
         options: { data: { full_name: fullName.trim() } },
@@ -52,6 +52,13 @@ function LoginForm() {
       if (error) {
         setError(error.message);
       } else {
+        // Also write to profiles table so NavAuthLinks can read it directly
+        if (signUpData.user) {
+          await supabase.from("profiles").upsert({
+            id: signUpData.user.id,
+            full_name: fullName.trim(),
+          });
+        }
         setError(null);
         setSignupSent(true);
       }
