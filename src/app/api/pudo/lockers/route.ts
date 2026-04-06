@@ -1,8 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // PUDO API — The Courier Guy locker network
-// Docs: https://api-docs.pudo.co.za
+// Docs: https://api-pudo.co.za
+// Auth: api_key query param (format: {accountId}|{apiKey})
 const PUDO_BASE = "https://api-pudo.co.za";
+
+interface PudoRawLocker {
+  code: string;
+  name: string;
+  address?: string;
+  place?: { town?: string; postalCode?: string };
+  openinghours?: Array<{ day: string; open_time: string; close_time: string }>;
+}
+
+function normalise(raw: PudoRawLocker) {
+  const firstHour = raw.openinghours?.[0];
+  const hours = firstHour
+    ? `${firstHour.day} ${firstHour.open_time.slice(0, 5)}–${firstHour.close_time.slice(0, 5)}`
+    : undefined;
+  return {
+    id: raw.code,
+    name: raw.name,
+    address: raw.address,
+    city: raw.place?.town,
+    hours,
+  };
+}
 
 export async function GET(req: NextRequest) {
   const apiKey = process.env.PUDO_API_KEY;
@@ -11,21 +34,20 @@ export async function GET(req: NextRequest) {
   }
 
   const { searchParams } = new URL(req.url);
-  const search = searchParams.get("search") ?? "";
+  const search = (searchParams.get("search") ?? "").toLowerCase().trim();
 
   if (search.length < 2) {
     return NextResponse.json({ lockers: [] });
   }
 
   try {
+    // PUDO returns all lockers — no server-side search param supported.
+    // We cache the full list for 1 h and filter here.
     const res = await fetch(
-      `${PUDO_BASE}/lockers-data?search=${encodeURIComponent(search)}`,
+      `${PUDO_BASE}/lockers-data?api_key=${encodeURIComponent(apiKey)}`,
       {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          Accept: "application/json",
-        },
-        next: { revalidate: 3600 }, // cache locker list for 1h
+        headers: { Accept: "application/json" },
+        next: { revalidate: 3600 },
       }
     );
 
@@ -36,8 +58,16 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await res.json();
-    // Normalise: PUDO may return { lockers: [...] } or a raw array
-    const lockers = Array.isArray(data) ? data : (data.lockers ?? data.data ?? []);
+    const raw: PudoRawLocker[] = Array.isArray(data) ? data : (data.lockers ?? data.data ?? []);
+
+    const lockers = raw
+      .filter((l) => {
+        const haystack = [l.name, l.address, l.place?.town].join(" ").toLowerCase();
+        return haystack.includes(search);
+      })
+      .slice(0, 20)
+      .map(normalise);
+
     return NextResponse.json({ lockers });
   } catch (err) {
     console.error("[PUDO] Network error:", err);
