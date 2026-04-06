@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import type { DbOrder, DbOrderItem } from "@/lib/data/types";
 
 const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@yarik3d.co.za>";
+  process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@thedexarium.co.za>";
 
 function formatZAR(cents: number): string {
   return `R ${(cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
