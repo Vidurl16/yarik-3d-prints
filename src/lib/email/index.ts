@@ -193,7 +193,7 @@ function buildOrderConfirmationHtml(
                   <td style="padding:16px 20px;">
                     <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:13px;color:#e8dcc8;">Questions about your order?</p>
                     <p style="margin:0;font-family:Georgia,serif;font-size:13px;color:#9e8e78;line-height:1.6;">
-                      Email: <a href="mailto:yarikhansraj@gmail.com" style="color:#c9a84c;text-decoration:none;">yarikhansraj@gmail.com</a>
+                      Email: <a href="mailto:thedexarium@gmail.com" style="color:#c9a84c;text-decoration:none;">thedexarium@gmail.com</a>
                       &nbsp;&middot;&nbsp;
                       WhatsApp: <a href="https://wa.me/27000000000" style="color:#c9a84c;text-decoration:none;">+27 XX XXX XXXX</a><br>
                       Include your order reference in any message.
@@ -248,11 +248,11 @@ export async function sendEmail({
     return;
   }
   const resend = new Resend(RESEND_KEY);
-  const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html, replyTo: "yarikhansraj@gmail.com" });
+  const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html, replyTo: "thedexarium@gmail.com" });
   if (error) console.error("[Email] Failed to send to", to, error);
 }
 
-const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "yarikhansraj@gmail.com";
+const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "thedexarium@gmail.com";
 
 export async function sendOrderConfirmationEmail(
   order: DbOrder,

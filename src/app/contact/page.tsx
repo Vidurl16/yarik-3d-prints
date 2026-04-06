@@ -39,9 +39,9 @@ export default function ContactPage() {
             {
               icon: "📧",
               label: "EMAIL",
-              value: "yarikhansraj@gmail.com",
+              value: "thedexarium@gmail.com",
               sub: "Replies within 24 hours",
-              href: "mailto:yarikhansraj@gmail.com",
+              href: "mailto:thedexarium@gmail.com",
             },
             {
               icon: "💬",

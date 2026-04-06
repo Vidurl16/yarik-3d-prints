@@ -208,7 +208,7 @@ export async function getProductsByBrand(brand: string): Promise<DbProduct[]> {
     console.error("[DB] getProductsByBrand:", error.message);
     return fallbackProducts;
   }
-  return data ?? [];
+  return data && data.length > 0 ? data : fallbackProducts;
 }
 
 export async function getNewArrivals(): Promise<DbProduct[]> {
