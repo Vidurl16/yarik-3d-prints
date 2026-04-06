@@ -37,24 +37,29 @@ export async function submitContactForm(
   const subject = `[Dexarium Enquiry] ${enquiryType ? enquiryType + " — " : ""}${name}`;
   const body = `Name: ${name}\nEmail: ${email}${enquiryType ? `\nType: ${enquiryType}` : ""}\n\n${message}`;
 
-  const res = await fetch("https://api.web3forms.com/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      access_key: apiKey,
-      subject,
-      from_name: `${name} via The Dexarium`,
-      replyto: email,
-      message: body,
-    }),
-  });
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: apiKey,
+        subject,
+        from_name: `${name} via The Dexarium`,
+        replyto: email,
+        message: body,
+      }),
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok || !data.success) {
-    console.error("[Contact] Web3Forms error:", data);
+    if (!res.ok || !data.success) {
+      console.error("[Contact] Web3Forms error:", data);
+      return { status: "error", message: "Failed to send your message. Please try again." };
+    }
+
+    return { status: "success" };
+  } catch (err) {
+    console.error("[Contact] Unexpected error:", err);
     return { status: "error", message: "Failed to send your message. Please try again." };
   }
-
-  return { status: "success" };
 }
