@@ -30,10 +30,10 @@ const FACTION_GROUPS: Record<string, { label: string; factionIds: string[] }[]> 
 const ROLE_SECTIONS = [
   {
     id: "HQ",
-    label: "HQ",
+    label: "Characters",
     icon: "👑",
     description: "Commanders & Characters",
-    roles: ["HQ"],
+    roles: ["HQ", "Characters", "Heroes", "Hero"],
   },
   {
     id: "Battleline",
@@ -44,24 +44,24 @@ const ROLE_SECTIONS = [
   },
   {
     id: "Infantry",
-    label: "Infantry / Cavalry",
+    label: "Infantry / Mounted",
     icon: "⚔️",
     description: "Foot soldiers & mounted warriors",
-    roles: ["Infantry", "Cavalry"],
+    roles: ["Infantry", "Cavalry", "Infantry/Mounted"],
   },
   {
     id: "Vehicles",
     label: "Vehicles",
     icon: "🚛",
     description: "Tanks, walkers & war machines",
-    roles: ["Vehicles"],
+    roles: ["Vehicles", "Vehicle"],
   },
   {
     id: "Transports",
     label: "Transports",
     icon: "🚁",
     description: "Deployment & mobility units",
-    roles: ["Transports"],
+    roles: ["Transports", "Transport"],
   },
 ] as const;
 
@@ -671,7 +671,7 @@ export default function ArmyBuilderClient({
 
         {/* Right: Sticky Summary Panel */}
         <aside
-          className="lg:w-80 xl:w-96 shrink-0"
+          className="lg:w-96 xl:w-[420px] shrink-0"
           style={{
             position: "sticky",
             top: "80px",
@@ -695,8 +695,8 @@ export default function ArmyBuilderClient({
               YOUR WARBAND
             </h3>
 
-            {/* Selected units by role */}
-            <div className="space-y-1 mb-4 min-h-[80px]">
+            {/* Selected units grouped by role */}
+            <div className="space-y-3 mb-4 min-h-[80px]">
               {selectedEntries.length === 0 && !basingActive && !battleEffectsActive ? (
                 <p
                   className="font-body text-xs italic"
@@ -706,33 +706,92 @@ export default function ArmyBuilderClient({
                 </p>
               ) : (
                 <>
-                  {selectedEntries.map(({ product, qty }) => (
-                    <div
-                      key={product.id}
-                      className="flex items-start justify-between gap-2"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <p
-                          className="font-body text-xs leading-snug truncate"
-                          style={{ color: "var(--text)" }}
+                  {ROLE_SECTIONS.map((section) => {
+                    const sectionItems = selectedEntries.filter(({ product }) =>
+                      product.role ? (section.roles as readonly string[]).includes(product.role) : false
+                    );
+                    if (sectionItems.length === 0) return null;
+                    return (
+                      <div key={section.id} className="mb-2">
+                        <h4
+                          className="font-body text-xs uppercase tracking-widest mb-1.5"
+                          style={{ color: "var(--muted)", opacity: 0.7 }}
                         >
-                          {product.name}
-                        </p>
-                        <p
-                          className="font-body text-xs tracking-wider"
-                          style={{ color: "var(--muted)" }}
-                        >
-                          ×{qty}
-                        </p>
+                          {section.icon} {section.label}
+                        </h4>
+                        {sectionItems.map(({ product, qty }) => (
+                          <div
+                            key={product.id}
+                            className="flex items-start justify-between gap-2 mb-1"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="font-body text-sm leading-snug truncate"
+                                style={{ color: "var(--text)" }}
+                              >
+                                {product.name}
+                              </p>
+                              <p
+                                className="font-body text-xs tracking-wider"
+                                style={{ color: "var(--muted)" }}
+                              >
+                                ×{qty}
+                              </p>
+                            </div>
+                            <span
+                              className="font-body text-sm flex-shrink-0"
+                              style={{ color: "var(--primary)" }}
+                            >
+                              {formatPrice(product.price * qty)}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                      <span
-                        className="font-body text-xs flex-shrink-0"
-                        style={{ color: "var(--primary)" }}
-                      >
-                        {formatPrice(product.price * qty)}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
+                  {/* Units with no matching role → "Other" */}
+                  {(() => {
+                    const allRoles = ROLE_SECTIONS.flatMap((s) => s.roles as readonly string[]);
+                    const other = selectedEntries.filter(({ product }) => !product.role || !allRoles.includes(product.role));
+                    if (other.length === 0) return null;
+                    return (
+                      <div className="mb-2">
+                        <h4
+                          className="font-body text-xs uppercase tracking-widest mb-1.5"
+                          style={{ color: "var(--muted)", opacity: 0.7 }}
+                        >
+                          Other
+                        </h4>
+                        {other.map(({ product, qty }) => (
+                          <div
+                            key={product.id}
+                            className="flex items-start justify-between gap-2 mb-1"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="font-body text-sm leading-snug truncate"
+                                style={{ color: "var(--text)" }}
+                              >
+                                {product.name}
+                              </p>
+                              <p
+                                className="font-body text-xs tracking-wider"
+                                style={{ color: "var(--muted)" }}
+                              >
+                                ×{qty}
+                              </p>
+                            </div>
+                            <span
+                              className="font-body text-sm flex-shrink-0"
+                              style={{ color: "var(--primary)" }}
+                            >
+                              {formatPrice(product.price * qty)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </>
               )}
             </div>
