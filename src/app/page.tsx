@@ -406,10 +406,7 @@ export default async function HeroPage() {
                   href={CATEGORY_ROUTE_MAP[product.brand] ?? `/shop/${product.brand}`}
                   className="group card-bg overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
                   style={{
-                    borderLeft: "1px solid var(--border)",
-                    borderRight: "1px solid var(--border)",
-                    borderBottom: "1px solid var(--border)",
-                    borderTop: "2px solid var(--primary)",
+                    border: "1px solid var(--border)",
                   }}
                 >
                   <div
