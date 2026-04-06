@@ -8,6 +8,8 @@ import type { BrandFaction } from "@/lib/products";
 interface FactionTileGridProps {
   brandSlug: string;
   factions: BrandFaction[];
+  heading?: string;
+  subheading?: string;
 }
 
 import type { Variants } from "framer-motion";
@@ -22,7 +24,7 @@ const tileVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-export default function FactionTileGrid({ brandSlug, factions }: FactionTileGridProps) {
+export default function FactionTileGrid({ brandSlug, factions, heading, subheading }: FactionTileGridProps) {
   if (factions.length === 0) return null;
 
   return (
@@ -32,13 +34,13 @@ export default function FactionTileGrid({ brandSlug, factions }: FactionTileGrid
           className="font-body text-xs tracking-[0.2em] uppercase mb-3"
           style={{ color: "var(--primary)", opacity: 0.7 }}
         >
-          Choose Your Faction
+          {subheading ?? "Choose Your Faction"}
         </p>
         <h2
           className="font-heading text-3xl sm:text-4xl tracking-wider"
           style={{ color: "var(--text)" }}
         >
-          FACTIONS &amp; COLLECTIONS
+          {heading ?? "FACTIONS & COLLECTIONS"}
         </h2>
       </div>
 

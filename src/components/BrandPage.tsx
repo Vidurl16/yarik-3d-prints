@@ -158,47 +158,59 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
         </div>
       </section>
 
-      {/* ── FACTION TILES (for brands with factions) OR PRODUCT GRID ─── */}
-      {/* If a subcategory tag filter is active, show the product grid regardless of factions */}
-      {hasFactions && !initialTag ? (
+      {/* ── DISPLAY FIGURES: Browse by Type → then Browse by Theme ─── */}
+      {brandSlug === "display-figures-busts" && !initialTag ? (
+        <>
+          {/* 1. BROWSE BY TYPE — Single Figures, Dioramas, Busts, Limited Edition */}
+          <section className="max-w-7xl mx-auto px-6 py-12">
+            <div className="mb-8">
+              <p className="font-body text-xs tracking-[0.2em] uppercase mb-3"
+                style={{ color: "var(--primary)", opacity: 0.7 }}>
+                What are you looking for?
+              </p>
+              <h2 className="font-heading text-3xl sm:text-4xl tracking-wider" style={{ color: "var(--text)" }}>
+                BROWSE BY TYPE
+              </h2>
+            </div>
+            {/* TODO: Replace placeholder images with real subcategory thumbnails (owner to upload) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {DISPLAY_SUBCATEGORIES.map((sub) => (
+                <a
+                  key={sub.name}
+                  href={`/display-figures-busts?tag=${encodeURIComponent(sub.name.toLowerCase())}`}
+                  className="group relative overflow-hidden cursor-pointer"
+                  style={{ aspectRatio: "3/4", background: "#111111", border: "1px solid var(--border)" }}
+                >
+                  <div className="absolute inset-0 flex flex-col items-center justify-end p-4"
+                    style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)" }}
+                  >
+                    <p className="font-heading text-sm tracking-widest text-center uppercase group-hover:text-purple-300 transition-colors"
+                      style={{ color: "var(--text)" }}>
+                      {sub.name}
+                    </p>
+                    <span className="font-body text-xs mt-1 tracking-wider" style={{ color: "var(--primary)" }}>
+                      BROWSE →
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* 2. BROWSE BY THEME — Comics, Games, Movies, Other */}
+          <FactionTileGrid
+            brandSlug={brandSlug}
+            factions={factions}
+            heading="BROWSE BY THEME"
+            subheading="Browse by Universe"
+          />
+        </>
+      ) : hasFactions && !initialTag ? (
+        /* Other brands with factions — standard faction tiles */
         <FactionTileGrid brandSlug={brandSlug} factions={factions} />
       ) : (
+        /* Product grid — shown when ?tag= is active or brand has no factions */
         <BrandProductGrid products={products} brandSlug={brandSlug} initialTag={initialTag} />
-      )}
-
-      {/* ── DISPLAY FIGURES SUBCATEGORY GRID ────────────────── */}
-      {brandSlug === "display-figures-busts" && (
-        <section className="max-w-7xl mx-auto px-6 py-12">
-          <h2
-            className="font-heading text-2xl tracking-wider mb-6"
-            style={{ color: "var(--text)" }}
-          >
-            BROWSE BY SUBCATEGORY
-          </h2>
-          {/* TODO: Replace placeholder images with real subcategory thumbnails (owner to upload) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {DISPLAY_SUBCATEGORIES.map((sub) => (
-              <a
-                key={sub.name}
-                href={`/display-figures-busts?tag=${encodeURIComponent(sub.name.toLowerCase())}`}
-                className="group relative overflow-hidden cursor-pointer"
-                style={{ aspectRatio: "3/4", background: "#111111", border: "1px solid var(--border)" }}
-              >
-                <div className="absolute inset-0 flex flex-col items-center justify-end p-4"
-                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)" }}
-                >
-                  <p className="font-heading text-sm tracking-widest text-center uppercase group-hover:text-purple-300 transition-colors"
-                    style={{ color: "var(--text)" }}>
-                    {sub.name}
-                  </p>
-                  <span className="font-body text-xs mt-1 tracking-wider" style={{ color: "var(--primary)" }}>
-                    BROWSE →
-                  </span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
       )}
 
       {/* ── UPSELL SECTION (hidden for Pokémon per TASK-04) ─────────────────────── */}
