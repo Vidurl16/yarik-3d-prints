@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
-import { formatPrice, type Product } from "@/lib/products";
+import { formatPrice, type Product, brandFactions } from "@/lib/products";
 import type { ThemeTokens } from "@/components/theme/themes";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -22,8 +22,8 @@ const FACTION_GROUPS: Record<string, { label: string; factionIds: string[] }[]> 
   "age-of-fantasy": [
     { label: "Order",       factionIds: ["high-elves","wood-elves","dark-elves","woodelves","lizardmen","cities"] },
     { label: "Death",       factionIds: ["undead","vampire-lords","flesh-eaters"] },
-    { label: "Chaos",       factionIds: ["rotkin","chas-knights","chaos-dwarves"] },
-    { label: "Destruction", factionIds: ["greenskins","goblins","ogres","giants","ratmen"] },
+    { label: "Chaos",       factionIds: ["rotkin","chaos-knights-aof","chaos-dwarves","ratmen"] },
+    { label: "Destruction", factionIds: ["greenskins","goblins","ogres","giants"] },
   ],
 };
 
@@ -339,10 +339,14 @@ export default function ArmyBuilderClient({
   const factionList = useMemo(() => {
     const groups = FACTION_GROUPS[brand] ?? [];
     const allIds = groups.flatMap((g) => g.factionIds);
-    return allIds.map((id) => ({
-      id,
-      label: id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-    }));
+    const factionData = brandFactions[brand as keyof typeof brandFactions] ?? [];
+    return allIds.map((id) => {
+      const found = factionData.find((f) => f.id === id);
+      return {
+        id,
+        label: found?.name ?? id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+      };
+    });
   }, [brand]);
 
   const [selectedFaction, setSelectedFaction] = useState<string>("all");

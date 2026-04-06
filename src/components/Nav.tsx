@@ -64,7 +64,7 @@ const BRAND_MENU = [
       { label: "Vampire Lords", href: "/age-of-fantasy/vampire-lords" },
       { label: "The Haunted", href: "/age-of-fantasy/undead" },
       { label: "Flesh Eaters", href: "/age-of-fantasy/flesh-eaters" },
-      { label: "Chaos Knights", href: "/age-of-fantasy/chas-knights" },
+      { label: "Chaos Knights", href: "/age-of-fantasy/chaos-knights-aof" },
       { label: "Chaos Dwarves", href: "/age-of-fantasy/chaos-dwarves" },
       { label: "Rotkin", href: "/age-of-fantasy/rotkin" },
       { label: "Greenskins", href: "/age-of-fantasy/greenskins" },

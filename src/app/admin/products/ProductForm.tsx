@@ -68,7 +68,7 @@ const FACTIONS: { group: string; options: { id: string; label: string }[] }[] = 
   ]},
   { group: "Age of Fantasy — Chaos", options: [
     { id: "rotkin",        label: "Rotkin" },
-    { id: "chas-knights",  label: "Chaos Knights" },
+    { id: "chaos-knights-aof",  label: "Chaos Knights" },
     { id: "chaos-dwarves", label: "Chaos Dwarves" },
   ]},
   { group: "Age of Fantasy — Destruction", options: [
