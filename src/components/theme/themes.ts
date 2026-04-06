@@ -137,7 +137,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
     border: "rgba(160,128,64,0.25)",
     heroImage: "/images/categories/banners/basing.jpg",
     heroFit: "cover",
-    heroPosition: "center top",
+    heroPosition: "center center",
     label: "Basing & Battle Effects",
     icon: "🪨",
     iconSrc: "/brand-icons/basing-battle-effects.svg",
