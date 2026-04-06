@@ -17,10 +17,42 @@ interface BrandPageProps {
 
 // TODO: Replace placeholder images with real subcategory thumbnails (owner to upload)
 const DISPLAY_SUBCATEGORIES = [
-  { name: "Single Figures",  image: "/images/display-figures/single-placeholder.jpg" },
-  { name: "Dioramas",        image: "/images/display-figures/dioramas-placeholder.jpg" },
-  { name: "Busts",           image: "/images/display-figures/busts-placeholder.jpg" },
-  { name: "Limited Edition", image: "/images/display-figures/limited-placeholder.jpg" },
+  {
+    name: "Single Figures",
+    tag: "single figures",
+    accent: "#a87c4f",
+    glow: "rgba(168,124,79,0.35)",
+    gradient: "linear-gradient(160deg, #1a1208 0%, #2e1f0d 50%, #1a1208 100%)",
+    icon: "◈",
+    desc: "Hand-crafted single miniatures",
+  },
+  {
+    name: "Dioramas",
+    tag: "dioramas",
+    accent: "#5a8fa3",
+    glow: "rgba(90,143,163,0.35)",
+    gradient: "linear-gradient(160deg, #0a1520 0%, #0f2535 50%, #0a1520 100%)",
+    icon: "◉",
+    desc: "Multi-figure scenic compositions",
+  },
+  {
+    name: "Busts",
+    tag: "busts",
+    accent: "#8b6fae",
+    glow: "rgba(139,111,174,0.35)",
+    gradient: "linear-gradient(160deg, #130d1e 0%, #1f1230 50%, #130d1e 100%)",
+    icon: "◎",
+    desc: "Detailed portrait-scale busts",
+  },
+  {
+    name: "Limited Edition",
+    tag: "limited edition",
+    accent: "#c9a84c",
+    glow: "rgba(201,168,76,0.35)",
+    gradient: "linear-gradient(160deg, #1a1500 0%, #2e2500 50%, #1a1500 100%)",
+    icon: "✦",
+    desc: "Exclusive & collector's pieces",
+  },
 ];
 
 /** Cross-sell add-ons per brand — uses real DB brand slugs */
@@ -172,26 +204,75 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
                 BROWSE BY TYPE
               </h2>
             </div>
-            {/* TODO: Replace placeholder images with real subcategory thumbnails (owner to upload) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {DISPLAY_SUBCATEGORIES.map((sub) => (
                 <a
                   key={sub.name}
-                  href={`/display-figures-busts?tag=${encodeURIComponent(sub.name.toLowerCase())}`}
-                  className="group relative overflow-hidden cursor-pointer"
-                  style={{ aspectRatio: "3/4", background: "#111111", border: "1px solid var(--border)" }}
+                  href={`/display-figures-busts?tag=${encodeURIComponent(sub.tag)}`}
+                  className="group relative overflow-hidden transition-all duration-300"
+                  style={{
+                    aspectRatio: "3/4",
+                    background: sub.gradient,
+                    border: `1px solid color-mix(in srgb, ${sub.accent} 30%, transparent)`,
+                  }}
                 >
-                  <div className="absolute inset-0 flex flex-col items-center justify-end p-4"
-                    style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)" }}
-                  >
-                    <p className="font-heading text-sm tracking-widest text-center uppercase group-hover:text-purple-300 transition-colors"
-                      style={{ color: "var(--text)" }}>
-                      {sub.name}
-                    </p>
-                    <span className="font-body text-xs mt-1 tracking-wider" style={{ color: "var(--primary)" }}>
-                      BROWSE →
+                  {/* Corner accent */}
+                  <div
+                    className="absolute top-0 right-0 w-14 h-14 opacity-20"
+                    style={{ background: `linear-gradient(225deg, ${sub.accent} 0%, transparent 70%)` }}
+                  />
+
+                  {/* Hover glow */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{
+                      background: `radial-gradient(ellipse 80% 60% at 50% 120%, ${sub.glow} 0%, transparent 70%)`,
+                    }}
+                  />
+
+                  {/* Content */}
+                  <div className="relative z-10 h-full flex flex-col justify-between p-5">
+                    {/* Icon top-left */}
+                    <span className="text-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-300"
+                      style={{ color: sub.accent }}>
+                      {sub.icon}
                     </span>
+
+                    {/* Text bottom */}
+                    <div>
+                      <p className="font-body text-xs mb-2 leading-relaxed"
+                        style={{ color: `color-mix(in srgb, ${sub.accent} 70%, white)`, opacity: 0.75 }}>
+                        {sub.desc}
+                      </p>
+                      <h3
+                        className="font-heading text-base sm:text-lg tracking-wider group-hover:tracking-widest transition-all duration-300 mb-2"
+                        style={{ color: "var(--text)" }}
+                      >
+                        {sub.name.toUpperCase()}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="font-body text-xs tracking-[0.2em] group-hover:tracking-widest transition-all duration-300"
+                          style={{ color: sub.accent }}
+                        >
+                          BROWSE
+                        </span>
+                        <svg
+                          className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                          style={{ color: sub.accent }}
+                          viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.5}
+                        >
+                          <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Bottom accent line on hover */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: `linear-gradient(90deg, transparent, ${sub.accent}, transparent)` }}
+                  />
                 </a>
               ))}
             </div>
