@@ -205,6 +205,8 @@ export async function sendEmail({
   if (error) console.error("[Email] Failed to send to", to, error);
 }
 
+const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "yarikhansraj@gmail.com";
+
 export async function sendOrderConfirmationEmail(
   order: DbOrder,
   items: DbOrderItem[]
@@ -225,18 +227,36 @@ export async function sendOrderConfirmationEmail(
   }
 
   const resend = new Resend(RESEND_KEY);
+  const subject = `Your Dexarium Order Confirmation – #${order.id.slice(0, 8).toUpperCase()}`;
+  const html = buildOrderConfirmationHtml(order, items);
 
-  const { error } = await resend.emails.send({
+  // Send confirmation to customer
+  const { error: customerError } = await resend.emails.send({
     from: FROM_EMAIL,
     to: toEmail,
-    replyTo: "yarikhansraj@gmail.com",
-    subject: `Your Dexarium Order Confirmation – #${order.id.slice(0, 8).toUpperCase()}`,
-    html: buildOrderConfirmationHtml(order, items),
+    replyTo: OWNER_EMAIL,
+    subject,
+    html,
   });
-
-  if (error) {
-    console.error("[Email] Failed to send order confirmation:", error);
+  if (customerError) {
+    console.error("[Email] Failed to send customer confirmation:", customerError);
   } else {
-    console.log("[Email] Order confirmation sent to", toEmail, "for order", order.id);
+    console.log("[Email] Order confirmation sent to customer", toEmail, "for order", order.id);
+  }
+
+  // Send notification to owner (skip if owner is already the customer)
+  if (toEmail.toLowerCase() !== OWNER_EMAIL.toLowerCase()) {
+    const { error: ownerError } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: OWNER_EMAIL,
+      replyTo: toEmail,
+      subject: `New Order – #${order.id.slice(0, 8).toUpperCase()} from ${toEmail}`,
+      html,
+    });
+    if (ownerError) {
+      console.error("[Email] Failed to send owner notification:", ownerError);
+    } else {
+      console.log("[Email] Owner notification sent to", OWNER_EMAIL, "for order", order.id);
+    }
   }
 }
