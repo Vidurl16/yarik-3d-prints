@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { getCatalogBuilderProducts } from "@/lib/data/products";
 
 export const metadata: Metadata = {
-  title: "Army Builder — YARIK 3D Prints",
+  title: "Army Builder — The Dexarium",
   description: "Build your custom army by mixing units across supported factions and adding them to your cart.",
 };
 

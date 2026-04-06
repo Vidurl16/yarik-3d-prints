@@ -195,7 +195,7 @@ function buildOrderConfirmationHtml(
                     <p style="margin:0;font-family:Georgia,serif;font-size:13px;color:#9e8e78;line-height:1.6;">
                       Email: <a href="mailto:thedexarium@gmail.com" style="color:#c9a84c;text-decoration:none;">thedexarium@gmail.com</a>
                       &nbsp;&middot;&nbsp;
-                      WhatsApp: <a href="https://wa.me/27000000000" style="color:#c9a84c;text-decoration:none;">+27 XX XXX XXXX</a><br>
+                      WhatsApp: <a href="https://wa.me/27739140709" style="color:#c9a84c;text-decoration:none;">+27 73 914 0709</a><br>
                       Include your order reference in any message.
                     </p>
                   </td>

@@ -118,7 +118,7 @@ export default function ContactPage() {
             Want to build a custom army order? Use our builder for an instant quote.
           </p>
           <Link
-            href="/builder"
+            href="/grimdark-future/army-builder"
             className="font-body text-xs tracking-[0.2em] px-8 py-3 transition-all duration-200 inline-block"
             style={{ background: "var(--accent)", color: "var(--bg)" }}
           >

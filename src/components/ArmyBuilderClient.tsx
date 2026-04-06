@@ -16,7 +16,7 @@ const GAME_SYSTEMS = [
 const FACTION_GROUPS: Record<string, { label: string; factionIds: string[] }[]> = {
   "grimdark-future": [
     { label: "Imperial",  factionIds: ["space-marines","dark-angels","blood-angels","space-wolves","black-templars","custodians","imperial-guard","sisters-of-battle","grey-knights","adeptus-mechanicus","knights"] },
-    { label: "Chaos",     factionIds: ["chaos-space-marines","death-guard","thousand-sons","world-eaters","emperors-children","chaos-knights","chaos-titans"] },
+    { label: "Chaos",     factionIds: ["chaos-space-marines","death-guard","thousand-sons","world-eaters","emperors-children","chaos-knights"] },
     { label: "Xenos",     factionIds: ["orks","necrons","tyranids","eldar","dark-eldar","tau","leagues-of-votann","genestealer-cults"] },
   ],
   "age-of-fantasy": [

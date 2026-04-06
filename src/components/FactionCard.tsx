@@ -8,7 +8,7 @@ interface FactionCardProps {
 export default function FactionCard({ faction }: FactionCardProps) {
   return (
     <Link
-      href={`/shop/${faction.id}`}
+      href={`/${faction.brand}/${faction.id}`}
       className="group relative block overflow-hidden"
       style={{
         background: "linear-gradient(135deg, #141414 0%, #1a1414 100%)",

@@ -42,7 +42,9 @@ export default async function ArmyBuilderPage({ params }: Props) {
         : product.tags?.includes("nature")
     ) ?? basingProducts[0];
   const battleEffectsSuggestion =
-    basingProducts.find((product) => product.tags?.includes("explosion")) ?? basingProducts[0];
+    basingProducts.find((product) => product.tags?.includes("explosion")) ??
+    basingProducts.find((p) => p.id !== basingSuggestion?.id) ??
+    basingProducts[0];
 
   if (!basingSuggestion || !battleEffectsSuggestion) {
     notFound();

@@ -4,7 +4,7 @@ import { getGuestOrderWithItems } from "@/lib/data/orders";
 import { normalizeEmail } from "@/lib/utils/normalizeEmail";
 
 export const metadata: Metadata = {
-  title: "Order Status — YARIK 3D Prints",
+  title: "Order Status — The Dexarium",
   description: "Look up a guest order with your order reference and email address.",
 };
 

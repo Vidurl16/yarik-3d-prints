@@ -64,7 +64,7 @@ export default function RootLayout({
             <p className="font-heading text-xs tracking-[0.2em]" style={{ color: "var(--primary)" }}>
               THE DEXARIUM
             </p>
-            <nav className="flex items-center gap-6">
+            <nav aria-label="Footer navigation" className="flex items-center gap-6">
               {[
                 { href: "/shop", label: "Shop" },
                 { href: "/preorders", label: "Preorders" },

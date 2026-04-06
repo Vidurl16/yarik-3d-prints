@@ -3,6 +3,14 @@ import { getOrdersByUser } from "@/lib/data/orders";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import AccountSignOut from "./AccountSignOut";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Account — The Dexarium",
+  description: "Manage your account and view your order history.",
+  robots: { index: false },
+};
+
 
 function formatPrice(cents: number, currency = "ZAR") {
   return new Intl.NumberFormat("en-ZA", { style: "currency", currency }).format(cents / 100);

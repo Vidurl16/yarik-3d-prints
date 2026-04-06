@@ -5,6 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/admin/", "/api/", "/auth/"],
     },
+    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://thedexarium.co.za"}/sitemap.xml`,
   };
 }

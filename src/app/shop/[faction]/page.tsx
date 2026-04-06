@@ -29,14 +29,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const siteCategory = getSiteCategoryById(slug);
   if (siteCategory) {
     return {
-      title: `${siteCategory.name} — YARIK 3D Prints`,
+      title: `${siteCategory.name} — The Dexarium`,
       description: siteCategory.flavorText,
     };
   }
   const faction = getFactionById(slug);
   if (!faction) return { title: "Not Found" };
   return {
-    title: `${faction.name} — YARIK 3D Prints`,
+    title: `${faction.name} — The Dexarium`,
     description: faction.flavorText,
   };
 }

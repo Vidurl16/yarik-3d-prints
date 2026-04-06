@@ -187,6 +187,7 @@ export default function Nav() {
 
   return (
     <nav
+      aria-label="Main navigation"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-[rgba(12,9,2,0.98)] border-b border-[rgba(196,160,69,0.2)]"
@@ -226,6 +227,8 @@ export default function Nav() {
               <button
                 onClick={() => setShopOpen((v) => !v)}
                 onMouseEnter={() => setShopOpen(true)}
+                aria-expanded={shopOpen}
+                aria-haspopup="true"
                 className="flex items-center gap-1.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group"
               >
                 SHOP
