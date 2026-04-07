@@ -12,10 +12,14 @@ const FROM_EMAIL =
 // Also required in Supabase Dashboard → Authentication → URL Configuration:
 //   Site URL:        https://thedexarium.co.za
 //   Redirect URLs:   https://thedexarium.co.za/auth/callback
-// Uses a dedicated path so the allowed URL in Supabase is an exact match
-// (no query string — Supabase does exact matching, not prefix matching).
-// Add https://thedexarium.co.za/auth/reset-callback to Supabase Redirect URLs.
-const RESET_REDIRECT = "https://thedexarium.co.za/auth/reset-callback";
+// admin.generateLink uses the implicit flow — it redirects with
+// #access_token=... in the URL hash, not ?code= (PKCE).
+// Hash fragments are never sent to the server, so we must redirect
+// directly to the client page that will parse the hash.
+//
+// Required in Supabase Dashboard → Authentication → Redirect URLs:
+//   https://thedexarium.co.za/reset-password
+const RESET_REDIRECT = "https://thedexarium.co.za/reset-password";
 
 export async function POST(req: Request) {
   const { email } = await req.json();

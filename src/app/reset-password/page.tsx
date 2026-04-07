@@ -19,8 +19,45 @@ export default function ResetPasswordPage() {
   useEffect(() => {
     const supabase = getBrowserClient();
 
-    // Listen for the PASSWORD_RECOVERY event fired when Supabase detects
-    // the session from the reset link (either via hash or after code exchange).
+    async function resolveSession() {
+      // admin.generateLink uses implicit flow — tokens arrive in the URL hash
+      // (#access_token=...&refresh_token=...&type=recovery).
+      // createBrowserClient (SSR/cookie mode) does NOT auto-parse the hash,
+      // so we do it manually.
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get("access_token");
+        const refreshToken = params.get("refresh_token") ?? "";
+        const type = params.get("type");
+
+        if (accessToken && type === "recovery") {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (!error) {
+            // Clear the hash so tokens aren't visible in the URL
+            window.history.replaceState(null, "", window.location.pathname);
+            setPageState("ready");
+            return;
+          }
+        }
+      }
+
+      // Fallback: PKCE flow — session already in cookies from /auth/callback
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        setPageState("ready");
+        return;
+      }
+
+      // Give PASSWORD_RECOVERY event a moment before giving up
+      setTimeout(() => {
+        setPageState((current) => (current === "loading" ? "expired" : current));
+      }, 2000);
+    }
+
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event: AuthChangeEvent) => {
         if (event === "PASSWORD_RECOVERY") {
@@ -29,19 +66,7 @@ export default function ResetPasswordPage() {
       }
     );
 
-    // The /auth/callback route already exchanged the code and stored the
-    // session in cookies before redirecting here, so getSession() resolves
-    // immediately with a valid session.
-    supabase.auth.getSession().then(({ data }: { data: { session: unknown } }) => {
-      if (data.session) {
-        setPageState("ready");
-      } else {
-        // Give the PASSWORD_RECOVERY event a moment to fire before giving up.
-        setTimeout(() => {
-          setPageState((current) => (current === "loading" ? "expired" : current));
-        }, 2000);
-      }
-    });
+    resolveSession();
 
     return () => listener.subscription.unsubscribe();
   }, []);
