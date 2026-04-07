@@ -27,10 +27,10 @@ export default function ResetPasswordPage() {
       }
     });
 
-    // If neither fires within 8 s, treat link as expired
+    // If neither fires within 15 s, treat link as expired
     const timeout = setTimeout(() => {
       setPageState((prev) => (prev === "loading" ? "expired" : prev));
-    }, 8000);
+    }, 15000);
 
     return () => {
       listener.subscription.unsubscribe();
@@ -54,7 +54,12 @@ export default function ResetPasswordPage() {
     setSubmitting(true);
     try {
       const supabase = getBrowserClient();
-      const { error: updateError } = await supabase.auth.updateUser({ password });
+
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Request timed out. Please try again.")), 15000)
+      );
+      const update = supabase.auth.updateUser({ password });
+      const { error: updateError } = await Promise.race([update, timeout]);
 
       if (updateError) {
         setError(updateError.message);
@@ -85,7 +90,8 @@ export default function ResetPasswordPage() {
             VERIFYING RESET LINK…
           </p>
           <p className="font-body text-xs" style={{ color: "var(--muted)" }}>
-            If this message persists, your link may have expired.{" "}
+            If this message persists, check your spam folder and ensure you clicked
+            the most recent reset link.{" "}
             <Link href="/login" style={{ color: "var(--primary)" }}>
               Request a new one
             </Link>
@@ -112,7 +118,8 @@ export default function ResetPasswordPage() {
           </p>
           <p className="font-body text-sm" style={{ color: "var(--muted)" }}>
             This password reset link is invalid or has expired. Reset links are
-            single-use and expire after 1 hour.
+            single-use and expire after 1 hour. If your email went to spam, the
+            spam scanner may have consumed the link — request a fresh one.
           </p>
           <Link
             href="/login"
