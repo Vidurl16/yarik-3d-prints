@@ -57,17 +57,22 @@ export default function ResetPasswordPage() {
     }
 
     setSubmitting(true);
-    const supabase = getBrowserClient();
-    const { error: updateError } = await supabase.auth.updateUser({ password });
+    try {
+      const supabase = getBrowserClient();
+      const { error: updateError } = await supabase.auth.updateUser({ password });
 
-    if (updateError) {
-      setError(updateError.message);
+      if (updateError) {
+        setError(updateError.message);
+        setSubmitting(false);
+        return;
+      }
+
+      setPageState("success");
+      setTimeout(() => router.push("/account"), 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred. Please try again.");
       setSubmitting(false);
-      return;
     }
-
-    setPageState("success");
-    setTimeout(() => router.push("/account"), 2000);
   }
 
   // ── Loading ──────────────────────────────────────────────────────────────────
