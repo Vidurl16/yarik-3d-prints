@@ -5,7 +5,14 @@ import { getServiceClient } from "@/lib/supabase/server";
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@thedexarium.co.za>";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thedexarium.co.za";
+// IMPORTANT: This redirectTo is hard-coded to the production domain.
+// Do NOT change it to an env var — the Vercel env var points to the Vercel
+// subdomain, which would break the email link on the custom domain.
+//
+// Also required in Supabase Dashboard → Authentication → URL Configuration:
+//   Site URL:        https://thedexarium.co.za
+//   Redirect URLs:   https://thedexarium.co.za/auth/callback
+const RESET_REDIRECT = "https://thedexarium.co.za/auth/callback?next=/reset-password";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
@@ -15,7 +22,7 @@ export async function POST(req: Request) {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  const redirectTo = `${SITE_URL}/auth/callback?next=/auth/update-password`;
+  const redirectTo = RESET_REDIRECT;
   const supabase = getServiceClient();
 
   let resetUrl: string | null = null;
