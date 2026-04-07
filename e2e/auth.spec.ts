@@ -76,10 +76,10 @@ test.describe("Login form — client validation", () => {
     expect(valid).toBe(true);
   });
 
-  test("password shorter than 6 chars is rejected by browser", async ({ page }) => {
+  test("password shorter than 8 chars is rejected by browser on login", async ({ page }) => {
     await page.goto("/login");
     await page.locator("input[type='email']").fill("user@example.com");
-    await page.locator("input[type='password']").fill("abc");
+    await page.locator("input[type='password']").fill("short1");
     await page.getByRole("button", { name: /sign in/i }).click();
     const pwInput = page.locator("input[type='password']");
     const valid = await pwInput.evaluate(
