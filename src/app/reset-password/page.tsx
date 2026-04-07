@@ -22,7 +22,7 @@ export default function ResetPasswordPage() {
     const supabase = getBrowserClient();
     supabase.auth
       .getSession()
-      .then(({ data }) => {
+      .then(({ data }: { data: { session: import("@supabase/supabase-js").Session | null } }) => {
         setPageState(data.session ? "ready" : "expired");
       })
       .catch(() => setPageState("expired"));

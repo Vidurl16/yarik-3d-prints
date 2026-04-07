@@ -32,14 +32,14 @@ function LoginForm() {
     const supabase = getBrowserClient();
 
     if (mode === "forgot") {
-      const res = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+      // Call resetPasswordForEmail directly from the browser so the PKCE
+      // code verifier is stored in browser cookies. The code verifier is
+      // needed later when /auth/reset-callback exchanges the ?code= param.
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://thedexarium.co.za/auth/reset-callback",
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? "Could not send reset email. Please try again.");
+      if (error) {
+        setError(error.message);
       } else {
         setForgotSent(true);
       }
