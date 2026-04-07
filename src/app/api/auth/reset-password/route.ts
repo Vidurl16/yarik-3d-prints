@@ -12,7 +12,10 @@ const FROM_EMAIL =
 // Also required in Supabase Dashboard → Authentication → URL Configuration:
 //   Site URL:        https://thedexarium.co.za
 //   Redirect URLs:   https://thedexarium.co.za/auth/callback
-const RESET_REDIRECT = "https://thedexarium.co.za/auth/callback?next=/reset-password";
+// Uses a dedicated path so the allowed URL in Supabase is an exact match
+// (no query string — Supabase does exact matching, not prefix matching).
+// Add https://thedexarium.co.za/auth/reset-callback to Supabase Redirect URLs.
+const RESET_REDIRECT = "https://thedexarium.co.za/auth/reset-callback";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
