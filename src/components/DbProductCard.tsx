@@ -136,7 +136,7 @@ export default function DbProductCard({ product }: DbProductCardProps) {
             <button
               onClick={handleAddToCart}
               disabled={adding}
-              className={`font-body text-xs tracking-wider px-3 py-1.5 transition-all duration-200 ${
+              className={`font-body text-xs tracking-wider px-3 py-2.5 min-h-[44px] transition-all duration-200 ${
                 adding
                   ? "bg-[rgba(201,168,76,0.2)] text-[#c9a84c] border border-[rgba(201,168,76,0.5)]"
                   : "bg-[#8b0000] hover:bg-[#b50000] text-[#e8e0d0] border border-transparent"

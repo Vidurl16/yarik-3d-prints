@@ -191,7 +191,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => onQtyChange(qty - 1)}
-                  className="w-6 h-6 flex items-center justify-center transition-colors"
+                  className="w-8 h-8 flex items-center justify-center transition-colors"
                   style={{
                     border: "1px solid var(--border)",
                     color: "var(--primary)",
@@ -208,7 +208,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
                 </span>
                 <button
                   onClick={() => onQtyChange(qty + 1)}
-                  className="w-6 h-6 flex items-center justify-center transition-colors"
+                  className="w-8 h-8 flex items-center justify-center transition-colors"
                   style={{
                     border: "1px solid var(--primary)",
                     color: "var(--primary)",
@@ -221,7 +221,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
             ) : (
               <button
                 onClick={() => onQtyChange(1)}
-                className="font-body text-xs tracking-wider px-2.5 py-1 transition-all duration-150"
+                className="font-body text-xs tracking-wider w-full py-2.5 min-h-[44px] transition-all duration-150"
                 style={{
                   background: "var(--primary)",
                   color: "var(--bg)",
@@ -568,7 +568,7 @@ export default function ArmyBuilderClient({
       {/* Main Layout */}
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-8">
         {/* Left: Role sections */}
-        <div className="flex-1 space-y-6">
+        <div className="flex-1 space-y-6 pb-24 lg:pb-0">
           {ROLE_SECTIONS.map((section) => {
             const sectionProducts = productsByRole[section.id] ?? [];
             return (
@@ -933,6 +933,44 @@ export default function ArmyBuilderClient({
             )}
           </div>
         </aside>
+      </div>
+
+      {/* Mobile sticky bottom CTA bar */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t p-4 pb-safe"
+        style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-body text-xs tracking-[0.2em]" style={{ color: "var(--muted)" }}>
+            TOTAL
+          </span>
+          <span className="font-heading text-lg" style={{ color: "var(--primary)" }}>
+            {formatPrice(total)}
+          </span>
+        </div>
+        <button
+          disabled={!hasSelection}
+          onClick={handleAddToCart}
+          className="w-full font-body text-sm tracking-[0.2em] py-3 transition-all duration-200"
+          style={
+            hasSelection
+              ? {
+                  background: addedToCart
+                    ? "color-mix(in srgb, var(--primary) 60%, transparent)"
+                    : "var(--primary)",
+                  color: "var(--bg)",
+                  cursor: "pointer",
+                }
+              : {
+                  background: "var(--surface)",
+                  color: "var(--muted)",
+                  cursor: "not-allowed",
+                  border: "1px solid var(--border)",
+                }
+          }
+        >
+          {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+        </button>
       </div>
     </div>
   );

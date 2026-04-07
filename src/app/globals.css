@@ -242,6 +242,21 @@ body {
 /* ────────────────────────────────────────
    Utility classes
 ──────────────────────────────────────── */
+
+/* Hide scrollbar for carousel snap containers */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* iOS safe-area bottom padding */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 .gold-border {
   border: 1px solid rgba(196, 160, 69, 0.3);
 }

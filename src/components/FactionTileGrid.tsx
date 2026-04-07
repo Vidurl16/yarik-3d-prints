@@ -49,7 +49,7 @@ export default function FactionTileGrid({ brandSlug, factions, heading, subheadi
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4"
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
       >
         {factions.map((faction) => (
           <motion.div key={faction.id} variants={tileVariants}>
