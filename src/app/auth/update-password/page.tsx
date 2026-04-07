@@ -19,9 +19,6 @@ export default function UpdatePasswordPage() {
     const { data: listener } = supabase.auth.onAuthStateChange((event: AuthChangeEvent) => {
       if (event === "PASSWORD_RECOVERY") setReady(true);
     });
-    supabase.auth.getSession().then(({ data }: { data: { session: unknown } }) => {
-      if (data.session) setReady(true);
-    });
     return () => listener.subscription.unsubscribe();
   }, []);
 

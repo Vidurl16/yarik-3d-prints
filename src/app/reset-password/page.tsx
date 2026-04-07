@@ -27,11 +27,6 @@ export default function ResetPasswordPage() {
       }
     });
 
-    // Fallback: if a session is already present (e.g. user navigated back)
-    supabase.auth.getSession().then(({ data }: { data: { session: import("@supabase/supabase-js").Session | null } }) => {
-      if (data.session) setPageState("ready");
-    });
-
     // If neither fires within 8 s, treat link as expired
     const timeout = setTimeout(() => {
       setPageState((prev) => (prev === "loading" ? "expired" : prev));
