@@ -62,10 +62,10 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
   const [saving, setSaving] = useState(false);
   const [localStatus, setLocalStatus] = useState(order.status ?? "pending");
   const [localPaymentStatus, setLocalPaymentStatus] = useState(order.payment_status ?? "pending");
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<false | "saved" | "email">(false);
   const [customMessage, setCustomMessage] = useState("");
 
-  async function patchOrder(body: Record<string, string>) {
+  async function patchOrder(body: Record<string, string>): Promise<boolean> {
     setSaving(true);
     const res = await fetch(`/api/admin/orders/${order.id}`, {
       method: "PATCH",
@@ -74,17 +74,19 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
     });
     setSaving(false);
     if (res.ok) {
-      const { order: updated } = await res.json();
-      setSaved(true);
+      const { order: updated, email_sent } = await res.json() as { order: Partial<DbOrder>; email_sent?: boolean };
+      setSaved(email_sent ? "email" : "saved");
       onUpdated(order.id, updated);
       setTimeout(() => setSaved(false), 2000);
+      return true;
     }
+    return false;
   }
 
   async function updateStatus(newStatus: string) {
     setLocalStatus(newStatus);
-    await patchOrder({ status: newStatus, ...(customMessage.trim() ? { custom_message: customMessage.trim() } : {}) });
-    setCustomMessage("");
+    const ok = await patchOrder({ status: newStatus, ...(customMessage.trim() ? { custom_message: customMessage.trim() } : {}) });
+    if (ok) setCustomMessage("");
   }
 
   async function markAsPaid() {
@@ -143,7 +145,8 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
                 ))}
               </select>
               {saving && <span className="font-body text-xs text-[rgba(196,160,69,0.5)]">Saving…</span>}
-              {saved && <span className="font-body text-xs text-green-400">✓ Saved</span>}
+              {saved === "email" && <span className="font-body text-xs text-green-400">✓ Saved · ✉️ Sent</span>}
+              {saved === "saved" && <span className="font-body text-xs text-green-400">✓ Saved</span>}
             </div>
             <input
               type="text"

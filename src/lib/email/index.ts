@@ -272,6 +272,7 @@ const STATUS_META: Record<string, { label: string; colour: string; description: 
 function buildStatusUpdateHtml(order: DbOrder, newStatus: string, customMessage?: string): string {
   const meta = STATUS_META[newStatus] ?? { label: newStatus, colour: "#c9a84c", description: "", emoji: "📋" };
   const orderDate = new Date().toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" });
+  const shippingBlock = ["dispatched", "fulfilled"].includes(newStatus) ? buildShippingBlock(order) : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -318,6 +319,8 @@ function buildStatusUpdateHtml(order: DbOrder, newStatus: string, customMessage?
               </table>
             </td>
           </tr>` : ""}
+
+          ${shippingBlock}
 
           <tr>
             <td style="padding:24px 40px 0;">

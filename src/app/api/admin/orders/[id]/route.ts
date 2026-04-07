@@ -46,6 +46,18 @@ export async function PATCH(
   }
 
   const supabase = getServiceClient();
+
+  // Fetch current status before update for dedup — don't email if status hasn't actually changed
+  let previousStatus: string | null = null;
+  if (status) {
+    const { data: current } = await supabase
+      .from("orders")
+      .select("status")
+      .eq("id", id)
+      .single();
+    previousStatus = current?.status ?? null;
+  }
+
   const { data, error } = await supabase
     .from("orders")
     .update(update)
@@ -55,15 +67,22 @@ export async function PATCH(
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Send status notification email to customer when fulfilment status changes
-  if (status) {
+  // Send status notification email only if status genuinely changed
+  let emailSent = false;
+  if (status && status !== previousStatus) {
+    const sanitisedMessage = typeof custom_message === "string"
+      ? custom_message.slice(0, 1000).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      : undefined;
     const orderWithItems = await getOrderWithItems(id);
     if (orderWithItems) {
-      sendOrderStatusEmail(orderWithItems.order, status, custom_message || undefined).catch((err) =>
-        console.error("[Email] Status email failed for order", id, err)
-      );
+      try {
+        await sendOrderStatusEmail(orderWithItems.order, status, sanitisedMessage || undefined);
+        emailSent = true;
+      } catch (err) {
+        console.error("[Email] Status email failed for order", id, err);
+      }
     }
   }
 
-  return NextResponse.json({ order: data });
+  return NextResponse.json({ order: data, email_sent: emailSent });
 }
