@@ -63,6 +63,7 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
   const [localStatus, setLocalStatus] = useState(order.status ?? "pending");
   const [localPaymentStatus, setLocalPaymentStatus] = useState(order.payment_status ?? "pending");
   const [saved, setSaved] = useState(false);
+  const [customMessage, setCustomMessage] = useState("");
 
   async function patchOrder(body: Record<string, string>) {
     setSaving(true);
@@ -82,7 +83,8 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
 
   async function updateStatus(newStatus: string) {
     setLocalStatus(newStatus);
-    await patchOrder({ status: newStatus });
+    await patchOrder({ status: newStatus, ...(customMessage.trim() ? { custom_message: customMessage.trim() } : {}) });
+    setCustomMessage("");
   }
 
   async function markAsPaid() {
@@ -128,19 +130,29 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
           </div>
         </td>
         <td className="py-3" onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center gap-2">
-            <select
-              value={localStatus}
-              onChange={(e) => updateStatus(e.target.value)}
-              disabled={saving}
-              className="bg-[#140e06] border border-[rgba(196,160,69,0.3)] px-2 py-1 font-body text-xs text-[#f0e8d8] focus:outline-none focus:border-[rgba(196,160,69,0.6)] disabled:opacity-50"
-            >
-              {FULFILLMENT_STATUSES.map((s) => (
-                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-              ))}
-            </select>
-            {saving && <span className="font-body text-xs text-[rgba(196,160,69,0.5)]">Saving…</span>}
-            {saved && <span className="font-body text-xs text-green-400">✓ Saved</span>}
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+              <select
+                value={localStatus}
+                onChange={(e) => updateStatus(e.target.value)}
+                disabled={saving}
+                className="bg-[#140e06] border border-[rgba(196,160,69,0.3)] px-2 py-1 font-body text-xs text-[#f0e8d8] focus:outline-none focus:border-[rgba(196,160,69,0.6)] disabled:opacity-50"
+              >
+                {FULFILLMENT_STATUSES.map((s) => (
+                  <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                ))}
+              </select>
+              {saving && <span className="font-body text-xs text-[rgba(196,160,69,0.5)]">Saving…</span>}
+              {saved && <span className="font-body text-xs text-green-400">✓ Saved</span>}
+            </div>
+            <input
+              type="text"
+              value={customMessage}
+              onChange={(e) => setCustomMessage(e.target.value)}
+              placeholder="Optional message to customer…"
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#140e06] border border-[rgba(196,160,69,0.15)] px-2 py-1 font-body text-xs text-[#f0e8d8] placeholder:text-[rgba(240,232,216,0.25)] focus:outline-none focus:border-[rgba(196,160,69,0.4)] w-full"
+            />
           </div>
         </td>
       </tr>

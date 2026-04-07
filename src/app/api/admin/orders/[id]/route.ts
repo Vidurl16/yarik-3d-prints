@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/getSession";
 import { isAdmin } from "@/lib/auth/isAdmin";
 import { getServiceClient } from "@/lib/supabase/server";
+import { getOrderWithItems } from "@/lib/data/orders";
+import { sendOrderStatusEmail } from "@/lib/email";
 
 const VALID_STATUSES = ["pending", "processing", "dispatched", "fulfilled", "failed", "refunded", "cancelled"];
 const VALID_PAYMENT_STATUSES = ["pending", "paid", "failed", "refunded"];
@@ -17,7 +19,12 @@ export async function PATCH(
 
   const { id } = await params;
   const body = await req.json();
-  const { status, payment_status, notes } = body as { status?: string; payment_status?: string; notes?: string };
+  const { status, payment_status, notes, custom_message } = body as {
+    status?: string;
+    payment_status?: string;
+    notes?: string;
+    custom_message?: string;
+  };
 
   if (status && !VALID_STATUSES.includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
@@ -47,5 +54,16 @@ export async function PATCH(
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Send status notification email to customer when fulfilment status changes
+  if (status) {
+    const orderWithItems = await getOrderWithItems(id);
+    if (orderWithItems) {
+      sendOrderStatusEmail(orderWithItems.order, status, custom_message || undefined).catch((err) =>
+        console.error("[Email] Status email failed for order", id, err)
+      );
+    }
+  }
+
   return NextResponse.json({ order: data });
 }
