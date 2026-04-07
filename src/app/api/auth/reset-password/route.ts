@@ -12,8 +12,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://thedexarium.co.za";
+  const siteUrl = "https://thedexarium.co.za";
   const redirectTo = `${siteUrl}/auth/callback?next=/auth/update-password`;
 
   const supabase = getServiceClient();
