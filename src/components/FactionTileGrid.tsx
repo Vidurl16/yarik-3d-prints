@@ -49,13 +49,13 @@ export default function FactionTileGrid({ brandSlug, factions, heading, subheadi
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
       >
         {factions.map((faction) => (
           <motion.div key={faction.id} variants={tileVariants}>
             <Link
               href={`/${brandSlug}/${faction.id}`}
-              className="group block relative overflow-hidden transition-all duration-300 h-56"
+              className="group block relative overflow-hidden transition-all duration-300 h-44 sm:h-56"
               style={{
                 background: faction.imageUrl
                   ? "var(--surface)"
@@ -70,7 +70,7 @@ export default function FactionTileGrid({ brandSlug, factions, heading, subheadi
                   alt={faction.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               )}
 

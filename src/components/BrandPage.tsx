@@ -208,7 +208,7 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
                 BROWSE BY TYPE
               </h2>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {DISPLAY_SUBCATEGORIES.map((sub) => (
                 <a
                   key={sub.name}
@@ -227,7 +227,7 @@ export default function BrandPage({ themeId, brandSlug, products = [], initialTa
                       alt={sub.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 50vw, 25vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   )}
                   {/* Dark scrim */}

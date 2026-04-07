@@ -240,7 +240,6 @@ export default async function HeroPage() {
                 style={{
                   border: "1px solid var(--border)",
                   aspectRatio: "2/3",
-                  minHeight: "360px",
                 }}
               >
                 {thumb ? (
@@ -318,7 +317,7 @@ export default async function HeroPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {newArrivals.map((product) => (
                 <Link
                   key={product.id}
@@ -336,7 +335,7 @@ export default async function HeroPage() {
                       fill
                       loading="lazy"
                       className="product-card-image opacity-90 group-hover:opacity-100"
-                      sizes="(max-width: 640px) 50vw, 25vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <span
                       className="absolute top-2 left-2 font-body text-xs tracking-[0.1em] px-2 py-0.5"
@@ -394,7 +393,7 @@ export default async function HeroPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {preorders.map((product) => (
                 <Link
                   key={product.id}
@@ -414,7 +413,7 @@ export default async function HeroPage() {
                       fill
                       loading="lazy"
                       className="product-card-image opacity-70 group-hover:opacity-90"
-                      sizes="(max-width: 640px) 50vw, 25vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <span
                       className="absolute top-2 left-2 font-body text-xs tracking-[0.1em] px-2 py-0.5"

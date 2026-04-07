@@ -36,7 +36,7 @@ export default function BrandProductGrid({ products, brandSlug, initialTag }: Br
         className="sticky top-16 z-30 border-b"
         style={{ background: "var(--surface)", borderColor: "var(--border)" }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-4 overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4 overflow-x-auto">
           <span className="font-body text-xs tracking-[0.1em] uppercase flex-shrink-0"
             style={{ color: "var(--muted)" }}
           >
@@ -80,7 +80,7 @@ export default function BrandProductGrid({ products, brandSlug, initialTag }: Br
       </section>
 
       {/* Product grid */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         <h2
           className="font-heading text-2xl tracking-wider mb-8"
           style={{ color: "var(--text)" }}
@@ -89,7 +89,7 @@ export default function BrandProductGrid({ products, brandSlug, initialTag }: Br
         </h2>
 
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filtered.map((product) => (
               <DbProductCard key={product.id} product={product} />
             ))}

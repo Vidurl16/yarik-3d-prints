@@ -71,7 +71,6 @@ export default function ShopPage() {
                 style={{
                   border: "1px solid var(--border)",
                   aspectRatio: "2/3",
-                  minHeight: "320px",
                 }}
               >
                 {thumb ? (

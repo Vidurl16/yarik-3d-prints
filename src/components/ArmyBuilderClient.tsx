@@ -566,7 +566,7 @@ export default function ArmyBuilderClient({
       </div>
 
       {/* Main Layout */}
-      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col lg:flex-row gap-8">
         {/* Left: Role sections */}
         <div className="flex-1 space-y-6 pb-24 lg:pb-0">
           {ROLE_SECTIONS.map((section) => {
@@ -617,7 +617,7 @@ export default function ArmyBuilderClient({
                     No units available in this category.
                   </p>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {sectionProducts.map((product) => (
                       <UnitCard
                         key={product.id}

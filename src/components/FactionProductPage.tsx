@@ -134,7 +134,7 @@ export default function FactionProductPage({
           borderColor: "var(--border)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Breadcrumb */}
           <div
             className="flex items-center gap-2 font-body text-xs tracking-wider mb-6"
@@ -199,7 +199,7 @@ export default function FactionProductPage({
           className="sticky top-16 z-30 border-b"
           style={{ background: "var(--surface)", borderColor: "var(--border)" }}
         >
-          <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-3 overflow-x-auto">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3 overflow-x-auto">
             <span
               className="font-body text-xs tracking-[0.1em] uppercase flex-shrink-0"
               style={{ color: "var(--muted)" }}
@@ -287,7 +287,7 @@ export default function FactionProductPage({
                   </div>
 
                   {/* Product grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     {group.items.map((product, i) => (
                       <motion.div
                         key={product.id}
