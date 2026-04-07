@@ -16,21 +16,33 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://thedexarium.co.za";
   const redirectTo = `${siteUrl}/auth/callback?next=/auth/update-password`;
 
-  // Use service role to generate a signed recovery link
   const supabase = getServiceClient();
+
+  // Try recovery link first (user already exists)
+  let resetUrl: string | null = null;
   const { data, error } = await supabase.auth.admin.generateLink({
     type: "recovery",
     email: email.trim().toLowerCase(),
     options: { redirectTo },
   });
 
-  if (error || !data?.properties?.action_link) {
-    console.error("[reset-password] generateLink error:", error?.message);
-    // Return success anyway — don't reveal whether the email exists
-    return NextResponse.json({ ok: true });
+  if (!error && data?.properties?.action_link) {
+    resetUrl = data.properties.action_link;
+  } else {
+    // User may not exist yet — invite them instead (creates account + sends setup link)
+    console.log("[reset-password] recovery failed, trying invite:", error?.message);
+    const { data: inviteData, error: inviteError } = await supabase.auth.admin.generateLink({
+      type: "invite",
+      email: email.trim().toLowerCase(),
+      options: { redirectTo },
+    });
+    if (!inviteError && inviteData?.properties?.action_link) {
+      resetUrl = inviteData.properties.action_link;
+    } else {
+      console.error("[reset-password] invite also failed:", inviteError?.message);
+      return NextResponse.json({ ok: true }); // silent — don't reveal enumeration
+    }
   }
-
-  const resetUrl = data.properties.action_link;
 
   // Send via Resend (domain already verified for thedexarium.co.za)
   const resend = new Resend(process.env.RESEND_API_KEY);
@@ -38,7 +50,7 @@ export async function POST(req: Request) {
     from: FROM_EMAIL,
     to: email,
     replyTo: "thedexarium@gmail.com",
-    subject: "Reset your Dexarium password",
+    subject: "Set up your Dexarium password",
     html: `
 <!DOCTYPE html>
 <html lang="en">
