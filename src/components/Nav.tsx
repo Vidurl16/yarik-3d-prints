@@ -252,8 +252,8 @@ export default function Nav() {
                     transition={{ duration: 0.18, ease: "easeOut" }}
                     className="absolute top-full left-0 mt-2 flex"
                     style={{
-                      background: "linear-gradient(160deg, #100c04 0%, #1a1408 100%)",
-                      border: "1px solid rgba(196,160,69,0.14)",
+                      background: "linear-gradient(160deg, #161009 0%, #1e1810 100%)",
+                      border: "1px solid rgba(196,160,69,0.22)",
                       backdropFilter: "blur(20px)",
                       boxShadow: "0 24px 48px rgba(0,0,0,0.7)",
                       width: "920px",
@@ -261,7 +261,7 @@ export default function Nav() {
                   >
                     {/* Left: Brand list */}
                     <div className="w-80 flex-shrink-0 py-4 border-r border-[rgba(196,160,69,0.08)]">
-                      <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase px-5 pb-3">
+                      <p className="font-body text-[13px] tracking-[0.2em] text-[rgba(196,160,69,0.75)] uppercase px-5 pb-3">
                         Browse by Brand
                       </p>
                       {BRAND_MENU.map((brand) => (
@@ -283,11 +283,11 @@ export default function Nav() {
                           <div className="min-w-0">
                             <p
                               className="font-body text-base tracking-wider truncate"
-                              style={{ color: activeBrand === brand.id ? "#f0e8d8" : "rgba(240,232,216,0.7)" }}
+                              style={{ color: activeBrand === brand.id ? "#f0e8d8" : "rgba(240,232,216,0.9)" }}
                             >
                               {brand.label}
                             </p>
-                            <p className="font-body text-sm text-[rgba(240,232,216,0.4)] truncate mt-0.5">
+                            <p className="font-body text-[13px] text-[rgba(240,232,216,0.6)] truncate mt-0.5">
                               {brand.tagline}
                             </p>
                           </div>
@@ -331,7 +331,7 @@ export default function Nav() {
 
                       {activeBrandData.factions.length > 0 && (
                         <>
-                          <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
+                          <p className="font-body text-[13px] tracking-[0.2em] text-[rgba(196,160,69,0.75)] uppercase mb-3">
                             Browse by Faction
                           </p>
                           <div className="grid grid-cols-2 gap-1 mb-5">
@@ -340,7 +340,7 @@ export default function Nav() {
                                 key={faction.href}
                                 href={faction.href}
                                 onClick={() => setShopOpen(false)}
-                                className="font-body text-base tracking-wider text-[rgba(240,232,216,0.75)] hover:text-[#c4a045] transition-colors py-2.5 px-3 hover:bg-[rgba(196,160,69,0.06)]"
+                                className="font-body text-base tracking-wider text-[rgba(240,232,216,0.88)] hover:text-[#c4a045] transition-colors py-2.5 px-3 hover:bg-[rgba(196,160,69,0.06)]"
                               >
                                 {faction.label}
                               </Link>
@@ -351,7 +351,7 @@ export default function Nav() {
 
                       {activeBrandData.subcategories.length > 0 && (
                         <>
-                          <p className="font-body text-xs tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase mb-3">
+                          <p className="font-body text-[13px] tracking-[0.2em] text-[rgba(196,160,69,0.75)] uppercase mb-3">
                             Product Types
                           </p>
                           <div className="flex flex-wrap gap-2">
@@ -418,15 +418,15 @@ export default function Nav() {
                     transition={{ duration: 0.18, ease: "easeOut" }}
                     className="absolute top-full left-0 mt-2"
                     style={{
-                      background: "linear-gradient(160deg, #100c04 0%, #1a1408 100%)",
-                      border: "1px solid rgba(196,160,69,0.14)",
+                      background: "linear-gradient(160deg, #161009 0%, #1e1810 100%)",
+                      border: "1px solid rgba(196,160,69,0.22)",
                       backdropFilter: "blur(20px)",
                       boxShadow: "0 24px 48px rgba(0,0,0,0.7)",
                       width: "280px",
                     }}
                   >
-                    <div className="px-5 pt-4 pb-2 border-b border-[rgba(196,160,69,0.08)]">
-                      <p className="font-body text-[10px] tracking-[0.2em] text-[rgba(196,160,69,0.5)] uppercase">Select Game System</p>
+                    <div className="px-5 pt-4 pb-2 border-b border-[rgba(196,160,69,0.12)]">
+                      <p className="font-body text-[13px] tracking-[0.2em] text-[rgba(196,160,69,0.75)] uppercase">Select Game System</p>
                     </div>
                     <div className="p-3 space-y-1">
                       <Link
@@ -446,7 +446,7 @@ export default function Nav() {
                         <span className="text-xl">⚙️</span>
                         <div>
                           <p className="font-body text-sm tracking-[0.12em] text-[#f0e8d8] group-hover/item:text-[#c4a045] transition-colors">GRIMDARK FUTURE</p>
-                          <p className="font-body text-xs text-[rgba(240,232,216,0.4)] mt-0.5">40K-scale · Industrial war</p>
+                          <p className="font-body text-[13px] text-[rgba(240,232,216,0.6)] mt-0.5">40K-scale · Industrial war</p>
                         </div>
                       </Link>
                       <Link
@@ -466,7 +466,7 @@ export default function Nav() {
                         <span className="text-xl">⚔️</span>
                         <div>
                           <p className="font-body text-sm tracking-[0.12em] text-[#f0e8d8] group-hover/item:text-[#c4a045] transition-colors">AGE OF FANTASY</p>
-                          <p className="font-body text-xs text-[rgba(240,232,216,0.4)] mt-0.5">Heroic warriors · Ancient magic</p>
+                          <p className="font-body text-[13px] text-[rgba(240,232,216,0.6)] mt-0.5">Heroic warriors · Ancient magic</p>
                         </div>
                       </Link>
                     </div>
