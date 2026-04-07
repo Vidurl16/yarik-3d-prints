@@ -278,11 +278,11 @@ body {
 }
 
 .product-card-image {
-  object-fit: contain;
-  object-position: center top;
-  padding: 0.75rem;
+  object-fit: cover;
+  object-position: center;
+  padding: 0;
   transition: transform 500ms ease, opacity 500ms ease;
-  transform-origin: center top;
+  transform-origin: center;
 }
 
 .group:hover .product-card-image {

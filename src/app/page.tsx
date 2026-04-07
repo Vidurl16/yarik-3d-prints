@@ -107,11 +107,8 @@ export default async function HeroPage() {
             THE DEXARIUM
           </h1>
           <p
-            className="font-heading text-xl sm:text-2xl mb-8 animate-fade-in-up-delay-1"
-            style={{
-              color: "var(--primary)",
-              letterSpacing: "0.25em",
-            }}
+            className="font-heading text-lg sm:text-2xl tracking-[0.12em] sm:tracking-[0.25em] mb-8 animate-fade-in-up-delay-1"
+            style={{ color: "var(--primary)" }}
           >
             FROM SPARK TO LEGEND
           </p>
@@ -119,9 +116,7 @@ export default async function HeroPage() {
             className="font-body text-sm sm:text-base max-w-xl mx-auto leading-relaxed tracking-wide mb-10 animate-fade-in-up-delay-2"
             style={{ color: "var(--muted)" }}
           >
-            Premium 16K resin &amp; multicolour FDM printing.
-            <br className="hidden sm:block" />
-            Pokémon, Warhammer, custom orders — built to last.
+            Premium 16K resin &amp; multicolour FDM printing. Pokémon, Warhammer, custom orders — built to last.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up-delay-3">
@@ -272,9 +267,9 @@ export default async function HeroPage() {
                   style={{ boxShadow: "inset 0 0 0 1px var(--primary)" }}
                 />
                 {/* Text */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 z-10">
                   <h3
-                    className="font-heading text-sm sm:text-base tracking-[0.08em] leading-tight mb-2"
+                    className="font-heading text-xs sm:text-sm md:text-base tracking-[0.05em] sm:tracking-[0.08em] leading-tight mb-2"
                     style={{ color: "#fff" }}
                   >
                     {cat.name.toUpperCase()}

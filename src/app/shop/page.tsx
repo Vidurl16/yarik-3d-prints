@@ -98,9 +98,9 @@ export default function ShopPage() {
                   style={{ boxShadow: "inset 0 0 0 1px var(--primary)" }}
                 />
                 {/* Text */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 z-10">
                   <h2
-                    className="font-heading text-sm sm:text-base tracking-[0.08em] leading-tight mb-2"
+                    className="font-heading text-xs sm:text-sm md:text-base tracking-[0.05em] sm:tracking-[0.08em] leading-tight mb-2"
                     style={{ color: "#fff" }}
                   >
                     {cat.name.toUpperCase()}
