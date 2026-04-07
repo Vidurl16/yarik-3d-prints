@@ -24,6 +24,13 @@ function buildShippingBlock(order: DbOrder): string {
       ${postnet.number ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Branch #: ${postnet.number}</p>` : ""}
       ${postnet.email ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Branch email: ${postnet.email}</p>` : ""}
     `;
+  } else if (addr?.locker) {
+    // PUDO locker delivery
+    details = `
+      <p style="margin:4px 0;color:#e8dcc8;font-size:14px;">${addr.name}</p>
+      <p style="margin:4px 0;color:#9e8e78;font-size:13px;">PUDO Locker: <strong style="color:#c9a84c;">${addr.locker}</strong></p>
+      ${addr.phone ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Phone: ${addr.phone}</p>` : ""}
+    `;
   } else if (addr?.name) {
     details = `
       <p style="margin:4px 0;color:#e8dcc8;font-size:14px;">${addr.name}</p>

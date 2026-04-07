@@ -39,6 +39,17 @@ function getDefaultDateRange() {
 function ShippingDetail({ metadata }: { metadata: Record<string, unknown> | null }) {
   const s = metadata?.shipping_address as Record<string, string> | undefined;
   if (!s) return <span className="text-[rgba(240,232,216,0.3)]">No shipping address</span>;
+
+  if (s.locker) {
+    return (
+      <span>
+        {s.name} — <span className="text-[#c9a84c]">PUDO: {s.locker}</span>
+        {s.locker_id ? <span className="text-[rgba(240,232,216,0.4)]"> ({s.locker_id})</span> : null}
+        {s.phone ? <><br />{s.phone}</> : null}
+      </span>
+    );
+  }
+
   return (
     <span>
       {s.name} — {s.line1}{s.line2 ? `, ${s.line2}` : ""}, {s.city}, {s.province} {s.postal_code}, {s.country}
@@ -158,6 +169,21 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
                     <p className="text-[rgba(196,160,69,0.65)] uppercase tracking-[0.1em] mb-1">PostNet Details</p>
                     <p className="text-[rgba(240,232,216,0.7)]">
                       Branch: {pd.branch_name}<br />Number: {pd.number}<br />Email: {pd.email}
+                    </p>
+                  </div>
+                );
+              })()}
+              {(() => {
+                const s = meta?.shipping_address as Record<string, string> | undefined;
+                if (!s?.locker) return null;
+                return (
+                  <div>
+                    <p className="text-[rgba(196,160,69,0.65)] uppercase tracking-[0.1em] mb-1">PUDO Locker</p>
+                    <p className="text-[rgba(240,232,216,0.7)]">
+                      Locker: <span className="text-[#c9a84c]">{s.locker}</span>
+                      {s.locker_id ? <><br />ID: <span className="font-mono text-[rgba(196,160,69,0.6)]">{s.locker_id}</span></> : null}
+                      {s.phone ? <><br />Phone: {s.phone}</> : null}
+                      {s.email ? <><br />Email: {s.email}</> : null}
                     </p>
                   </div>
                 );
