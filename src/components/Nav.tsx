@@ -589,7 +589,7 @@ export default function Nav() {
                             key={f.href}
                             href={f.href}
                             onClick={() => setMobileOpen(false)}
-                            className="block font-body text-xs tracking-wider text-[rgba(240,232,216,0.65)] hover:text-[#c4a045] py-1.5 transition-colors"
+                            className="block font-body text-sm tracking-wider text-[rgba(240,232,216,0.82)] hover:text-[#c4a045] py-2 transition-colors"
                           >
                             {f.label}
                           </Link>
@@ -602,7 +602,7 @@ export default function Nav() {
                             key={sub.href}
                             href={sub.href}
                             onClick={() => setMobileOpen(false)}
-                            className="block font-body text-xs tracking-wider text-[rgba(240,232,216,0.5)] hover:text-[rgba(240,232,216,0.85)] py-1 transition-colors"
+                            className="block font-body text-sm tracking-wider text-[rgba(240,232,216,0.7)] hover:text-[rgba(240,232,216,0.9)] py-2 transition-colors"
                           >
                             — {sub.label}
                           </Link>

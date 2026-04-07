@@ -149,7 +149,7 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
+              minLength={8}
               className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="••••••••"

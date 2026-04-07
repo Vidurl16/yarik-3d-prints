@@ -3,6 +3,7 @@ import { getOrdersByUser } from "@/lib/data/orders";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import AccountSignOut from "./AccountSignOut";
+import ChangePasswordButton from "./ChangePasswordButton";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -79,6 +80,21 @@ export default async function AccountPage({ searchParams }: PageProps) {
           </div>
           <AccountSignOut />
         </div>
+
+        <section className="mb-10">
+          <h2 className="font-heading text-sm tracking-[0.2em] mb-4 uppercase pb-2" style={{ color: "var(--primary)", opacity: 0.9, borderBottom: "1px solid var(--border)" }}>
+            Security
+          </h2>
+          <div className="flex items-center justify-between py-3 px-4" style={{ border: "1px solid var(--border)", background: "var(--surface)" }}>
+            <div>
+              <p className="font-body text-sm" style={{ color: "var(--text)" }}>Password</p>
+              <p className="font-body text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+                A reset link will be sent to {user.email}
+              </p>
+            </div>
+            <ChangePasswordButton email={user.email!} />
+          </div>
+        </section>
 
         <section>
           <h2 className="font-heading text-sm tracking-[0.2em] mb-4 uppercase pb-2" style={{ color: "var(--primary)", opacity: 0.9, borderBottom: "1px solid var(--border)" }}>
