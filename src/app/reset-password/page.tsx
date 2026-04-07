@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
     // onAuthStateChange catches PASSWORD_RECOVERY for both flows:
     //  - Implicit: Supabase client auto-processes #access_token hash and fires the event
     //  - PKCE:     createBrowserClient auto-exchanges ?code= on init, then fires the event
-    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event: import("@supabase/supabase-js").AuthChangeEvent) => {
       if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
         setPageState("ready");
       }
