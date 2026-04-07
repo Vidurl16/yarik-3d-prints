@@ -5,7 +5,7 @@ import { getServiceClient } from "@/lib/supabase/server";
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@thedexarium.co.za>";
 
-const SITE_URL = "https://thedexarium.co.za";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thedexarium.co.za";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
