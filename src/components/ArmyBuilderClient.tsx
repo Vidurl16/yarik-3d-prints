@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product, brandFactions } from "@/lib/products";
 import type { ThemeTokens } from "@/components/theme/themes";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const GAME_SYSTEMS = [
@@ -91,7 +91,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
 
   return (
     <div
-      className="flex flex-col overflow-hidden transition-all duration-200"
+      className="flex flex-row sm:flex-col overflow-hidden transition-all duration-200"
       style={{
         background: isSelected
           ? `linear-gradient(160deg, var(--surface) 0%, color-mix(in srgb, var(--primary) 8%, var(--surface)) 100%)`
@@ -101,9 +101,40 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
           : "1px solid var(--border)",
       }}
     >
-      {/* Image */}
+      {/* Mobile: compact square thumbnail */}
       <div
-        className="product-card-frame"
+        className="relative w-[72px] h-[72px] shrink-0 overflow-hidden sm:hidden"
+        style={{ background: "color-mix(in srgb, var(--surface) 80%, black)" }}
+      >
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          fill
+          className="object-cover opacity-75"
+          sizes="72px"
+        />
+        {isSelected && (
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ background: "rgba(139,0,0,0.35)" }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={3}
+              className="w-5 h-5"
+              style={{ color: "#fff" }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: portrait card image */}
+      <div
+        className="hidden sm:block product-card-frame"
         style={{ background: "color-mix(in srgb, var(--surface) 80%, black)" }}
       >
         <Image
@@ -111,22 +142,16 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
           alt={product.name}
           fill
           className="product-card-image opacity-75"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          sizes="(max-width: 1024px) 33vw, 20vw"
         />
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)",
-          }}
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)" }}
         />
         {product.isPreorder && (
           <span
             className="absolute top-2 left-2 font-body text-[11px] tracking-[0.1em] px-1.5 py-0.5"
-            style={{
-              background: "rgba(139,0,0,0.8)",
-              color: "#ff9090",
-            }}
+            style={{ background: "rgba(139,0,0,0.8)", color: "#ff9090" }}
           >
             PREORDER
           </span>
@@ -144,20 +169,16 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
               className="w-3 h-3"
               style={{ color: "var(--bg)" }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m4.5 12.75 6 6 9-13.5"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
           </div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-3 flex flex-col gap-1.5">
+      {/* Content — shared between mobile row and desktop card */}
+      <div className="flex-1 p-2 sm:p-3 flex flex-col gap-1 sm:gap-1.5 min-w-0">
         <p
-          className="font-body text-xs tracking-[0.1em] uppercase truncate"
+          className="hidden sm:block font-body text-xs tracking-[0.1em] uppercase truncate"
           style={{ color: "var(--muted)" }}
         >
           {product.faction.replace(/-/g, " ")}
@@ -175,44 +196,37 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
         </div>
 
         <div
-          className="pt-2 mt-auto"
+          className="pt-1 sm:pt-2 mt-auto"
           style={{ borderTop: "1px solid var(--border)" }}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-1">
             <span
-              className="font-heading text-sm"
+              className="font-heading text-sm shrink-0"
               style={{ color: "var(--primary)" }}
             >
               {formatPrice(product.price)}
             </span>
 
-            {/* Quantity controls */}
             {isSelected ? (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={() => onQtyChange(qty - 1)}
-                  className="w-8 h-8 flex items-center justify-center transition-colors"
-                  style={{
-                    border: "1px solid var(--border)",
-                    color: "var(--primary)",
-                  }}
+                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-colors"
+                  style={{ border: "1px solid var(--border)", color: "var(--primary)" }}
                   aria-label="Decrease quantity"
                 >
                   −
                 </button>
                 <span
-                  className="font-body text-sm w-5 text-center"
+                  className="font-body text-sm w-4 text-center"
                   style={{ color: "var(--text)" }}
                 >
                   {qty}
                 </span>
                 <button
                   onClick={() => onQtyChange(qty + 1)}
-                  className="w-8 h-8 flex items-center justify-center transition-colors"
-                  style={{
-                    border: "1px solid var(--primary)",
-                    color: "var(--primary)",
-                  }}
+                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-colors"
+                  style={{ border: "1px solid var(--primary)", color: "var(--primary)" }}
                   aria-label="Increase quantity"
                 >
                   +
@@ -221,11 +235,8 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
             ) : (
               <button
                 onClick={() => onQtyChange(1)}
-                className="font-body text-xs tracking-wider w-full py-2.5 min-h-[44px] transition-all duration-150"
-                style={{
-                  background: "var(--primary)",
-                  color: "var(--bg)",
-                }}
+                className="font-body text-[11px] tracking-wider sm:w-full px-2 sm:px-0 py-1.5 sm:py-2.5 min-h-[36px] sm:min-h-[44px] transition-all duration-150 shrink-0"
+                style={{ background: "var(--primary)", color: "var(--bg)" }}
               >
                 + ADD
               </button>
@@ -334,6 +345,7 @@ export default function ArmyBuilderClient({
   const [basingActive, setBasingActive] = useState(false);
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Faction filter — all factions defined for this brand (show even if no products yet)
   const factionList = useMemo(() => {
@@ -667,9 +679,9 @@ export default function ArmyBuilderClient({
           </section>
         </div>
 
-        {/* Right: Sticky Summary Panel */}
+        {/* Right: Sticky Summary Panel — desktop only */}
         <aside
-          className="lg:w-[480px] xl:w-[540px] shrink-0"
+          className="hidden lg:block lg:w-[480px] xl:w-[540px] shrink-0"
           style={{
             position: "sticky",
             top: "80px",
@@ -935,42 +947,179 @@ export default function ArmyBuilderClient({
         </aside>
       </div>
 
-      {/* Mobile sticky bottom CTA bar */}
+      {/* Mobile warband drawer */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t p-4 pb-safe"
-        style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden"
+        style={{ background: "var(--surface)", borderTop: "1px solid var(--border)" }}
       >
-        <div className="flex items-center justify-between mb-3">
-          <span className="font-body text-xs tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-            TOTAL
-          </span>
-          <span className="font-heading text-lg" style={{ color: "var(--primary)" }}>
-            {formatPrice(total)}
-          </span>
-        </div>
+        {/* Expandable warband summary */}
+        <AnimatePresence>
+          {drawerOpen && (
+            <motion.div
+              key="warband-drawer"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div
+                className="overflow-y-auto p-4 space-y-3"
+                style={{ maxHeight: "55vh", borderBottom: "1px solid var(--border)" }}
+              >
+                <h3
+                  className="font-heading text-sm tracking-wider pb-3"
+                  style={{ color: "var(--text)", borderBottom: "1px solid var(--border)" }}
+                >
+                  YOUR WARBAND
+                </h3>
+
+                {selectedEntries.length === 0 && !basingActive && !battleEffectsActive ? (
+                  <p className="font-body text-xs italic" style={{ color: "var(--muted)" }}>
+                    No units selected yet.
+                  </p>
+                ) : (
+                  <>
+                    {ROLE_SECTIONS.map((section) => {
+                      const items = selectedEntries.filter(({ product }) =>
+                        product.role ? (section.roles as readonly string[]).includes(product.role) : false
+                      );
+                      if (items.length === 0) return null;
+                      return (
+                        <div key={section.id}>
+                          <p
+                            className="font-body text-[11px] uppercase tracking-widest mb-1"
+                            style={{ color: "var(--muted)", opacity: 0.7 }}
+                          >
+                            {section.icon} {section.label}
+                          </p>
+                          {items.map(({ product, qty }) => (
+                            <div key={product.id} className="flex justify-between items-baseline gap-2 mb-1">
+                              <p className="font-body text-xs truncate" style={{ color: "var(--text)" }}>
+                                {product.name} <span style={{ color: "var(--muted)" }}>×{qty}</span>
+                              </p>
+                              <span className="font-body text-xs shrink-0" style={{ color: "var(--primary)" }}>
+                                {formatPrice(product.price * qty)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })}
+
+                    {/* Other-role items */}
+                    {(() => {
+                      const allRoles = ROLE_SECTIONS.flatMap((s) => s.roles as readonly string[]);
+                      const other = selectedEntries.filter(({ product }) => !product.role || !allRoles.includes(product.role));
+                      return other.length > 0 ? (
+                        <div>
+                          <p className="font-body text-[11px] uppercase tracking-widest mb-1" style={{ color: "var(--muted)", opacity: 0.7 }}>Other</p>
+                          {other.map(({ product, qty }) => (
+                            <div key={product.id} className="flex justify-between items-baseline gap-2 mb-1">
+                              <p className="font-body text-xs truncate" style={{ color: "var(--text)" }}>
+                                {product.name} <span style={{ color: "var(--muted)" }}>×{qty}</span>
+                              </p>
+                              <span className="font-body text-xs shrink-0" style={{ color: "var(--primary)" }}>
+                                {formatPrice(product.price * qty)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null;
+                    })()}
+
+                    {/* Upsells */}
+                    {(basingActive || battleEffectsActive) && (
+                      <div
+                        className="pt-2 space-y-1"
+                        style={{ borderTop: "1px solid var(--border)" }}
+                      >
+                        {basingActive && (
+                          <div className="flex justify-between gap-2">
+                            <p className="font-body text-xs truncate" style={{ color: "var(--muted)" }}>
+                              🪨 {basingSuggestion.name}
+                            </p>
+                            <span className="font-body text-xs shrink-0" style={{ color: "var(--primary)" }}>
+                              {formatPrice(basingSuggestion.price)}
+                            </span>
+                          </div>
+                        )}
+                        {battleEffectsActive && (
+                          <div className="flex justify-between gap-2">
+                            <p className="font-body text-xs truncate" style={{ color: "var(--muted)" }}>
+                              💥 {battleEffectsSuggestion.name}
+                            </p>
+                            <span className="font-body text-xs shrink-0" style={{ color: "var(--primary)" }}>
+                              {formatPrice(battleEffectsSuggestion.price)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Tappable handle: shows total + item count, toggles drawer */}
         <button
-          disabled={!hasSelection}
-          onClick={handleAddToCart}
-          className="w-full font-body text-sm tracking-[0.2em] py-3 transition-all duration-200"
-          style={
-            hasSelection
-              ? {
-                  background: addedToCart
-                    ? "color-mix(in srgb, var(--primary) 60%, transparent)"
-                    : "var(--primary)",
-                  color: "var(--bg)",
-                  cursor: "pointer",
-                }
-              : {
-                  background: "var(--surface)",
-                  color: "var(--muted)",
-                  cursor: "not-allowed",
-                  border: "1px solid var(--border)",
-                }
-          }
+          onClick={() => setDrawerOpen((o) => !o)}
+          className="w-full flex items-center justify-between px-4 py-3"
+          style={{ borderBottom: "1px solid var(--border)" }}
         >
-          {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+          <span className="font-body text-xs tracking-[0.15em]" style={{ color: "var(--muted)" }}>
+            {hasSelection
+              ? `${selectedEntries.length} UNIT${selectedEntries.length !== 1 ? "S" : ""} SELECTED`
+              : "YOUR WARBAND"}
+          </span>
+          <div className="flex items-center gap-3">
+            <span className="font-heading text-base" style={{ color: "var(--primary)" }}>
+              {formatPrice(total)}
+            </span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="w-4 h-4 transition-transform duration-200"
+              style={{
+                color: "var(--muted)",
+                transform: drawerOpen ? "rotate(180deg)" : "rotate(0deg)",
+              }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+            </svg>
+          </div>
         </button>
+
+        {/* Cart CTA */}
+        <div className="px-4 py-3">
+          <button
+            disabled={!hasSelection}
+            onClick={handleAddToCart}
+            className="w-full font-body text-sm tracking-[0.2em] py-3 transition-all duration-200"
+            style={
+              hasSelection
+                ? {
+                    background: addedToCart
+                      ? "color-mix(in srgb, var(--primary) 60%, transparent)"
+                      : "var(--primary)",
+                    color: "var(--bg)",
+                    cursor: "pointer",
+                  }
+                : {
+                    background: "var(--surface)",
+                    color: "var(--muted)",
+                    cursor: "not-allowed",
+                    border: "1px solid var(--border)",
+                  }
+            }
+          >
+            {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+          </button>
+        </div>
       </div>
     </div>
   );
