@@ -9,15 +9,10 @@ const FROM_EMAIL =
 // Do NOT change it to an env var — the Vercel env var points to the Vercel
 // subdomain, which would break the email link on the custom domain.
 //
-// Required in Supabase Dashboard → Authentication → URL Configuration:
-//   Auth flow type:  PKCE  ← MUST be set to PKCE (not Implicit)
-//   Site URL:        https://thedexarium.co.za
-//   Redirect URLs:   https://thedexarium.co.za/auth/reset-callback
-//
-// With PKCE flow, admin.generateLink redirects with ?code= (not hash tokens).
-// The /auth/reset-callback server route exchanges the code and redirects
-// to /reset-password with a proper session in cookies.
-const RESET_REDIRECT = "https://thedexarium.co.za/auth/reset-callback";
+// https://thedexarium.co.za/reset-password is in the Supabase allow list.
+// With PKCE flow the link arrives as ?code=…; with implicit flow as #access_token=….
+// The /reset-password page handles both.
+const RESET_REDIRECT = "https://thedexarium.co.za/reset-password";
 
 export async function POST(req: Request) {
   const { email } = await req.json();

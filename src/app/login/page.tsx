@@ -32,11 +32,12 @@ function LoginForm() {
     const supabase = getBrowserClient();
 
     if (mode === "forgot") {
-      // Call resetPasswordForEmail directly from the browser so the PKCE
-      // code verifier is stored in browser cookies. The code verifier is
-      // needed later when /auth/reset-callback exchanges the ?code= param.
+      // Call resetPasswordForEmail from the browser so the PKCE code verifier
+      // is stored in browser cookies. redirectTo must be in the Supabase
+      // allow list — /reset-password handles both ?code= (PKCE) and
+      // #access_token= (implicit) flows.
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "https://thedexarium.co.za/auth/reset-callback",
+        redirectTo: "https://thedexarium.co.za/reset-password",
       });
       if (error) {
         setError(error.message);

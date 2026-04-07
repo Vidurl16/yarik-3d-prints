@@ -16,16 +16,31 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // With PKCE flow, the /auth/reset-callback server route already exchanged
-    // the code and stored the session in cookies before redirecting here.
-    // We just need to verify the session exists.
     const supabase = getBrowserClient();
-    supabase.auth
-      .getSession()
-      .then(({ data }: { data: { session: import("@supabase/supabase-js").Session | null } }) => {
-        setPageState(data.session ? "ready" : "expired");
-      })
-      .catch(() => setPageState("expired"));
+
+    // onAuthStateChange catches PASSWORD_RECOVERY for both flows:
+    //  - Implicit: Supabase client auto-processes #access_token hash and fires the event
+    //  - PKCE:     createBrowserClient auto-exchanges ?code= on init, then fires the event
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
+        setPageState("ready");
+      }
+    });
+
+    // Fallback: if a session is already present (e.g. user navigated back)
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) setPageState("ready");
+    });
+
+    // If neither fires within 8 s, treat link as expired
+    const timeout = setTimeout(() => {
+      setPageState((prev) => (prev === "loading" ? "expired" : prev));
+    }, 8000);
+
+    return () => {
+      listener.subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
