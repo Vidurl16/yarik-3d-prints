@@ -324,7 +324,7 @@ export default function Nav() {
                         <p className="font-heading text-xl tracking-wider text-[#f0e8d8] group-hover:text-[#c4a045] transition-colors">
                           {activeBrandData.label.toUpperCase()}
                         </p>
-                        <p className="font-body text-sm text-[rgba(240,232,216,0.45)] mt-1">
+                        <p className="font-body text-sm text-[rgba(240,232,216,0.65)] mt-1">
                           {activeBrandData.tagline}
                         </p>
                       </Link>

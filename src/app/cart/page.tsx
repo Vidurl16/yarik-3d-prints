@@ -316,7 +316,7 @@ function CartContent() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="w-7 h-7 flex items-center justify-center transition-all text-sm"
+                        className="w-11 h-11 flex items-center justify-center transition-all text-sm"
                         style={{ border: "1px solid var(--border)", color: "var(--primary)" }}
                       >
                         −
@@ -326,7 +326,7 @@ function CartContent() {
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="w-7 h-7 flex items-center justify-center transition-all text-sm"
+                        className="w-11 h-11 flex items-center justify-center transition-all text-sm"
                         style={{ border: "1px solid var(--border)", color: "var(--primary)" }}
                       >
                         +

@@ -202,7 +202,7 @@ export default async function HeroPage() {
                 }}
               >
                 <div className="hidden sm:block">{icon}</div>
-                <p className="font-heading text-[11px] tracking-[0.15em]">{label}</p>
+                <p className="font-heading text-xs tracking-[0.15em]">{label}</p>
                 <p className="font-body text-xs mt-0.5 hidden sm:block" style={{ color: "var(--muted)" }}>
                   {sub}
                 </p>

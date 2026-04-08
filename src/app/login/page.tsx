@@ -93,6 +93,7 @@ function LoginForm() {
             <div className="font-body text-xs text-center px-4 py-6" style={{ color: "var(--muted)" }}>
               <p className="mb-2" style={{ color: "var(--primary)" }}>Check your inbox!</p>
               <p>A reset link has been sent to <strong>{email}</strong>.</p>
+              <p className="mt-2 font-body text-xs" style={{ color: "var(--muted)" }}>If it doesn't arrive within 2 minutes, check your spam or junk folder.</p>
             </div>
           ) : signupSent ? (
             <div className="font-body text-xs text-center px-4 py-6" style={{ color: "var(--muted)" }}>
@@ -118,7 +119,7 @@ function LoginForm() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-              className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
+              className="w-full px-4 py-3.5 font-body text-base focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1 focus:ring-offset-[var(--surface)] transition-colors"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="Jane Smith"
             />
@@ -134,7 +135,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
+              className="w-full px-4 py-3.5 font-body text-base focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1 focus:ring-offset-[var(--surface)] transition-colors"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="your@email.com"
             />
@@ -151,7 +152,7 @@ function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full px-4 py-3.5 font-body text-base focus:outline-none transition-colors"
+              className="w-full px-4 py-3.5 font-body text-base focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1 focus:ring-offset-[var(--surface)] transition-colors"
               style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
               placeholder="••••••••"
             />
@@ -170,7 +171,7 @@ function LoginForm() {
             className="w-full disabled:opacity-50 font-body text-sm tracking-[0.2em] py-4 transition-colors duration-200 uppercase"
             style={{ background: "var(--accent)", color: "var(--bg)" }}
           >
-            {loading ? "..." : mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send Reset Link"}
+            {loading ? (mode === "login" ? "SIGNING IN…" : mode === "signup" ? "CREATING ACCOUNT…" : "SENDING…") : mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send Reset Link"}
           </button>
           </>
           )}
@@ -189,7 +190,7 @@ function LoginForm() {
               <button
                 onClick={() => { setMode("forgot"); setError(null); setForgotSent(false); }}
                 className="font-body text-sm tracking-wider transition-colors"
-                style={{ color: "var(--muted)", opacity: 0.7 }}
+                style={{ color: "var(--muted)" }}
               >
                 Forgot password?
               </button>
@@ -200,14 +201,14 @@ function LoginForm() {
               <button
                 onClick={() => { setMode("login"); setError(null); setForgotSent(false); }}
                 className="font-body text-sm tracking-wider transition-colors"
-                style={{ color: "var(--muted)", opacity: 0.7 }}
+                style={{ color: "var(--muted)" }}
               >
                 ← Back to sign in
               </button>
             </div>
           )}
           <div>
-            <Link href="/" className="font-body text-sm tracking-wider transition-colors" style={{ color: "var(--muted)", opacity: 0.6 }}>
+            <Link href="/" className="font-body text-sm tracking-wider transition-colors" style={{ color: "var(--muted)" }}>
               ← Back to Dexarium
             </Link>
           </div>

@@ -485,7 +485,7 @@ export default function ArmyBuilderClient({
         <div className="max-w-7xl mx-auto px-6">
           <p
             className="font-body text-xs tracking-[0.15em] uppercase mb-2"
-            style={{ color: "var(--primary)", opacity: 0.7 }}
+            style={{ color: "var(--primary)" }}
           >
             {theme.icon} {theme.label}
           </p>
@@ -580,7 +580,7 @@ export default function ArmyBuilderClient({
       {/* Main Layout */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col lg:flex-row gap-8">
         {/* Left: Role sections */}
-        <div className="flex-1 space-y-6 pb-24 lg:pb-0">
+        <div className="flex-1 min-w-0 space-y-6 pb-24 lg:pb-0">
           {ROLE_SECTIONS.map((section) => {
             const sectionProducts = productsByRole[section.id] ?? [];
             return (
@@ -681,7 +681,7 @@ export default function ArmyBuilderClient({
 
         {/* Right: Sticky Summary Panel — desktop only */}
         <aside
-          className="hidden lg:block lg:w-[480px] xl:w-[540px] shrink-0"
+          className="hidden lg:block lg:w-[360px] xl:w-[440px] shrink-0"
           style={{
             position: "sticky",
             top: "80px",
@@ -725,7 +725,7 @@ export default function ArmyBuilderClient({
                       <div key={section.id} className="mb-2">
                         <h4
                           className="font-body text-xs uppercase tracking-widest mb-1.5"
-                          style={{ color: "var(--muted)", opacity: 0.7 }}
+                          style={{ color: "var(--muted)" }}
                         >
                           {section.icon} {section.label}
                         </h4>
@@ -768,7 +768,7 @@ export default function ArmyBuilderClient({
                       <div className="mb-2">
                         <h4
                           className="font-body text-xs uppercase tracking-widest mb-1.5"
-                          style={{ color: "var(--muted)", opacity: 0.7 }}
+                          style={{ color: "var(--muted)" }}
                         >
                           Other
                         </h4>
@@ -926,6 +926,16 @@ export default function ArmyBuilderClient({
               {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
             </button>
 
+            {hasSelection && (
+              <button
+                onClick={() => { setSelections({}); setAddedToCart(false); }}
+                className="w-full font-body text-xs tracking-[0.15em] uppercase py-2.5 transition-colors duration-200 mt-2"
+                style={{ color: "var(--muted)", border: "1px solid var(--border)", background: "transparent" }}
+              >
+                CLEAR WARBAND
+              </button>
+            )}
+
             {!hasSelection && (
               <p
                 className="font-body text-xs text-center mt-3"
@@ -989,7 +999,7 @@ export default function ArmyBuilderClient({
                         <div key={section.id}>
                           <p
                             className="font-body text-[11px] uppercase tracking-widest mb-1"
-                            style={{ color: "var(--muted)", opacity: 0.7 }}
+                            style={{ color: "var(--muted)" }}
                           >
                             {section.icon} {section.label}
                           </p>
@@ -1013,7 +1023,7 @@ export default function ArmyBuilderClient({
                       const other = selectedEntries.filter(({ product }) => !product.role || !allRoles.includes(product.role));
                       return other.length > 0 ? (
                         <div>
-                          <p className="font-body text-[11px] uppercase tracking-widest mb-1" style={{ color: "var(--muted)", opacity: 0.7 }}>Other</p>
+                          <p className="font-body text-[11px] uppercase tracking-widest mb-1" style={{ color: "var(--muted)" }}>Other</p>
                           {other.map(({ product, qty }) => (
                             <div key={product.id} className="flex justify-between items-baseline gap-2 mb-1">
                               <p className="font-body text-xs truncate" style={{ color: "var(--text)" }}>

@@ -63,29 +63,29 @@ export default function DbProductCard({ product }: DbProductCardProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />
 
-          <span className="absolute bottom-3 left-3 font-body text-[11px] tracking-[0.1em] px-2 py-0.5 print-badge-resin">
+          <span className="absolute bottom-3 left-3 font-body text-xs tracking-[0.1em] px-2 py-0.5 print-badge-resin">
             {printType}
           </span>
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">
             {product.is_new && (
-              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.8)] text-[#f0e8d8]">
+              <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.8)] text-[#f0e8d8]">
                 NEW
               </span>
             )}
             {product.is_preorder && (
-              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,0,0,0.7)] text-[#ff9090]">
+              <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,0,0,0.7)] text-[#ff9090]">
                 PREORDER
               </span>
             )}
             {isOutOfStock && (
-              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(30,30,30,0.9)] text-[#aaa]">
+              <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(30,30,30,0.9)] text-[#aaa]">
                 SOLD OUT
               </span>
             )}
             {isLowStock && (
-              <span className="font-body text-[11px] tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.7)] text-[#f0e8d8]">
+              <span className="font-body text-xs tracking-[0.1em] px-2 py-0.5 bg-[rgba(139,94,20,0.7)] text-[#f0e8d8]">
                 {product.stock_quantity} LEFT
               </span>
             )}

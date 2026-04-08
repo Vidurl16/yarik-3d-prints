@@ -191,7 +191,7 @@ export default function ResetPasswordPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full px-4 py-3 font-body text-sm focus:outline-none"
+              className="w-full px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1 focus:ring-offset-[var(--surface)]"
               style={{
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
@@ -214,7 +214,7 @@ export default function ResetPasswordPage() {
               onChange={(e) => setConfirm(e.target.value)}
               required
               minLength={8}
-              className="w-full px-4 py-3 font-body text-sm focus:outline-none"
+              className="w-full px-4 py-3 font-body text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1 focus:ring-offset-[var(--surface)]"
               style={{
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
@@ -244,7 +244,7 @@ export default function ResetPasswordPage() {
           <Link
             href="/login"
             className="font-body text-xs tracking-wider"
-            style={{ color: "var(--muted)", opacity: 0.6 }}
+            style={{ color: "var(--muted)" }}
           >
             ← Back to sign in
           </Link>

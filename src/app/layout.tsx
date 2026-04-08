@@ -82,7 +82,7 @@ export default function RootLayout({
                 </Link>
               ))}
             </nav>
-            <p className="font-body text-[11px]" style={{ color: "var(--muted)" }}>
+            <p className="font-body text-xs" style={{ color: "var(--muted)" }}>
               © {new Date().getFullYear()} The Dexarium
             </p>
           </div>

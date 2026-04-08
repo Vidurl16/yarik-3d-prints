@@ -10,7 +10,7 @@
   --bg:      #faf5ec;
   --surface: #f0e6d2;
   --text:    #1e1208;
-  --muted:   #7a5e40;
+  --muted:   #5c3d14;   /* darkened from #7a5e40 — WCAG AA on #faf5ec */
   --primary: #8b5e14;
   --accent:  #5c3d1a;
   --border:  rgba(92, 61, 26, 0.15);
@@ -21,8 +21,8 @@
   --bg:      #08080e;
   --surface: #0f0f1a;
   --text:    #d4cce0;
-  --muted:   #5a5570;
-  --primary: #9b4060;
+  --muted:   #9e9ab8;   /* lightened from #5a5570 — WCAG AA on #08080e */
+  --primary: #c85878;   /* lightened from #9b4060 — 4.9:1 on #08080e WCAG AA */
   --accent:  #c0392b;
   --border:  rgba(155, 64, 96, 0.25);
   --glow:    rgba(192, 57, 43, 0.2);
@@ -32,7 +32,7 @@
   --bg:      #080e08;
   --surface: #0f180e;
   --text:    #d8e8d0;
-  --muted:   #4a5e48;
+  --muted:   #88a885;   /* lightened from #4a5e48 — WCAG AA on #080e08 */
   --primary: #5ca85c;
   --accent:  #2e7d2e;
   --border:  rgba(92, 168, 92, 0.25);
@@ -43,7 +43,7 @@
   --bg:      #08090f;
   --surface: #0f1018;
   --text:    #e8ecf8;
-  --muted:   #4a5278;
+  --muted:   #8892c8;   /* lightened from #4a5278 — WCAG AA on #08090f */
   --primary: #e8c838;
   --accent:  #c8281c;
   --border:  rgba(232, 200, 56, 0.25);
@@ -54,7 +54,7 @@
   --bg:      #0d0b07;
   --surface: #16120c;
   --text:    #e8dcc8;
-  --muted:   #5e5040;
+  --muted:   #a89070;   /* lightened from #5e5040 — WCAG AA on #0d0b07 */
   --primary: #a08040;
   --accent:  #6b4e20;
   --border:  rgba(160, 128, 64, 0.25);
@@ -65,7 +65,7 @@
   --bg:      #080e08;
   --surface: #0f180f;
   --text:    #d8e8d0;
-  --muted:   #485848;
+  --muted:   #849e84;   /* lightened from #485848 — WCAG AA on #080e08 */
   --primary: #608060;
   --accent:  #3a5c3a;
   --border:  rgba(96, 128, 96, 0.25);
@@ -76,8 +76,8 @@
   --bg:      #000000;
   --surface: #0d0d0d;
   --text:    #ffffff;
-  --muted:   #888888;
-  --primary: #8a5ab0;
+  --muted:   #b8b8b8;   /* lightened from #888888 — WCAG AA on #000000 */
+  --primary: #a870d8;   /* lightened from #8a5ab0 — 6.0:1 on #000000 WCAG AA */
   --accent:  #5a3a7a;
   --border:  rgba(138, 90, 176, 0.25);
   --glow:    rgba(138, 90, 176, 0.15);
@@ -108,7 +108,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 body {
@@ -116,7 +116,7 @@ body {
   color: #f0e8d8;
   min-height: 100vh;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 /* ────────────────────────────────────────
