@@ -578,9 +578,9 @@ export default function ArmyBuilderClient({
       </div>
 
       {/* Main Layout */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col lg:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col md:flex-row gap-8">
         {/* Left: Role sections */}
-        <div className="flex-1 min-w-0 space-y-6 pb-24 lg:pb-0">
+        <div className="flex-1 min-w-0 space-y-6 pb-24 md:pb-0">
           {ROLE_SECTIONS.map((section) => {
             const sectionProducts = productsByRole[section.id] ?? [];
             return (
@@ -681,7 +681,7 @@ export default function ArmyBuilderClient({
 
         {/* Right: Sticky Summary Panel — desktop only */}
         <aside
-          className="hidden lg:block lg:w-[360px] xl:w-[440px] shrink-0"
+          className="hidden md:block md:w-[260px] lg:w-[320px] xl:w-[380px] shrink-0"
           style={{
             position: "sticky",
             top: "80px",
@@ -959,7 +959,7 @@ export default function ArmyBuilderClient({
 
       {/* Mobile warband drawer */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 md:hidden"
         style={{ background: "var(--surface)", borderTop: "1px solid var(--border)" }}
       >
         {/* Expandable warband summary */}
