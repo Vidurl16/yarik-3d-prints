@@ -235,7 +235,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
             ) : (
               <button
                 onClick={() => onQtyChange(1)}
-                className="font-body text-[11px] tracking-wider sm:w-full px-2 sm:px-0 py-1.5 sm:py-2.5 min-h-[36px] sm:min-h-[44px] transition-all duration-150 shrink-0"
+                className="font-body text-[11px] tracking-wider px-3 py-1.5 sm:py-2 min-h-[36px] transition-all duration-150 shrink-0"
                 style={{ background: "var(--primary)", color: "var(--bg)" }}
               >
                 + ADD
