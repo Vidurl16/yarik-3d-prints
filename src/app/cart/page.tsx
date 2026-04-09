@@ -512,19 +512,20 @@ function CartContent() {
                 )}
 
                 {selectedShipping === "courier-door" && (
-                  <div className="space-y-2">
-                    <p className="font-body text-xs tracking-[0.1em] uppercase" style={{ color: "var(--muted)" }}>
+                  <div>
+                    <p className="font-body text-xs tracking-[0.1em] uppercase mb-2" style={{ color: "var(--muted)" }}>
                       DELIVERY ADDRESS <span style={{ color: "rgba(139,0,0,0.9)" }}>*</span>
                     </p>
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-2">
                     {[
-                      { key: "name",        label: "Full name",              placeholder: "Recipient name",   required: true },
-                      { key: "line1",       label: "Address line 1",         placeholder: "Street address",   required: true },
-                      { key: "line2",       label: "Address line 2",         placeholder: "Apt, unit, etc.",  required: false },
-                      { key: "city",        label: "City",                   placeholder: "Cape Town",        required: true },
-                      { key: "province",    label: "Province",               placeholder: "Western Cape",     required: true },
-                      { key: "postal_code", label: "Postal code",            placeholder: "8001",             required: true },
-                    ].map(({ key, label, placeholder, required }) => (
-                      <div key={key}>
+                      { key: "name",        label: "Full name",     placeholder: "Recipient name",  required: true,  span: 2 },
+                      { key: "line1",       label: "Address line 1",placeholder: "Street address",  required: true,  span: 2 },
+                      { key: "line2",       label: "Address line 2",placeholder: "Apt, unit, etc.", required: false, span: 2 },
+                      { key: "city",        label: "City",          placeholder: "Cape Town",       required: true,  span: 1 },
+                      { key: "province",    label: "Province",      placeholder: "Western Cape",    required: true,  span: 1 },
+                      { key: "postal_code", label: "Postal code",   placeholder: "8001",            required: true,  span: 1 },
+                    ].map(({ key, label, placeholder, required, span }) => (
+                      <div key={key} className={span === 2 ? "col-span-2" : ""}>
                         <label className="block font-body text-xs tracking-[0.1em] mb-1" style={{ color: "var(--muted)" }}>
                           {label.toUpperCase()}{required && <span style={{ color: "rgba(139,0,0,0.9)" }}> *</span>}
                         </label>
@@ -538,6 +539,7 @@ function CartContent() {
                         />
                       </div>
                     ))}
+                    </div>
                   </div>
                 )}
 
@@ -603,14 +605,20 @@ function CartContent() {
                 <button
                   onClick={handleCheckout}
                   disabled={!canCheckout || checkingOut}
-                  className="w-full py-3 font-body text-sm tracking-[0.15em] transition-all duration-200"
+                  className="w-full py-3 font-body text-sm tracking-[0.15em] transition-all duration-200 flex items-center justify-center gap-2"
                   style={{
-                    background: !canCheckout ? "var(--muted)" : checkingOut ? "var(--muted)" : "var(--accent)",
+                    background: !canCheckout ? "var(--muted)" : checkingOut ? "var(--accent)" : "var(--accent)",
                     color: "var(--bg)",
-                    opacity: !canCheckout || checkingOut ? 0.5 : 1,
+                    opacity: !canCheckout ? 0.45 : 1,
                     cursor: !canCheckout || checkingOut ? "not-allowed" : "pointer",
                   }}
                 >
+                  {checkingOut && (
+                    <svg className="animate-spin w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+                  )}
                   {checkingOut ? "REDIRECTING…" : "PROCEED TO CHECKOUT"}
                 </button>
 

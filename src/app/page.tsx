@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteCategories, formatPrice } from "@/lib/products";
 import { getNewArrivals, getPreorders } from "@/lib/data/products";
+import AnimatedSection from "@/components/AnimatedSection";
 
 const CATEGORY_THUMBNAIL: Record<string, string> = {
   "grimdark-future":           "/images/categories/thumbnails/grimdark-future.jpg",
@@ -214,6 +215,7 @@ export default async function HeroPage() {
 
       {/* ── CATEGORY TILES ─────────────────────────────────── */}
       <section id="categories" className="py-12 px-4 sm:px-6 lg:px-8 max-w-[98vw] mx-auto">
+        <AnimatedSection>
         <div className="text-center mb-8">
           <p
             className="font-body text-xs tracking-[0.15em] mb-3 uppercase"
@@ -284,6 +286,7 @@ export default async function HeroPage() {
             );
           })}
         </div>
+        </AnimatedSection>
       </section>
 
       {/* ── NEW ARRIVALS ───────────────────────────────────── */}
@@ -293,6 +296,7 @@ export default async function HeroPage() {
             className="max-w-7xl mx-auto"
             style={{ borderTop: "1px solid var(--border)" }}
           >
+          <AnimatedSection>
             <div className="flex items-center justify-between mb-8 pt-10">
               <div>
                 <p
@@ -334,7 +338,7 @@ export default async function HeroPage() {
                       alt={product.name}
                       fill
                       loading="lazy"
-                      className="product-card-image opacity-90 group-hover:opacity-100"
+                      className="product-card-image opacity-90 group-hover:opacity-100 group-hover:brightness-110"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <span
@@ -346,7 +350,7 @@ export default async function HeroPage() {
                   </div>
                   <div className="p-3" style={{ borderTop: "1px solid var(--border)" }}>
                     <p
-                      className="font-body text-xs font-semibold leading-snug truncate"
+                      className="font-body text-xs font-semibold leading-snug line-clamp-2"
                       style={{ color: "var(--text)" }}
                     >
                       {product.name}
@@ -358,6 +362,7 @@ export default async function HeroPage() {
                 </Link>
               ))}
             </div>
+          </AnimatedSection>
           </div>
         </section>
       )}
@@ -369,6 +374,7 @@ export default async function HeroPage() {
             className="max-w-7xl mx-auto"
             style={{ borderTop: "1px solid var(--border)" }}
           >
+          <AnimatedSection>
             <div className="flex items-center justify-between mb-8 pt-10">
               <div>
                 <p
@@ -424,7 +430,7 @@ export default async function HeroPage() {
                   </div>
                   <div className="p-3" style={{ borderTop: "1px solid var(--border)" }}>
                     <p
-                      className="font-body text-xs font-semibold leading-snug truncate"
+                      className="font-body text-xs font-semibold leading-snug line-clamp-2"
                       style={{ color: "var(--text)" }}
                     >
                       {product.name}
@@ -443,6 +449,7 @@ export default async function HeroPage() {
                 </Link>
               ))}
             </div>
+          </AnimatedSection>
           </div>
         </section>
       )}

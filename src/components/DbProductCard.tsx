@@ -58,7 +58,7 @@ export default function DbProductCard({ product }: DbProductCardProps) {
             src={imageUrl}
             alt={product.name}
             fill
-            className="product-card-image opacity-80 group-hover:opacity-100"
+            className="product-card-image opacity-80 group-hover:opacity-100 group-hover:brightness-110"
             sizes="(max-width: 768px) 50vw, 25vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />

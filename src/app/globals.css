@@ -281,7 +281,7 @@ body {
   object-fit: cover;
   object-position: center;
   padding: 0;
-  transition: transform 500ms ease, opacity 500ms ease;
+  transition: transform 500ms ease, opacity 500ms ease, filter 500ms ease;
   transform-origin: center;
 }
 

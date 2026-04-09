@@ -63,6 +63,7 @@ export default function CartDrawer() {
               </h2>
               <button
                 onClick={closeDrawer}
+                aria-label="Close cart"
                 className="w-10 h-10 flex items-center justify-center text-[#c9a84c] hover:text-[#e0c878] hover:bg-[rgba(201,168,76,0.1)] transition-all"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
@@ -95,7 +96,7 @@ export default function CartDrawer() {
                     key={item.id}
                     className="flex gap-3 pb-4 border-b border-[rgba(255,255,255,0.06)]"
                   >
-                    <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden">
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden">
                       <Image
                         src={item.imageUrl}
                         alt={item.name}
@@ -106,7 +107,7 @@ export default function CartDrawer() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="font-body text-sm text-[#e8e0d0] leading-tight truncate">
+                      <p className="font-body text-sm text-[#e8e0d0] leading-tight line-clamp-2">
                         {item.name}
                       </p>
                       <p className="font-body text-xs text-[#c9a84c] mt-0.5">
