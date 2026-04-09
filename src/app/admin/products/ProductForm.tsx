@@ -153,6 +153,7 @@ export default function ProductForm({ product }: Props) {
     image_url: product?.image_url ?? "",
     image_urls: product?.image_urls ?? [],
     stock_quantity: product?.stock_quantity != null ? String(product.stock_quantity) : "",
+    description: product?.description ?? "",
   });
 
   const [options, setOptions] = useState<Array<{ label: string; choices: string }>>(
@@ -265,6 +266,18 @@ export default function ProductForm({ product }: Props) {
           <label className={labelClass}>Slug *</label>
           <input name="slug" value={form.slug} onChange={handleChange} required className={inputClass} placeholder="unique-url-slug" />
         </div>
+      </div>
+
+      <div>
+        <label className={labelClass}>Description</label>
+        <textarea
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          rows={4}
+          placeholder="Sales copy, sizing info, material, intended audience…"
+          className={`${inputClass} resize-y`}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

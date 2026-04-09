@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
   const insertData = {
     slug: body.slug,
     name: body.name,
+    description: body.description ?? null,
     brand: body.brand,
     type: body.type,
     print_type: body.print_type ?? null,

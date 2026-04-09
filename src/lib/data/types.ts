@@ -17,6 +17,7 @@ export interface DbProduct {
   is_new: boolean;
   is_active: boolean;
   preorder_date: string | null;
+  description?: string | null;
   stock_quantity?: number | null;
   created_at: string;
   updated_at: string;

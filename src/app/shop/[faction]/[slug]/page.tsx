@@ -106,6 +106,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <span className="font-heading text-4xl" style={{ color: "var(--primary)" }}>
                 {formattedPrice}
               </span>
+
+              {/* Description */}
+              {product.description && (
+                <p className="font-body text-sm leading-relaxed mt-4" style={{ color: "var(--muted)" }}>
+                  {product.description}
+                </p>
+              )}
               {isLowStock && (
                 <p className="font-body text-xs mt-2" style={{ color: "rgba(139,94,20,0.9)" }}>
                   ⚠ Only {product.stock_quantity} left in stock
