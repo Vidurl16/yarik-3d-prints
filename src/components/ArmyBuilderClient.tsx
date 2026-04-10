@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product, brandFactions } from "@/lib/products";
@@ -334,6 +334,7 @@ export default function ArmyBuilderClient({
   const [basingActive, setBasingActive] = useState(false);
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
 
   // Faction filter — all factions defined for this brand (show even if no products yet)
   const factionList = useMemo(() => {
@@ -442,6 +443,35 @@ export default function ArmyBuilderClient({
     setAddedToCart(true);
     openDrawer();
   }
+
+  // ── sessionStorage persistence ──────────────────────────────────────────
+  // Selections survive in-session navigation (faction → army-builder, etc.)
+  // but reset when the browser tab closes.
+  const SESSION_KEY = `army-builder-${brand}`;
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (!saved) return;
+      const state = JSON.parse(saved);
+      if (state.selections) setSelections(state.selections);
+      if (state.basingActive !== undefined) setBasingActive(state.basingActive);
+      if (state.battleEffectsActive !== undefined) setBattleEffectsActive(state.battleEffectsActive);
+      if (state.selectedFaction) setSelectedFaction(state.selectedFaction);
+    } catch { /* ignore parse errors */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brand]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+        selections,
+        basingActive,
+        battleEffectsActive,
+        selectedFaction,
+      }));
+    } catch { /* ignore storage errors */ }
+  }, [SESSION_KEY, selections, basingActive, battleEffectsActive, selectedFaction]);
 
   const roleCountMap = useMemo(() => {
     const map: Record<string, number> = {};
@@ -617,7 +647,7 @@ export default function ArmyBuilderClient({
                     No units available in this category.
                   </p>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {sectionProducts.map((product) => (
                       <UnitCard
                         key={product.id}
@@ -935,42 +965,166 @@ export default function ArmyBuilderClient({
         </aside>
       </div>
 
-      {/* Mobile sticky bottom CTA bar */}
+      {/* ── Mobile: expanded warband summary sheet ── */}
+      <AnimatePresence>
+        {mobileSummaryOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 lg:hidden"
+              style={{ background: "rgba(0,0,0,0.65)" }}
+              onClick={() => setMobileSummaryOpen(false)}
+            />
+
+            {/* Bottom sheet */}
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 32, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-50 lg:hidden flex flex-col"
+              style={{
+                background: "var(--surface)",
+                borderTop: "1px solid var(--border)",
+                maxHeight: "72vh",
+              }}
+            >
+              {/* Sheet header */}
+              <div
+                className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+                style={{ borderBottom: "1px solid var(--border)" }}
+              >
+                <h3 className="font-heading text-sm tracking-wider" style={{ color: "var(--text)" }}>
+                  YOUR WARBAND
+                </h3>
+                <button
+                  onClick={() => setMobileSummaryOpen(false)}
+                  className="font-body text-xs tracking-widest px-2 py-1"
+                  style={{ color: "var(--muted)" }}
+                >
+                  ✕ CLOSE
+                </button>
+              </div>
+
+              {/* Scrollable items */}
+              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+                {selectedEntries.length === 0 && !basingActive && !battleEffectsActive ? (
+                  <p className="font-body text-xs italic" style={{ color: "var(--muted)" }}>
+                    No units selected yet.
+                  </p>
+                ) : (
+                  <>
+                    {ROLE_SECTIONS.map((section) => {
+                      const sectionItems = selectedEntries.filter(({ product }) =>
+                        product.role ? (section.roles as readonly string[]).includes(product.role) : false
+                      );
+                      if (sectionItems.length === 0) return null;
+                      return (
+                        <div key={section.id}>
+                          <p className="font-body text-[10px] uppercase tracking-widest mb-1" style={{ color: "var(--muted)", opacity: 0.7 }}>
+                            {section.icon} {section.label}
+                          </p>
+                          {sectionItems.map(({ product, qty }) => (
+                            <div key={product.id} className="flex items-center justify-between gap-2 py-1">
+                              <p className="font-body text-sm truncate flex-1" style={{ color: "var(--text)" }}>
+                                {product.name} <span style={{ color: "var(--muted)" }}>×{qty}</span>
+                              </p>
+                              <span className="font-body text-sm flex-shrink-0" style={{ color: "var(--primary)" }}>
+                                {formatPrice(product.price * qty)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })}
+                    {basingActive && (
+                      <div className="flex items-center justify-between gap-2 py-1">
+                        <p className="font-body text-sm flex-1" style={{ color: "var(--text)" }}>🪨 {basingSuggestion.name}</p>
+                        <span className="font-body text-sm flex-shrink-0" style={{ color: "var(--primary)" }}>{formatPrice(basingSuggestion.price)}</span>
+                      </div>
+                    )}
+                    {battleEffectsActive && (
+                      <div className="flex items-center justify-between gap-2 py-1">
+                        <p className="font-body text-sm flex-1" style={{ color: "var(--text)" }}>💥 {battleEffectsSuggestion.name}</p>
+                        <span className="font-body text-sm flex-shrink-0" style={{ color: "var(--primary)" }}>{formatPrice(battleEffectsSuggestion.price)}</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Sheet footer — total + CTA */}
+              <div className="flex-shrink-0 px-4 py-4" style={{ borderTop: "1px solid var(--border)" }}>
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="font-body text-xs tracking-[0.2em]" style={{ color: "var(--muted)" }}>TOTAL</span>
+                  <span className="font-heading text-xl" style={{ color: "var(--primary)" }}>{formatPrice(total)}</span>
+                </div>
+                <button
+                  disabled={!hasSelection}
+                  onClick={() => { setMobileSummaryOpen(false); handleAddToCart(); }}
+                  className="w-full font-body text-sm tracking-[0.2em] py-3.5 transition-all duration-200"
+                  style={hasSelection
+                    ? { background: addedToCart ? "color-mix(in srgb, var(--primary) 60%, transparent)" : "var(--primary)", color: "var(--bg)" }
+                    : { background: "var(--surface)", color: "var(--muted)", border: "1px solid var(--border)" }}
+                >
+                  {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ── Mobile sticky bottom bar (always visible) ── */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t p-4 pb-safe"
+        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t"
         style={{ background: "var(--surface)", borderColor: "var(--border)" }}
       >
-        <div className="flex items-center justify-between mb-3">
-          <span className="font-body text-xs tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-            TOTAL
-          </span>
-          <span className="font-heading text-lg" style={{ color: "var(--primary)" }}>
-            {formatPrice(total)}
-          </span>
-        </div>
+        {/* Tap to expand summary */}
         <button
-          disabled={!hasSelection}
-          onClick={handleAddToCart}
-          className="w-full font-body text-sm tracking-[0.2em] py-3 transition-all duration-200"
-          style={
-            hasSelection
-              ? {
-                  background: addedToCart
-                    ? "color-mix(in srgb, var(--primary) 60%, transparent)"
-                    : "var(--primary)",
-                  color: "var(--bg)",
-                  cursor: "pointer",
-                }
-              : {
-                  background: "var(--surface)",
-                  color: "var(--muted)",
-                  cursor: "not-allowed",
-                  border: "1px solid var(--border)",
-                }
-          }
+          className="w-full flex items-center justify-between px-4 py-2.5"
+          onClick={() => setMobileSummaryOpen(true)}
+          aria-label="View warband summary"
         >
-          {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+          <div className="flex items-center gap-2">
+            <span className="font-body text-xs tracking-[0.2em]" style={{ color: "var(--muted)" }}>
+              WARBAND
+            </span>
+            {hasSelection && (
+              <span
+                className="font-body text-[10px] px-1.5 py-0.5"
+                style={{ background: "var(--primary)", color: "var(--bg)" }}
+              >
+                {selectedEntries.length + (basingActive ? 1 : 0) + (battleEffectsActive ? 1 : 0)}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="font-heading text-base" style={{ color: "var(--primary)" }}>
+              {formatPrice(total)}
+            </span>
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3 h-3" style={{ color: "var(--muted)" }}>
+              <path d="M2 8l4-4 4 4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
         </button>
+
+        {/* CTA button */}
+        <div className="px-4 pb-4">
+          <button
+            disabled={!hasSelection}
+            onClick={handleAddToCart}
+            className="w-full font-body text-sm tracking-[0.2em] py-3 transition-all duration-200"
+            style={hasSelection
+              ? { background: addedToCart ? "color-mix(in srgb, var(--primary) 60%, transparent)" : "var(--primary)", color: "var(--bg)" }
+              : { background: "var(--surface)", color: "var(--muted)", border: "1px solid var(--border)" }}
+          >
+            {addedToCart ? "ADDED ✓ — VIEW CART" : "ADD WARBAND TO CART"}
+          </button>
+        </div>
       </div>
     </div>
   );

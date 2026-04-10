@@ -15,7 +15,9 @@ export async function POST(req: Request) {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  const redirectTo = `${SITE_URL}/auth/callback?next=/auth/update-password`;
+  // IMPORTANT: Supabase Dashboard → Auth → URL Configuration → Site URL must be
+  // https://thedexarium.co.za, and /reset-password must be in the Redirect URLs allowlist.
+  const redirectTo = `${SITE_URL}/reset-password`;
   const supabase = getServiceClient();
 
   let resetUrl: string | null = null;
