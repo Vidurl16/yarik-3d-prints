@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice, type Product, brandFactions } from "@/lib/products";
@@ -341,6 +341,7 @@ export default function ArmyBuilderClient({
   basingSuggestion,
   battleEffectsSuggestion,
 }: Props) {
+  const SESSION_KEY = `army-builder-${brand}`;
   const [selections, setSelections] = useState<Record<string, number>>({});
   const [basingActive, setBasingActive] = useState(false);
   const [battleEffectsActive, setBattleEffectsActive] = useState(false);
@@ -362,6 +363,27 @@ export default function ArmyBuilderClient({
   }, [brand]);
 
   const [selectedFaction, setSelectedFaction] = useState<string>("all");
+
+  // Restore selections from sessionStorage on mount
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (!saved) return;
+      const { selections: s, basingActive: b, battleEffectsActive: be, selectedFaction: sf } = JSON.parse(saved);
+      if (s) setSelections(s);
+      if (b) setBasingActive(b);
+      if (be) setBattleEffectsActive(be);
+      if (sf) setSelectedFaction(sf);
+    } catch { /* ignore */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist selections to sessionStorage whenever they change
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ selections, basingActive, battleEffectsActive, selectedFaction }));
+    } catch { /* ignore */ }
+  }, [SESSION_KEY, selections, basingActive, battleEffectsActive, selectedFaction]);
 
   // Filter mainProducts by faction when one is selected
   const filteredProducts = useMemo(() => {
@@ -629,7 +651,7 @@ export default function ArmyBuilderClient({
                     No units available in this category.
                   </p>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {sectionProducts.map((product) => (
                       <UnitCard
                         key={product.id}
