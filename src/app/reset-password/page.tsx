@@ -44,8 +44,8 @@ function ResetPasswordForm() {
     // PKCE flow — Supabase appends ?code= to the redirectTo URL
     const code = searchParams.get("code");
     if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-        if (error) markInvalid();
+      supabase.auth.exchangeCodeForSession(code).then(({ error: exchangeError }) => {
+        if (exchangeError) markInvalid();
         else markReady();
       });
       return;
