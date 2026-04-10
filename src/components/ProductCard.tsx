@@ -45,7 +45,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             src={product.imageUrl}
             alt={product.name}
             fill
-            className="product-card-image opacity-80 group-hover:opacity-100"
+            className="product-card-image opacity-80 group-hover:opacity-100 group-hover:brightness-110"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.7)] to-transparent" />
@@ -59,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-4 gap-2">
-        <span className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.55)] uppercase">
+        <span className="font-body text-xs tracking-wider text-[rgba(240,232,216,0.75)] uppercase">
           {product.category}
         </span>
 

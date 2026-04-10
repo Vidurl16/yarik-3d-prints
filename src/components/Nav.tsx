@@ -235,6 +235,7 @@ export default function Nav() {
                 <motion.svg
                   animate={{ rotate: shopOpen ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
+                  aria-hidden="true"
                   className="w-3 h-3"
                   viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5}
                 >
@@ -324,7 +325,7 @@ export default function Nav() {
                         <p className="font-heading text-xl tracking-wider text-[#f0e8d8] group-hover:text-[#c4a045] transition-colors">
                           {activeBrandData.label.toUpperCase()}
                         </p>
-                        <p className="font-body text-sm text-[rgba(240,232,216,0.45)] mt-1">
+                        <p className="font-body text-sm text-[rgba(240,232,216,0.65)] mt-1">
                           {activeBrandData.tagline}
                         </p>
                       </Link>
@@ -501,8 +502,10 @@ export default function Nav() {
               </span>
               {itemCount > 0 && (
                 <motion.span
-                  initial={{ scale: 0 }}
+                  key={itemCount}
+                  initial={{ scale: 0.6 }}
                   animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   className="absolute -top-2 -right-2 w-5 h-5 bg-[#8b0000] text-[#f0e8d8] text-[10px] font-bold rounded-full flex items-center justify-center font-body"
                 >
                   {itemCount > 99 ? "99+" : itemCount}
@@ -511,9 +514,10 @@ export default function Nav() {
             </button>
 
             <button
-              className="lg:hidden flex flex-col gap-1.5 px-2 py-2 text-[#c4a045]"
+              className="lg:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 text-[#c4a045]"
               onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
             >
               <motion.span
                 animate={mobileOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
@@ -562,6 +566,7 @@ export default function Nav() {
                     </div>
                     <motion.svg
                       animate={{ rotate: mobileExpanded === brand.id ? 180 : 0 }}
+                      aria-hidden="true"
                       className="w-3 h-3 text-[rgba(196,160,69,0.5)]"
                       viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5}
                     >

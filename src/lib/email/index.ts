@@ -24,6 +24,13 @@ function buildShippingBlock(order: DbOrder): string {
       ${postnet.number ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Branch #: ${postnet.number}</p>` : ""}
       ${postnet.email ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Branch email: ${postnet.email}</p>` : ""}
     `;
+  } else if (addr?.locker) {
+    // PUDO locker delivery
+    details = `
+      <p style="margin:4px 0;color:#e8dcc8;font-size:14px;">${addr.name}</p>
+      <p style="margin:4px 0;color:#9e8e78;font-size:13px;">PUDO Locker: <strong style="color:#c9a84c;">${addr.locker}</strong></p>
+      ${addr.phone ? `<p style="margin:4px 0;color:#9e8e78;font-size:13px;">Phone: ${addr.phone}</p>` : ""}
+    `;
   } else if (addr?.name) {
     details = `
       <p style="margin:4px 0;color:#e8dcc8;font-size:14px;">${addr.name}</p>
@@ -253,6 +260,148 @@ export async function sendEmail({
 }
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "thedexarium@gmail.com";
+
+const STATUS_META: Record<string, { label: string; colour: string; description: string; emoji: string }> = {
+  processing:  { label: "In Production",    colour: "#3b82f6", description: "Your order has entered the print queue and production has started.",                          emoji: "⚙️" },
+  dispatched:  { label: "Dispatched",       colour: "#c9a84c", description: "Your order has been packed and handed to the courier. Tracking details will follow shortly.", emoji: "📦" },
+  fulfilled:   { label: "Delivered",        colour: "#22c55e", description: "Your order has been delivered. We hope you love it — enjoy the battlefield!",                emoji: "✅" },
+  cancelled:   { label: "Cancelled",        colour: "#8b0000", description: "Your order has been cancelled. If you have any questions please reach out.",                 emoji: "❌" },
+  pending:     { label: "Order Received",   colour: "#c9a84c", description: "We've received your order and it will enter the print queue shortly.",                       emoji: "🕐" },
+};
+
+function buildStatusUpdateHtml(order: DbOrder, newStatus: string, customMessage?: string): string {
+  const meta = STATUS_META[newStatus] ?? { label: newStatus, colour: "#c9a84c", description: "", emoji: "📋" };
+  const orderDate = new Date().toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" });
+  const shippingBlock = ["dispatched", "fulfilled"].includes(newStatus) ? buildShippingBlock(order) : "";
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Order Update — The Dexarium</title>
+</head>
+<body style="margin:0;padding:0;background:#0c0902;font-family:Georgia,serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0c0902;padding:48px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#110d05;border:1px solid rgba(196,160,69,0.15);overflow:hidden;">
+
+          <tr><td style="background:linear-gradient(90deg,${meta.colour},${meta.colour}99);height:3px;padding:0;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+          <tr>
+            <td style="background:#0c0902;padding:36px 40px 28px;text-align:center;border-bottom:1px solid rgba(196,160,69,0.1);">
+              <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:10px;letter-spacing:5px;color:#8b0000;text-transform:uppercase;font-weight:normal;">THE DEXARIUM</p>
+              <p style="margin:0 0 10px;font-size:32px;">${meta.emoji}</p>
+              <h1 style="margin:0 0 6px;font-family:Georgia,serif;font-size:28px;color:${meta.colour};letter-spacing:3px;text-transform:uppercase;font-weight:bold;">
+                ${meta.label}
+              </h1>
+              <p style="margin:0;font-family:Georgia,serif;font-size:12px;color:rgba(196,160,69,0.5);letter-spacing:2px;">${orderDate}</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:32px 40px 0;">
+              <p style="margin:0;color:#9e8e78;font-family:Georgia,serif;font-size:15px;line-height:1.7;">${meta.description}</p>
+            </td>
+          </tr>
+
+          ${customMessage ? `
+          <tr>
+            <td style="padding:24px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#0c0902;border:1px solid rgba(196,160,69,0.2);">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 8px;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;">Message from The Dexarium</p>
+                    <p style="margin:0;color:#e8dcc8;font-family:Georgia,serif;font-size:14px;line-height:1.7;">${customMessage}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>` : ""}
+
+          ${shippingBlock}
+
+          <tr>
+            <td style="padding:24px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#0c0902;border:1px solid rgba(139,0,0,0.4);">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:10px;letter-spacing:3px;color:#8b0000;text-transform:uppercase;">Order Reference</p>
+                    <p style="margin:0;font-size:13px;color:#c9a84c;font-family:'Courier New',Courier,monospace;word-break:break-all;">${order.id}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:24px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(139,0,0,0.08);border:1px solid rgba(139,0,0,0.25);">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:13px;color:#e8dcc8;">Questions about your order?</p>
+                    <p style="margin:0;font-family:Georgia,serif;font-size:13px;color:#9e8e78;line-height:1.6;">
+                      Email: <a href="mailto:thedexarium@gmail.com" style="color:#c9a84c;text-decoration:none;">thedexarium@gmail.com</a>
+                      &nbsp;&middot;&nbsp;
+                      WhatsApp: <a href="https://wa.me/27739140709" style="color:#c9a84c;text-decoration:none;">+27 73 914 0709</a><br>
+                      Include your order reference in any message.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background:#0c0902;border-top:1px solid rgba(196,160,69,0.08);padding:28px 40px;text-align:center;margin-top:32px;">
+              <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:10px;letter-spacing:4px;color:#8b0000;text-transform:uppercase;">THE DEXARIUM</p>
+              <p style="margin:0;font-family:Georgia,serif;font-size:12px;color:rgba(196,160,69,0.35);line-height:1.5;">
+                Medical-grade resin &amp; multicolour FDM printing, built to battlefield standard.<br>
+                &copy; ${new Date().getFullYear()} The Dexarium &mdash; South Africa
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+export async function sendOrderStatusEmail(
+  order: DbOrder,
+  newStatus: string,
+  customMessage?: string
+): Promise<void> {
+  const toEmail = order.email;
+  if (!toEmail) return;
+  if (!STATUS_META[newStatus]) return; // don't email for statuses without a template
+  if (RESEND_KEY_IS_PLACEHOLDER) {
+    console.warn("[Email] RESEND_API_KEY not set — skipping status email for order", order.id);
+    return;
+  }
+
+  const meta = STATUS_META[newStatus];
+  const resend = new Resend(RESEND_KEY);
+  const subject = `${meta.emoji} Your order is ${meta.label} – #${order.id.slice(0, 8).toUpperCase()}`;
+  const html = buildStatusUpdateHtml(order, newStatus, customMessage);
+
+  const { error } = await resend.emails.send({
+    from: FROM_EMAIL,
+    to: toEmail,
+    replyTo: OWNER_EMAIL,
+    subject,
+    html,
+  });
+  if (error) {
+    console.error("[Email] Failed to send status update to", toEmail, error);
+  } else {
+    console.log("[Email] Status update sent to", toEmail, "— status:", newStatus, "order:", order.id);
+  }
+}
 
 export async function sendOrderConfirmationEmail(
   order: DbOrder,

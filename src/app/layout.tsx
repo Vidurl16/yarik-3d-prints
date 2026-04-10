@@ -38,6 +38,15 @@ export default function RootLayout({
         className="font-body antialiased"
         style={{ background: "var(--bg)", color: "var(--text)" }}
       >
+        {/* Skip to content — keyboard accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 font-body text-xs tracking-wider"
+          style={{ background: "var(--accent)", color: "var(--bg)" }}
+        >
+          Skip to content
+        </a>
+
         {/* Noise texture overlay */}
         <div className="noise-overlay" aria-hidden="true" />
 
@@ -51,7 +60,7 @@ export default function RootLayout({
         <CartSyncProvider />
 
         {/* Page Content */}
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
 
         <Analytics />
 
@@ -82,7 +91,7 @@ export default function RootLayout({
                 </Link>
               ))}
             </nav>
-            <p className="font-body text-[11px]" style={{ color: "var(--muted)" }}>
+            <p className="font-body text-xs" style={{ color: "var(--muted)" }}>
               © {new Date().getFullYear()} The Dexarium
             </p>
           </div>

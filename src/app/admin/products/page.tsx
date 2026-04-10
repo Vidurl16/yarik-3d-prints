@@ -1,15 +1,27 @@
 import { getServiceClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import AdminProductActions from "./AdminProductActions";
+import ProductFilters from "./ProductFilters";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminProductsPage() {
+interface PageProps {
+  searchParams: Promise<{ search?: string; brand?: string; status?: string }>;
+}
+
+export default async function AdminProductsPage({ searchParams }: PageProps) {
+  const { search, brand, status } = await searchParams;
   const supabase = getServiceClient();
-  const { data: products } = await supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
+
+  let query = supabase.from("products").select("*").order("created_at", { ascending: false });
+
+  if (search) query = query.ilike("name", `%${search}%`);
+  if (brand) query = query.eq("brand", brand);
+  if (status === "active") query = query.eq("is_active", true);
+  else if (status === "inactive") query = query.eq("is_active", false);
+
+  const { data: products } = await query;
 
   return (
     <div>
@@ -24,6 +36,9 @@ export default async function AdminProductsPage() {
       </div>
 
       <div className="overflow-x-auto">
+        <Suspense fallback={null}>
+          <ProductFilters />
+        </Suspense>
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-[rgba(196,160,69,0.15)]">
@@ -93,7 +108,9 @@ export default async function AdminProductsPage() {
 
         {(!products || products.length === 0) && (
           <div className="text-center py-16">
-            <p className="font-body text-sm text-[rgba(240,232,216,0.3)]">No products yet.</p>
+            <p className="font-body text-sm text-[rgba(240,232,216,0.3)]">
+              {search || brand || status ? "No products match your filters." : "No products yet."}
+            </p>
           </div>
         )}
       </div>

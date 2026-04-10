@@ -58,7 +58,7 @@ export default function NavAuthLinks({ mobile = false }: { mobile?: boolean }) {
 
   const linkClass = mobile
     ? "block px-2 py-2.5 font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors"
-    : "font-body text-xs tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group";
+    : "font-body text-sm tracking-[0.15em] text-[#f0e8d8] hover:text-[#c4a045] transition-colors relative group";
 
   const underline = !mobile && (
     <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#c4a045] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />

@@ -5,7 +5,14 @@ import { getServiceClient } from "@/lib/supabase/server";
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ?? "The Dexarium <orders@thedexarium.co.za>";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thedexarium.co.za";
+// IMPORTANT: This redirectTo is hard-coded to the production domain.
+// Do NOT change it to an env var — the Vercel env var points to the Vercel
+// subdomain, which would break the email link on the custom domain.
+//
+// https://thedexarium.co.za/reset-password is in the Supabase allow list.
+// With PKCE flow the link arrives as ?code=…; with implicit flow as #access_token=….
+// The /reset-password page handles both.
+const RESET_REDIRECT = "https://thedexarium.co.za/reset-password";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
@@ -15,9 +22,7 @@ export async function POST(req: Request) {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  // IMPORTANT: Supabase Dashboard → Auth → URL Configuration → Site URL must be
-  // https://thedexarium.co.za, and /reset-password must be in the Redirect URLs allowlist.
-  const redirectTo = `${SITE_URL}/reset-password`;
+  const redirectTo = RESET_REDIRECT;
   const supabase = getServiceClient();
 
   let resetUrl: string | null = null;

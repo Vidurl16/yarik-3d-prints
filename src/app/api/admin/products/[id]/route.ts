@@ -28,7 +28,7 @@ export async function PATCH(
   const updateData: Record<string, unknown> = {};
   // NOTE: stock_quantity excluded — column does not exist in DB yet. Add via migration to re-enable.
   const allowedFields = [
-    "slug", "name", "brand", "type", "print_type", "faction", "role", "price_cents", "currency",
+    "slug", "name", "description", "brand", "type", "print_type", "faction", "role", "price_cents", "currency",
     "tags", "image_url", "is_preorder", "is_new", "is_active", "preorder_date", "stock_quantity",
   ];
 

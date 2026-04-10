@@ -39,6 +39,17 @@ function getDefaultDateRange() {
 function ShippingDetail({ metadata }: { metadata: Record<string, unknown> | null }) {
   const s = metadata?.shipping_address as Record<string, string> | undefined;
   if (!s) return <span className="text-[rgba(240,232,216,0.3)]">No shipping address</span>;
+
+  if (s.locker) {
+    return (
+      <span>
+        {s.name} — <span className="text-[#c9a84c]">PUDO: {s.locker}</span>
+        {s.locker_id ? <span className="text-[rgba(240,232,216,0.4)]"> ({s.locker_id})</span> : null}
+        {s.phone ? <><br />{s.phone}</> : null}
+      </span>
+    );
+  }
+
   return (
     <span>
       {s.name} — {s.line1}{s.line2 ? `, ${s.line2}` : ""}, {s.city}, {s.province} {s.postal_code}, {s.country}
@@ -51,9 +62,10 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
   const [saving, setSaving] = useState(false);
   const [localStatus, setLocalStatus] = useState(order.status ?? "pending");
   const [localPaymentStatus, setLocalPaymentStatus] = useState(order.payment_status ?? "pending");
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<false | "saved" | "email">(false);
+  const [customMessage, setCustomMessage] = useState("");
 
-  async function patchOrder(body: Record<string, string>) {
+  async function patchOrder(body: Record<string, string>): Promise<boolean> {
     setSaving(true);
     const res = await fetch(`/api/admin/orders/${order.id}`, {
       method: "PATCH",
@@ -62,16 +74,19 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
     });
     setSaving(false);
     if (res.ok) {
-      const { order: updated } = await res.json();
-      setSaved(true);
+      const { order: updated, email_sent } = await res.json() as { order: Partial<DbOrder>; email_sent?: boolean };
+      setSaved(email_sent ? "email" : "saved");
       onUpdated(order.id, updated);
       setTimeout(() => setSaved(false), 2000);
+      return true;
     }
+    return false;
   }
 
   async function updateStatus(newStatus: string) {
     setLocalStatus(newStatus);
-    await patchOrder({ status: newStatus });
+    const ok = await patchOrder({ status: newStatus, ...(customMessage.trim() ? { custom_message: customMessage.trim() } : {}) });
+    if (ok) setCustomMessage("");
   }
 
   async function markAsPaid() {
@@ -117,19 +132,30 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
           </div>
         </td>
         <td className="py-3" onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center gap-2">
-            <select
-              value={localStatus}
-              onChange={(e) => updateStatus(e.target.value)}
-              disabled={saving}
-              className="bg-[#140e06] border border-[rgba(196,160,69,0.3)] px-2 py-1 font-body text-xs text-[#f0e8d8] focus:outline-none focus:border-[rgba(196,160,69,0.6)] disabled:opacity-50"
-            >
-              {FULFILLMENT_STATUSES.map((s) => (
-                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-              ))}
-            </select>
-            {saving && <span className="font-body text-xs text-[rgba(196,160,69,0.5)]">Saving…</span>}
-            {saved && <span className="font-body text-xs text-green-400">✓ Saved</span>}
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+              <select
+                value={localStatus}
+                onChange={(e) => updateStatus(e.target.value)}
+                disabled={saving}
+                className="bg-[#140e06] border border-[rgba(196,160,69,0.3)] px-2 py-1 font-body text-xs text-[#f0e8d8] focus:outline-none focus:border-[rgba(196,160,69,0.6)] disabled:opacity-50"
+              >
+                {FULFILLMENT_STATUSES.map((s) => (
+                  <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                ))}
+              </select>
+              {saving && <span className="font-body text-xs text-[rgba(196,160,69,0.5)]">Saving…</span>}
+              {saved === "email" && <span className="font-body text-xs text-green-400">✓ Saved · ✉️ Sent</span>}
+              {saved === "saved" && <span className="font-body text-xs text-green-400">✓ Saved</span>}
+            </div>
+            <input
+              type="text"
+              value={customMessage}
+              onChange={(e) => setCustomMessage(e.target.value)}
+              placeholder="Optional message to customer…"
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#140e06] border border-[rgba(196,160,69,0.15)] px-2 py-1 font-body text-xs text-[#f0e8d8] placeholder:text-[rgba(240,232,216,0.25)] focus:outline-none focus:border-[rgba(196,160,69,0.4)] w-full"
+            />
           </div>
         </td>
       </tr>
@@ -158,6 +184,21 @@ function OrderRow({ order, onUpdated }: { order: DbOrder; onUpdated: (id: string
                     <p className="text-[rgba(196,160,69,0.65)] uppercase tracking-[0.1em] mb-1">PostNet Details</p>
                     <p className="text-[rgba(240,232,216,0.7)]">
                       Branch: {pd.branch_name}<br />Number: {pd.number}<br />Email: {pd.email}
+                    </p>
+                  </div>
+                );
+              })()}
+              {(() => {
+                const s = meta?.shipping_address as Record<string, string> | undefined;
+                if (!s?.locker) return null;
+                return (
+                  <div>
+                    <p className="text-[rgba(196,160,69,0.65)] uppercase tracking-[0.1em] mb-1">PUDO Locker</p>
+                    <p className="text-[rgba(240,232,216,0.7)]">
+                      Locker: <span className="text-[#c9a84c]">{s.locker}</span>
+                      {s.locker_id ? <><br />ID: <span className="font-mono text-[rgba(196,160,69,0.6)]">{s.locker_id}</span></> : null}
+                      {s.phone ? <><br />Phone: {s.phone}</> : null}
+                      {s.email ? <><br />Email: {s.email}</> : null}
                     </p>
                   </div>
                 );
