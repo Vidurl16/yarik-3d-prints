@@ -91,7 +91,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
 
   return (
     <div
-      className="flex flex-row sm:flex-col overflow-hidden transition-all duration-200"
+      className="flex flex-col overflow-hidden transition-all duration-200"
       style={{
         background: isSelected
           ? `linear-gradient(160deg, var(--surface) 0%, color-mix(in srgb, var(--primary) 8%, var(--surface)) 100%)`
@@ -101,40 +101,9 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
           : "1px solid var(--border)",
       }}
     >
-      {/* Mobile: compact square thumbnail */}
+      {/* Portrait image — shown on all screen sizes */}
       <div
-        className="relative w-[72px] h-[72px] shrink-0 overflow-hidden sm:hidden"
-        style={{ background: "color-mix(in srgb, var(--surface) 80%, black)" }}
-      >
-        <Image
-          src={product.imageUrl}
-          alt={product.name}
-          fill
-          className="object-cover opacity-75"
-          sizes="72px"
-        />
-        {isSelected && (
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ background: "rgba(139,0,0,0.35)" }}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={3}
-              className="w-5 h-5"
-              style={{ color: "#fff" }}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-            </svg>
-          </div>
-        )}
-      </div>
-
-      {/* Desktop: portrait card image */}
-      <div
-        className="hidden sm:block product-card-frame"
+        className="product-card-frame"
         style={{ background: "color-mix(in srgb, var(--surface) 80%, black)" }}
       >
         <Image
@@ -142,7 +111,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
           alt={product.name}
           fill
           className="product-card-image opacity-75"
-          sizes="(max-width: 1024px) 33vw, 20vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
         />
         <div
           className="absolute inset-0"
@@ -175,14 +144,8 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
         )}
       </div>
 
-      {/* Content — shared between mobile row and desktop card */}
-      <div className="flex-1 p-2 sm:p-3 flex flex-col gap-1 sm:gap-1.5 min-w-0">
-        <p
-          className="hidden sm:block font-body text-xs tracking-[0.1em] uppercase truncate"
-          style={{ color: "var(--muted)" }}
-        >
-          {product.faction.replace(/-/g, " ")}
-        </p>
+      {/* Content */}
+      <div className="flex-1 p-2 flex flex-col gap-1 min-w-0">
         <h4
           className="font-body text-xs font-semibold leading-tight line-clamp-2"
           style={{ color: "var(--text)" }}
@@ -196,7 +159,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
         </div>
 
         <div
-          className="pt-1 sm:pt-2 mt-auto"
+          className="pt-1 mt-auto"
           style={{ borderTop: "1px solid var(--border)" }}
         >
           <div className="flex items-center justify-between gap-1">
@@ -208,24 +171,24 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
             </span>
 
             {isSelected ? (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-0.5">
                 <button
                   onClick={() => onQtyChange(qty - 1)}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-colors"
+                  className="w-6 h-6 flex items-center justify-center transition-colors"
                   style={{ border: "1px solid var(--border)", color: "var(--primary)" }}
                   aria-label="Decrease quantity"
                 >
                   −
                 </button>
                 <span
-                  className="font-body text-sm w-4 text-center"
+                  className="font-body text-xs w-4 text-center"
                   style={{ color: "var(--text)" }}
                 >
                   {qty}
                 </span>
                 <button
                   onClick={() => onQtyChange(qty + 1)}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-colors"
+                  className="w-6 h-6 flex items-center justify-center transition-colors"
                   style={{ border: "1px solid var(--primary)", color: "var(--primary)" }}
                   aria-label="Increase quantity"
                 >
@@ -235,7 +198,7 @@ function UnitCard({ product, qty, onQtyChange }: UnitCardProps) {
             ) : (
               <button
                 onClick={() => onQtyChange(1)}
-                className="font-body text-[11px] tracking-wider px-3 py-1.5 sm:py-2 min-h-[36px] transition-all duration-150 shrink-0"
+                className="font-body text-[11px] tracking-wider px-2 py-1.5 transition-all duration-150 shrink-0"
                 style={{ background: "var(--primary)", color: "var(--bg)" }}
               >
                 + ADD
